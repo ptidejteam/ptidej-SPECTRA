@@ -1,7 +1,6 @@
 // ApplyController.java
 package ca.concordia.encs.citydata.core;
 
-import ca.concordia.encs.citydata.datastores.MongoDataStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,6 @@ import java.util.*;
 @RequestMapping("/apply")
 public class ApplyController {
 	@Autowired
-	private MongoDataStore mongoDataStore;
 
 	@RequestMapping(value = "/sync", method = RequestMethod.POST)
 	public ResponseEntity<String> sync(@RequestBody String steps) {
@@ -51,7 +49,6 @@ public class ApplyController {
 			runnerTask.start();
 			runnerTask.join();
 			String producerName = stepsObject.get("use").getAsString();
-			storeProducerCallInfo(runnerId, steps, producerName);
 
 		} catch (IllegalStateException | JsonParseException e) {
 			String detailedMessage = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
@@ -94,7 +91,6 @@ public class ApplyController {
 			runnerId = deckard.getMetadata("id").toString();
 			deckard.runSteps();
 			String producerName = stepsObject.get("use").getAsString();
-			storeProducerCallInfo(runnerId, steps, producerName);
 		} catch (IllegalStateException | JsonParseException e) {
 			String detailedMessage = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
 			errorMessage = "Your query is not a valid JSON file. Details: " + detailedMessage;
@@ -138,16 +134,6 @@ public class ApplyController {
 		return ResponseEntity.status(HttpStatus.OK).body("pong at " + timeStamp);
 	}
 
-	private void storeProducerCallInfo(String runnerId, String requestBody, String producerName) {
-		ProducerCallInfo callInfo = new ProducerCallInfo("anonymous", new Date(), requestBody, producerName);
-		List<ProducerCallInfo> callInfoList = mongoDataStore.findByProducerName(producerName);
-		if (callInfoList.isEmpty()) {
-			mongoDataStore.save(callInfo);
-		} else {
-			ProducerCallInfo existingCallInfo = callInfoList.get(0);
-			existingCallInfo.setTimestamp(new Date());
-			mongoDataStore.save(existingCallInfo);
-		}
-	}
+
 
 	}
