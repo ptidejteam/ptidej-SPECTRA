@@ -91,7 +91,7 @@ public class CallTree {
     }
 
     /**
-     * Retrieves method signature with parameter types and optional line number from preprocessed mapping.
+     * Retrieves correct version of overloaded method with optional line number using JavaParser.
      */
     public static String resolve(String className, String methodName, int lineNumber) {
         // Convert class name to path
