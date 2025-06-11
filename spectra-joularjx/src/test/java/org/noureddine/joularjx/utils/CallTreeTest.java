@@ -142,6 +142,16 @@ public class CallTreeTest {
         System.out.println(resolved);
         assertEquals("org.noureddine.joularjx.monitor.MonitoringHandler.destroyingVM(String)", resolved);
     }
+    @Test
+    public void testCorrectConstructor() {
+        String resolved = CallTree.resolve("org.noureddine.joularjx.utils.CallTree", "<init>", 38);
+        assertEquals("org.noureddine.joularjx.monitor.MonitoringHandler.CallTree.<init>()", resolved);
+    }
+    @Test
+    public void testCorrectConstructor2() {
+        String resolved = CallTree.resolve("org.noureddine.joularjx.utils.CallTree", "<init>.List<StackTraceElement>", 56);
+        assertEquals("org.noureddine.joularjx.monitor.MonitoringHandler.CallTree.<init>()", resolved);
+    }
 }
 
 
