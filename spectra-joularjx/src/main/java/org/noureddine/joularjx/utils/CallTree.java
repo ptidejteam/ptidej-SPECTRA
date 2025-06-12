@@ -76,17 +76,27 @@ public class CallTree {
 
     @Override
     public String toString() {
-        String res = "";
+        if (callTree.isEmpty()) return "null";
+
+        StringBuilder res = new StringBuilder();
+
+        StackTraceElement top = callTree.get(0);
+        String resolvedTop = resolve(top.getClassName(), top.getMethodName(), top.getLineNumber());
+        res.append(resolvedTop != null ? resolvedTop : top.getClassName() + "." + top.getMethodName());
+        if (resolvedTop == null) {
+            resolvedTop  = top.getClassName() + "." + top.getMethodName(); // Fallback
+        }
+        res.append(";");
+
 
         /*Appening elements to res String in reverse order. The least recent element (the bottom of the stack trace) will be written first, and the most recent one last.*/
-        for(int i = this.callTree.size()-1; i >= 0; i--){
-            StackTraceElement element = this.callTree.get(i);
-            res += element.getClassName()+"."+element.getMethodName()+";";
+        for (int i = callTree.size() - 1; i > 0; i--) {
+            StackTraceElement element = callTree.get(i);
+            res.append(element.getClassName()).append(".").append(element.getMethodName()).append(";");
         }
 
         //Removing the last ";"
         return res.substring(0, res.length()-1);
-
 
     }
 

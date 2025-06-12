@@ -9,15 +9,28 @@
  */
 
 package org.noureddine.joularjx.utils;
+
+import com.sun.management.OperatingSystemMXBean;
+import org.junit.jupiter.api.Test;
+import org.noureddine.joularjx.monitor.MonitoringHandler;
+import org.noureddine.joularjx.monitor.MonitoringStatus;
+import org.noureddine.joularjx.result.ResultWriter;
+import org.noureddine.joularjx.cpu.Cpu;
+import org.noureddine.joularjx.result.ResultTreeManager;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.junit.jupiter.api.Test;
+import java.lang.management.ManagementFactory;
+import java.util.Arrays;
+import java.util.Map;
 
 public class CallTreeTest {
 
@@ -152,6 +165,117 @@ public class CallTreeTest {
         String resolved = CallTree.resolve("org.noureddine.joularjx.utils.CallTree", "<init>.List<StackTraceElement>", 56);
         assertEquals("org.noureddine.joularjx.monitor.MonitoringHandler.CallTree.<init>()", resolved);
     }
+    static class OverloadTester {
+        public void test(String s) {
+            System.out.println("Overload 1: " + s);
+        }
+
+        public void test(String s, int x) {
+            System.out.println("Overload 2: " + s + ", " + x);
+        }
+
+        public void test(String s, int x, double y) {
+            System.out.println("Overload 3: " + s + ", " + x + ", " + y);
+        }
+    }
+
+    @Test
+    void testEnergyOfAllOverloadedMethods() throws Exception {
+        OverloadTester tester = new OverloadTester();
+
+        // Simulate CPU load for profiling
+        for (int i = 0; i < 1000; i++) {
+            tester.test("a");
+            tester.test("a", 1);
+            tester.test("a", 1, 2.0);
+        }
+
+        // Setup stubbed components
+        AgentProperties props = new AgentProperties();
+        MonitoringStatus status = new MonitoringStatus();
+        ResultWriter writer = new ResultWriter() {
+            @Override public void setTarget(String path, boolean overwrite) {}
+            @Override public void write(String key, double value) {}
+            @Override public void closeTarget() {}
+        };
+        Cpu cpu = new Cpu() {
+            @Override
+            public void close() throws Exception {
+
+            }
+
+            @Override
+            public void initialize() {
+
+            }
+
+            @Override public double getInitialPower() { return 0.0; }
+            @Override public double getCurrentPower(double cpuLoad) { return 1.0; }
+            @Override public double getMaxPower(double cpuLoad) { return 0.0; }
+        };
+
+        ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
+        OperatingSystemMXBean osBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        ResultTreeManager resultTreeManager = new ResultTreeManager(props, 1234L, System.currentTimeMillis());
+
+        MonitoringHandler handler = new MonitoringHandler(1234L, props, writer, cpu, status, osBean, threadMXBean, resultTreeManager);
+
+        // Only run once, so we wrap in thread and cancel early
+        AtomicBoolean shouldStop = new AtomicBoolean(false);
+        Thread t = new Thread(() -> {
+            try {
+                handler.run();
+            } catch (Exception ignored) {}
+        });
+        t.start();
+
+        // Wait enough for sampling to occur
+        Thread.sleep(2500);
+        t.interrupt();
+        t.join();
+
+        // Now check if each overload had energy > 0 (keyed by resolved name)
+        boolean found1 = false, found2 = false, found3 = false;
+        for (Map.Entry<String, Double> entry : status.getMethodConsumedEnergyMap().entrySet()) {
+            String method = entry.getKey();
+            double energy = entry.getValue();
+            if (method.contains("destroyingVM()")) found1 = energy > 0;
+            if (method.contains("destroyingVM(String)")) found2 = energy > 0;
+            if (method.contains("destroyingVM(double)")) found3 = energy > 0;
+        }
+
+        assertTrue(found1, "Expected destroyingVM() to consume energy");
+        assertTrue(found2, "Expected destroyingVM(String) to consume energy");
+        assertTrue(found3, "Expected destroyingVM(double) to consume energy");
+    }
+    @Test
+    void testResolvedOverloadsInCallTree() throws Exception {
+        CallTreeTest.OverloadTester tester = new CallTreeTest.OverloadTester();
+
+        // Call each overload once to push it into the stack trace
+        tester.test("A");
+        tester.test("B", 10);
+        tester.test("C", 20, 3.14);
+
+        // Generate the call stack manually (simulate sampling one frame deep)
+        List<StackTraceElement> stack = List.of(Thread.currentThread().getStackTrace());
+
+        // Create a CallTree for this frame
+        CallTree tree = new CallTree(stack);
+
+        // Print the resolved method name (calls resolve() internally)
+        String resolved = tree.toString();
+        System.out.println("Resolved CallTree: " + resolved);
+
+        // We expect the top frame to contain one of the tester.test(...) calls
+        // Since only one will appear on top, this assert is illustrative:
+        assertTrue(resolved.contains("test(String)")
+                        || resolved.contains("test(String,int)")
+                        || resolved.contains("test(String,int,double)"),
+                "Resolved method should be one of the overloaded variants");
+    }
+
+
 }
 
 

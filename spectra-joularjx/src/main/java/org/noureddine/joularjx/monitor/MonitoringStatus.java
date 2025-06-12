@@ -49,6 +49,10 @@ public class MonitoringStatus {
 
         this.totalConsumedEnergy = 0;
     }
+    public Map<String, Double> getMethodConsumedEnergyMap() {
+        return methodsConsumedEnergy;
+    }
+
 
     /**
      * Adds the given energy to the total consumed energy count.
@@ -190,4 +194,5 @@ public class MonitoringStatus {
     public Map<CallTree, Double> getFilteredCallTreesConsumedEnergy() {
         return this.filteredCallTreesConsumption;
     }
+
 }
