@@ -12,16 +12,12 @@
 		<relativePath/>
 	</parent>
 
-	<groupId>com.concordia.encs.citydata</groupId>
+	<groupId>com.concordia.ptidej.spectra</groupId>
 	<artifactId>Spectra</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
 	<name>Spectra</name>
 	<description>Demo project for Spring Boot</description>
-	<modules>
-		<module>spectra-joularjx</module>
-		<module>spectra-joularjx</module>
-	</modules>
 
 	<properties>
 		<java.version>21</java.version>
@@ -29,57 +25,19 @@
 		<maven.compiler.target>21</maven.compiler.target>
 	</properties>
 
-	<dependencies>
+<dependencies>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+		    <groupId>org.noureddine</groupId>
+		    <artifactId>joularjx</artifactId>
+		    <version>3.0.1</version>
 		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web-services</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>io.projectreactor</groupId>
-			<artifactId>reactor-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.firebase</groupId>
-			<artifactId>firebase-admin</artifactId>
-			<version>9.1.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.api-client</groupId>
-			<artifactId>google-api-client</artifactId>
-			<version>2.0.0</version>
-			<scope>test</scope>
-		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-csv</artifactId>
 			<version>1.14.0</version>
 		</dependency>
+		
 		<!-- Apache POI Core -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
@@ -114,18 +72,30 @@
 			<artifactId>poi-ooxml-schemas</artifactId>
 			<version>4.1.2</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.bcel</groupId>
 			<artifactId>bcel</artifactId>
 			<version>6.7.0</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.github.javaparser</groupId>
 			<artifactId>javaparser-core</artifactId>
-			<version>3.26.2</version>
+			<version>3.27.0</version>
+			<scope>compile</scope>
 		</dependency>
-
-	</dependencies>
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
 
 	<build>
 		<plugins>

@@ -1,21 +1,14 @@
-# CityData Middleware
+# SPECTRA
 
 ![Java](https://img.shields.io/badge/Java-orange)
 ![Apache Maven](https://github.com/ptidejteam/ptidej-Ptidej/actions/workflows/maven.yml/badge.svg)
 [![CO₂ Shield](https://img.shields.io/badge/CO₂-C_0.36g-C89806)](https://overbrowsing.com/projects/co2-shield)
 
-The CityData middleware allows users to fetch, transform, and process data from various sources using Producers and Operations.
+XXX
 
 ## What is it?
-CityData is a part of the [TOOLS4CITIES](https://www.concordia.ca/research/cities-institute/initiatives/tools4cities.html) tool suite. It is a middleware that enables users to perform operations on data from different sources via the use of the following abstractions:
 
-- Producer: connects to data sources and fetches data
-- Operation: describes transformations to be performed on producer outputs (data)
-- Runner: calls a series of producers, executes a series of operations on the producer's outputs, and then outputs the resulting data
-
-![image](./docs/simplified-architecture.png)
-
-You can see a more detailed breakdown of responsibilities for the middleware [here](./docs/architecture.png).
+XXX
 
 ## What do I need?
 
