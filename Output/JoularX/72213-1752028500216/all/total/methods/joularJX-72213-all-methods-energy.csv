@@ -1,0 +1,8 @@
+java.lang.Thread$ThreadNumbering.<clinit>,0.0547
+ca.concordia.ptidej.spectra.OverloadTest.add,21.2583
+java.lang.System.currentTimeMillis,0.0909
+java.lang.Object.getClass,0.0467
+java.lang.Thread.dumpThreads,28.1531
+java.lang.ref.Reference.waitForReferencePendingList,0.0135
+java.lang.ProcessHandleImpl.waitForProcessExit0,0.0048
+java.lang.System.nanoTime,0.0002
