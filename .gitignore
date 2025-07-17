@@ -5,7 +5,12 @@ env.json
 joularjx-result/*/all/total/methods/joularJX-*-all-methods-energy.csv
 joularjx-result/*/app/total/methods/joularJX-*-filtered-methods-energy.csv
 /citydata-files
-
+./src/test/data/db/*
+spectra-joularjx/bcel-6.10.0.jar
+spectra-joularjx/CITATION.cff
+spectra-joularjx/config-installer.bat
+spectra-joularjx/mvnw
+spectra-joularjx/mvnw.cmd
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar

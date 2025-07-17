@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tree type="Call Tree" threadSelection="All thread groups" threadStatus="Runnable" aggregationLevel="Methods">
+  <node leaf="true" time="50134795" count="0" selfTime="50134795" lineNumber="-1" percent="0.0" filtered="true"/>
+</tree>
