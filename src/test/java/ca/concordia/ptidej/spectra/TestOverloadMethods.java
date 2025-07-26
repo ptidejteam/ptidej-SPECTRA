@@ -21,14 +21,14 @@ import org.noureddine.joularjx.result.CsvResultWriter;
 import org.noureddine.joularjx.result.ResultWriter;
 
 public class TestOverloadMethods {
-	@Test
-	public void test1() throws IllegalConnectorArgumentsException, VMStartException, IOException {
-		File path = new File("Output/Joularjx/");
+    @Test
+    public void test1() throws IllegalConnectorArgumentsException, VMStartException, IOException {
+        File path = new File("Output/Joularjx/");
 
-		final Map<String, Double> methodsPowers = new HashMap<String, Double>();
-		ResultWriter writer = new CsvResultWriter();
-		final Launcher launcher = new Launcher();
-		launcher.launch(writer, "target/test-classes", "ca.concordia.ptidej.spectra.example.OverloadTest");
+        final Map<String, Double> methodsPowers = new HashMap<String, Double>();
+        ResultWriter writer = new CsvResultWriter();
+        final Launcher launcher = new Launcher();
+        launcher.launch(writer, "target/test-classes", "ca.concordia.ptidej.spectra.example.OverloadTest");
 
-	}
+    }
 }
