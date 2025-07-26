@@ -13,11 +13,9 @@ import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.bcel.classfile.ClassParser;
-import org.apache.bcel.classfile.JavaClass;
-import org.apache.bcel.classfile.LineNumberTable;
-import org.apache.bcel.classfile.Method;
+import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.Type;
+import org.apache.bcel.util.SyntheticRepository;
 import org.noureddine.joularjx.Agent;
 import org.noureddine.joularjx.cpu.Cpu;
 import org.noureddine.joularjx.monitor.MonitoringStatus;
@@ -245,11 +243,7 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
 						int lineNumber = stackTraceElement.getLineNumber();
 
 						// Use the resolve method to get the full method name
-						String fullMethodName = resolve("target/test-classes" +
-								"/ca" +
-								"/concordia/ptidej/spectra/example" +
-								"/OverloadTest.class", methodName, lineNumber);
-
+						String fullMethodName = resolve(Class.forName("ca.concordia.ptidej.spectra.example.OverloadTest"), methodName, lineNumber);
 						if (fullMethodName != null && covers.test(fullMethodName)) {
 							target.merge(fullMethodName, 1, Integer::sum);
 							break;
@@ -433,52 +427,46 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
 
 
 
-	public static String resolve(String classFilePath, String methodName, int lineNumber) {
+	public static String resolve(Class<?> clazz, String methodName, int lineNumber) {
+		JavaClass javaClass;
 		try {
-			// Parse the class file
-			ClassParser parser = new ClassParser(classFilePath);
-			JavaClass javaClass = parser.parse();
+			// Load class using BCEL repository
+			SyntheticRepository repo = SyntheticRepository.getInstance();
+			javaClass = repo.loadClass(clazz.getName());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
 
-			// Get the class name and package name
-			String className = javaClass.getClassName();
-			String packageName = javaClass.getPackageName();
+		String fullSignature = null;
+		String className = javaClass.getClassName();
 
-			// Iterate through methods
-			for (Method method : javaClass.getMethods()) {
-				// Get the LineNumberTable attribute
-				LineNumberTable lineNumberTable = method.getLineNumberTable();
-				if (lineNumberTable != null) {
-					int startLine = -1;
-					int endLine = -1;
-					if (lineNumberTable != null) {
-						var lineNumbers = lineNumberTable.getLineNumberTable();
-						if (lineNumbers.length > 0) {
-							startLine = lineNumbers[0].getLineNumber();
-							endLine = lineNumbers[lineNumbers.length - 1].getLineNumber();
-						}
-					}
-					// Check if the line number falls within the method's range
-					if (method.getName().equals(methodName) && lineNumber >= startLine && lineNumber <= endLine) {
-						// Build the method signature
+		for (Method method : javaClass.getMethods()) {
+			LineNumberTable lineNumberTable = method.getLineNumberTable();
+			if (lineNumberTable != null) {
+				LineNumber[] lineNumbers = lineNumberTable.getLineNumberTable();
+				if (lineNumbers.length > 0) {
+					int startLine = lineNumbers[0].getLineNumber();
+					int endLine = lineNumbers[lineNumbers.length - 1].getLineNumber();
+
+					if (method.getName().equals(methodName) &&
+							lineNumber >= startLine && lineNumber <= endLine) {
+
 						StringBuilder params = new StringBuilder();
 						for (Type paramType : method.getArgumentTypes()) {
 							params.append(paramType.toString()).append(", ");
 						}
 						if (params.length() > 0) {
-							params.setLength(params.length() - 2); // Remove trailing comma and space
+							params.setLength(params.length() - 2); // Remove trailing comma
 						}
-						return (packageName.isEmpty() ? className :
-								packageName + "." + className) + "." + "(" + params + ")";
+
+						fullSignature = className + "." + methodName + "(" + params + ")";
+						break; // Found the method; exit the loop
 					}
 				}
 			}
-
-			// Method not found
-			return null;
-
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
 		}
+
+		return fullSignature;
 	}
 }
