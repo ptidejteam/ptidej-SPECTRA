@@ -1,32 +1,23 @@
-/*
- * Copyright (c) 2021-2024, Adel Noureddine, Université de Pau et des Pays de l'Adour.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the
- * GNU General Public License v3.0 only (GPL-3.0-only)
- * which accompanies this distribution, and is available at
- * https://www.gnu.org/licenses/gpl-3.0.en.html
- *
- * Author : Adel Noureddine
- */
 
 package ca.concordia.ptidej.spectra.joularjx;
 
+import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.noureddine.joularjx.cpu.Cpu;
-import org.noureddine.joularjx.cpu.CpuFactory;
-import org.noureddine.joularjx.monitor.MonitoringHandler;
-import org.noureddine.joularjx.monitor.MonitoringStatus;
-import org.noureddine.joularjx.monitor.ShutdownHandler;
 import org.noureddine.joularjx.result.CsvResultWriter;
 import org.noureddine.joularjx.result.ResultTreeManager;
+import org.noureddine.joularjx.cpu.Cpu;
+import org.noureddine.joularjx.cpu.CpuFactory;
+import org.noureddine.joularjx.monitor.MonitoringStatus;
 import org.noureddine.joularjx.result.ResultWriter;
 import org.noureddine.joularjx.utils.AgentProperties;
 import org.noureddine.joularjx.utils.JoularJXLogging;
+import org.noureddine.joularjx.monitor.ShutdownHandler;
+
 
 import com.sun.management.OperatingSystemMXBean;
 
@@ -35,16 +26,6 @@ public class Agent {
 	public static final String NAME_THREAD_NAME = "JoularJX Agent Thread";
 	public static final String COMPUTATION_THREAD_NAME = "JoularJX Agent Computation";
 	private static final Logger logger = JoularJXLogging.getLogger();
-
-	private static ResultWriter writer;
-
-	public static ResultWriter getResultWriter() {
-		return Agent.writer;
-	}
-
-	public static void setResultWriter(final ResultWriter aWriter) {
-		Agent.writer = aWriter;
-	}
 
 	/**
 	 * JVM hook to statically load the java agent at startup. After the Java Virtual
@@ -57,7 +38,7 @@ public class Agent {
 		JoularJXLogging.updateLevel(properties.getLoggerLevel());
 
 		logger.info("+---------------------------------+");
-		logger.info("| JoularJX Agent Version 3.0.1    |");
+		logger.info("| Spectra-JoularJX Agent Version 3.0.2   |");
 		logger.info("+---------------------------------+");
 
 		ThreadMXBean threadBean = createThreadBean();
@@ -76,18 +57,37 @@ public class Agent {
 
 		OperatingSystemMXBean osBean = createOperatingSystemBean(cpu);
 		MonitoringStatus status = new MonitoringStatus();
-		if (Agent.writer == null) {
-			Agent.setResultWriter(new CsvResultWriter());
-		}
-		MonitoringHandler monitoringHandler = new MonitoringHandler(appPid, properties, Agent.getResultWriter(), cpu, status,
-				osBean, threadBean, resultTreeManager);
-		ShutdownHandler shutdownHandler = new ShutdownHandler(appPid, Agent.getResultWriter(), cpu, status, properties,
+
+//		final ResultWriter writer = new ResultWriter() {
+//			@Override
+//			public void write(final String methodName, final double methodPower) {
+//				System.out.println(methodName + " : " + methodPower);
+//			}
+//
+//			@Override
+//			public void setTarget(String name, boolean overwrite) throws IOException {
+//				// throw new RuntimeException("Boom!");
+//				//Thread.dumpStack();
+//
+//			}
+//
+//			@Override
+//			public void closeTarget() throws IOException {
+//				//Thread.dumpStack();
+//			}
+//		};
+
+		ResultWriter writer = new CsvResultWriter();
+        MonitoringHandler monitoringHandler = new MonitoringHandler(appPid, properties, writer, cpu, status, osBean,
+				threadBean, resultTreeManager);
+		ShutdownHandler shutdownHandler = new ShutdownHandler(appPid, writer, cpu, status, properties,
 				resultTreeManager);
 
 		logger.log(Level.INFO, "Initialization finished");
 
 		new Thread(monitoringHandler, COMPUTATION_THREAD_NAME).start();
 		Runtime.getRuntime().addShutdownHook(new Thread(shutdownHandler));
+
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class Agent {
 		// (first call will return -1)
 		logger.log(Level.INFO, "Please wait while initializing JoularJX...");
 		for (int i = 0; i < 2; i++) {
-			osBean.getSystemCpuLoad(); // In future when Java 17 becomes widely deployed, use getCpuLoad() instead
+			osBean.getCpuLoad(); // In future when Java 17 becomes widely deployed, use getCpuLoad() instead
 			osBean.getProcessCpuLoad();
 
 			cpu.initialize();
@@ -144,4 +144,5 @@ public class Agent {
 	 */
 	private Agent() {
 	}
+
 }

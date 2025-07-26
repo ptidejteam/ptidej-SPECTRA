@@ -1,58 +1,146 @@
 package ca.concordia.ptidej.spectra.joularjx;
 
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import com.sun.jdi.Bootstrap;
 import com.sun.jdi.VirtualMachine;
 import com.sun.jdi.connect.Connector;
-import com.sun.jdi.connect.IllegalConnectorArgumentsException;
 import com.sun.jdi.connect.LaunchingConnector;
-import com.sun.jdi.connect.VMStartException;
 import org.noureddine.joularjx.result.ResultWriter;
 
+import com.sun.jdi.connect.IllegalConnectorArgumentsException;
+import com.sun.jdi.connect.VMStartException;
+
+
 public class Launcher {
-	public void launch(final ResultWriter aWriter, final String aClasspath, final String aFQN)
-			throws IllegalConnectorArgumentsException, VMStartException, IOException {
-		// Set the ResultWriter for the Agent
-		Agent.setResultWriter(aWriter);
+	private Process launchExternal(final ResultWriter aWriter, final String aClasspath, final String aFQN)
+			throws IOException {
 
-		// Get the default launching connector
-		LaunchingConnector launchingConnector = Bootstrap.virtualMachineManager().defaultConnector();
+		// Path to the Java executable
+		final String javaPath = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+		;
+		//java -javaagent:target/joularjx-with-dependencies.jar -cp target/classes org.noureddine.joularjx.OverloadTest
+		// agent JAR path
+		final String myAgentPath = System.getProperty("user.dir") + "/target/Spectra-with-dependencies.jar";
+		final String JoularjxPath = "~/joularjx/joularjx/target/joularjx-3.0.1.jar";
+		// Build the command to start the JVM
+		List<String> command = new ArrayList<>();
+		command.add("sudo");
+		command.add("-S");
+		command.add(javaPath);
+		command.add("-javaagent:" + myAgentPath);
+		command.add("-DresultWriterTarget=Output/Joularjx/");
+		// command.add("-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8000");
+		command.add("-cp");
+		command.add(JoularjxPath + File.pathSeparator + aClasspath);
+		command.add(aFQN);
 
-		// Get the default arguments
-		Map<String, Connector.Argument> env = launchingConnector.defaultArguments();
+		// Create the ProcessBuilder
+		final ProcessBuilder processBuilder = new ProcessBuilder(command);
 
-		// Check required keys (without classpath because it may not exist)
-		if (!env.containsKey("main") || !env.containsKey("options")) {
-			throw new IllegalStateException("Missing required launch arguments.");
-		}
+		processBuilder.redirectErrorStream(true);
 
-		// Set the main class to launch
-		env.get("main").setValue(aFQN);
-
-		// Get existing options or empty string
-		String existingOptions = env.get("options").value();
-		if (existingOptions == null) existingOptions = "";
-
-		// Remove deprecated debug flags that cause JDK 21 VM start failure
-		existingOptions = existingOptions.replaceAll("(-Xdebug|-Xrunjdwp:[^\\s]+)", "").trim();
-
-		// Add javaagent and classpath inside options
-		String agentPath = "/Users/mac/Documents/RA/joularjx/joularjx/target/joularjx-3.0.1.jar";
-		String newOptions = existingOptions + " -javaagent:" + agentPath + " -cp " + aClasspath;
-
-		env.get("options").setValue(newOptions.trim());
+		// Set the working directory (optional, adjust as needed)
+		processBuilder.directory(new File(System.getProperty("user.dir")));
 
 		System.out.println("Launching JVM with:");
 		System.out.println("Main Class : " + aFQN);
 		System.out.println("Classpath  : " + aClasspath);
-		System.out.println("Agent Path : " + agentPath);
-		System.out.println("Options    : " + newOptions.trim());
+		System.out.println("Agent Path : " + myAgentPath);
+		System.out.println("Command    : " + String.join(" ", command)); //Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/bin/java -javaagent:/Users/mac/Documents/RA/SPECTRA/target/Spectra-with-dependencies.jar
+// -DresultWriterTarget=Output/Joularjx/ -cp
+// ~/joularjx/joularjx/target/joularjx-3.0.1.jar:target/test-classes
+// ca.concordia.ptidej.spectra.example.OverloadTest
 
-		// Launch the JVM
-		VirtualMachine vm = launchingConnector.launch(env);
 
-		System.out.println("JVM started with agent: " + agentPath);
+		// Start the process
+		final Process process = processBuilder.start();
+
+		return process;
+	}
+
+	public static  Process launchAPI(final ResultWriter writer,
+										   final String aClasspath,
+										   final String aFQN) throws IOException
+			, IllegalConnectorArgumentsException {
+		String agentJarPath = "/Users/mac/Documents/RA/SPECTRA/target/Spectra-with-dependencies.jar";
+		LaunchingConnector launchingConnector = Bootstrap.virtualMachineManager().defaultConnector();
+		Map<String, Connector.Argument> arguments = launchingConnector.defaultArguments();
+
+		arguments.get("main").setValue(aFQN);
+
+		// Construct VM options
+		String vmOptions = "-javaagent:" + agentJarPath +
+				" -DresultWriterTarget=" + "Output/Joularjx"+
+				" -cp " + "~/joularjx/joularjx/target/joularjx-3.0.1.jar:" + aClasspath ;
+		arguments.get("options").setValue(vmOptions);
+
+		//arguments.get("suspend").setValue("false");
+		arguments.remove("launch");
+
+		// Launch the VM
+        VirtualMachine vm = null;
+        try {
+            vm = launchingConnector.launch(arguments);
+        } catch (VMStartException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Return the underlying process
+		return vm.process();
+
+
+	}
+
+
+	public void launch(final ResultWriter aWriter, final String aClasspath, final String aFQN) throws IOException {
+		final Process processExternal = this.launchExternal(aWriter,
+				aClasspath, aFQN);
+//        Process processAPI = null;
+//        try {
+//			processAPI = this.launchAPI(aWriter,aClasspath,aFQN);
+//        } catch (IllegalConnectorArgumentsException e) {
+//			System.out.println(e);
+//        }
+
+
+
+        // Provide the sudo password
+		enterPassword(processExternal);
+
+		// Consume the output stream
+		try (BufferedReader reader =
+					 new BufferedReader(new InputStreamReader(processExternal.getInputStream()))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				System.out.println("Output: " + line);
+			}
+		}
+
+		try (BufferedReader errorReader =
+					 new BufferedReader(new InputStreamReader(processExternal.getErrorStream()))) {
+			String errorLine;
+			while ((errorLine = errorReader.readLine()) != null) {
+				System.err.println("Error: " + errorLine);
+			}
+		}
+
+		try {
+			int exitCode = processExternal.waitFor();
+			System.out.println("Process exited with code: " + exitCode);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			throw new IOException("Process was interrupted", e);
+		}
+	}
+
+	private void enterPassword(Process process) throws IOException {
+		try (OutputStream os = process.getOutputStream()) {
+			os.write("1234".getBytes());
+			os.flush();
+		}
 	}
 }

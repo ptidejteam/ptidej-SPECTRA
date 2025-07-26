@@ -12,9 +12,6 @@ package ca.concordia.ptidej.spectra.joularjx;
 
 import java.io.IOException;
 import java.lang.management.ThreadMXBean;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +22,11 @@ import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.bcel.classfile.ClassParser;
+import org.apache.bcel.classfile.JavaClass;
+import org.apache.bcel.classfile.LineNumberTable;
+import org.apache.bcel.classfile.Method;
+import org.apache.bcel.generic.Type;
 import org.noureddine.joularjx.Agent;
 import org.noureddine.joularjx.cpu.Cpu;
 import org.noureddine.joularjx.monitor.MonitoringStatus;
@@ -36,16 +38,22 @@ import org.noureddine.joularjx.utils.JoularJXLogging;
 import org.noureddine.joularjx.utils.Scope;
 import org.noureddine.joularjx.utils.StackTraceFilter;
 
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.utils.SourceRoot;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sun.management.OperatingSystemMXBean;
 
 /**
- * The MonitoringHandler performs all the sampling and energy computation step,
- * and stores the data in dedicated MonitoringStatus structures or in files.
+ * The MonitoringHandler performs all the sampling and energy computation step, and stores the data in dedicated MonitoringStatus structures or in files.
  */
 public class MonitoringHandler extends org.noureddine.joularjx.monitor.MonitoringHandler implements Runnable {
 
@@ -66,25 +74,19 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
 
 	/**
 	 * Creates a new MonitoringHandler.
-	 *
-	 * @param appPid            the PID of the monitored application
-	 * @param properties        the agent's configuration properties
-	 * @param resultWriter      the writer that will be used to save data in files
-	 * @param cpu               an implementation of the CPU interface, depending on
-	 *                          the OS and hardware
-	 * @param status            where all the runtime data will be saved
-	 * @param osBean            the OperatingSystemMXBean, used to collect CPU and
-	 *                          process loads
-	 * @param threadBean        the ThreadMXBean, used to collect thread CPU time
-	 * @param resultTreeManager the ResultTreeManager, used to provide filepaths for
-	 *                          runtime generated files
+	 * @param appPid the PID of the monitored application
+	 * @param properties the agent's configuration properties
+	 * @param resultWriter the writer that will be used to save data in files
+	 * @param cpu an implementation of the CPU interface, depending on the OS and hardware
+	 * @param status where all the runtime data will be saved
+	 * @param osBean the OperatingSystemMXBean, used to collect CPU and process loads
+	 * @param threadBean the ThreadMXBean, used to collect thread CPU time
+	 * @param resultTreeManager the ResultTreeManager, used to provide filepaths for runtime generated files
 	 */
 	public MonitoringHandler(long appPid, AgentProperties properties, ResultWriter resultWriter, Cpu cpu,
-			MonitoringStatus status, OperatingSystemMXBean osBean, ThreadMXBean threadBean,
-			ResultTreeManager resultTreeManager) {
-
-		super(appPid, properties, resultWriter, cpu, status, osBean, threadBean, resultTreeManager);
-
+							 MonitoringStatus status, OperatingSystemMXBean osBean, ThreadMXBean threadBean, ResultTreeManager resultTreeManager) {
+		super(appPid, properties, resultWriter, cpu, status, osBean,
+				threadBean, resultTreeManager);
 		this.appPid = appPid;
 		this.properties = properties;
 		this.resultWriter = resultWriter;
@@ -108,11 +110,11 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
 			try {
 				double energyBefore = cpu.getInitialPower();
 
-				var samples = sample();
+				final Map<Thread, List<StackTraceElement[]>> samples = sample();
 				var methodsStats = extractStats(samples, methodName -> true);
 				var methodsStatsFiltered = extractStats(samples, properties::filtersMethod);
 
-				// Collecting call trees stats only if the option is enabled
+				//Collecting call trees stats only if the option is enabled
 				Map<Thread, Map<CallTree, Integer>> callTreesStats = null;
 				Map<Thread, Map<CallTree, Integer>> filteredCallTreeStats = null;
 				if (this.properties.callTreesConsumption()) {
@@ -120,8 +122,7 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
 					filteredCallTreeStats = extractCallTreesStats(samples, properties::filtersMethod);
 				}
 
-				double cpuLoad = osBean.getSystemCpuLoad(); // In future when Java 17 becomes widely deployed, use
-															// getCpuLoad() instead
+				double cpuLoad = osBean.getSystemCpuLoad(); // In future when Java 17 becomes widely deployed, use getCpuLoad() instead
 				double processCpuLoad = osBean.getProcessCpuLoad();
 
 				double energyAfter = cpu.getCurrentPower(cpuLoad);
@@ -155,56 +156,34 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
 
 				var threadCpuTimePercentages = getThreadsCpuTimePercentage(methodsStats, threadsCpuTime, processEnergy);
 
-				updateMethodsConsumedEnergy(methodsStats, threadCpuTimePercentages, status::addMethodConsumedEnergy,
-						Scope.ALL);
-				updateMethodsConsumedEnergy(methodsStatsFiltered, threadCpuTimePercentages,
-						status::addFilteredMethodConsumedEnergy, Scope.FILTERED);
+				updateMethodsConsumedEnergy(methodsStats, threadCpuTimePercentages, status::addMethodConsumedEnergy, Scope.ALL);
+				updateMethodsConsumedEnergy(methodsStatsFiltered, threadCpuTimePercentages, status::addFilteredMethodConsumedEnergy, Scope.FILTERED);
 
-				// Updating call trees consumption if option is enabled
+				//Updating call trees consumption if option is enabled
 				if (this.properties.callTreesConsumption()) {
-					updateCallTreesConsumedEnergy(callTreesStats, threadCpuTimePercentages,
-							status::addCallTreeConsumedEnergy);
-					updateCallTreesConsumedEnergy(filteredCallTreeStats, threadCpuTimePercentages,
-							status::addFilteredCallTreeConsumedEnergy);
+					updateCallTreesConsumedEnergy(callTreesStats, threadCpuTimePercentages, status::addCallTreeConsumedEnergy);
+					updateCallTreesConsumedEnergy(filteredCallTreeStats, threadCpuTimePercentages, status::addFilteredCallTreeConsumedEnergy);
 
-					// Writing runtime call trees power only if option is enabled
+					//Writing runtime call trees power only if option is enabled
 					if (this.properties.saveCallTreesRuntimeData()) {
 						if (this.properties.overwriteCallTreesRuntimeData()) {
-							this.saveResults(callTreesStats, threadCpuTimePercentages,
-									this.resultTreeManager.getAllRuntimeCallTreePath()
-											+ String.format("/joularJX-%d-all-call-trees-power", appPid));
-							this.saveResults(filteredCallTreeStats, threadCpuTimePercentages,
-									this.resultTreeManager.getFilteredRuntimeCallTreePath()
-											+ String.format("/joularJX-%d-filtered-call-trees-power", appPid));
+							this.saveResults(callTreesStats, threadCpuTimePercentages, this.resultTreeManager.getAllRuntimeCallTreePath()+String.format("/joularJX-%d-all-call-trees-power", appPid));
+							this.saveResults(filteredCallTreeStats, threadCpuTimePercentages, this.resultTreeManager.getFilteredRuntimeCallTreePath()+String.format("/joularJX-%d-filtered-call-trees-power", appPid));
 						} else {
-							this.saveResults(callTreesStats, threadCpuTimePercentages,
-									this.resultTreeManager.getAllRuntimeCallTreePath()
-											+ String.format("/joularJX-%d-%d-all-call-trees-power", appPid,
-													System.currentTimeMillis()));
-							this.saveResults(filteredCallTreeStats, threadCpuTimePercentages,
-									this.resultTreeManager.getFilteredRuntimeCallTreePath()
-											+ String.format("/joularJX-%d-%d-filtered-call-trees-power", appPid,
-													System.currentTimeMillis()));
+							this.saveResults(callTreesStats, threadCpuTimePercentages, this.resultTreeManager.getAllRuntimeCallTreePath()+String.format("/joularJX-%d-%d-all-call-trees-power", appPid, System.currentTimeMillis()));
+							this.saveResults(filteredCallTreeStats, threadCpuTimePercentages, this.resultTreeManager.getFilteredRuntimeCallTreePath()+String.format("/joularJX-%d-%d-filtered-call-trees-power", appPid, System.currentTimeMillis()));
 						}
 					}
 				}
 
-				// Writing runtime method's power only if option is enabled
+				//Writing runtime method's power only if option is enabled
 				if (this.properties.savesRuntimeData()) {
 					if (this.properties.overwritesRuntimeData()) {
-						this.saveResults(methodsStats, threadCpuTimePercentages,
-								this.resultTreeManager.getAllRuntimeMethodsPath()
-										+ String.format("/joularJX-%d-all-methods-power", appPid));
-						this.saveResults(methodsStatsFiltered, threadCpuTimePercentages,
-								this.resultTreeManager.getFilteredRuntimeMethodsPath()
-										+ String.format("/joularJX-%d-filtered-methods-power", appPid));
+						this.saveResults(methodsStats, threadCpuTimePercentages, this.resultTreeManager.getAllRuntimeMethodsPath()+String.format("/joularJX-%d-all-methods-power", appPid));
+						this.saveResults(methodsStatsFiltered, threadCpuTimePercentages, this.resultTreeManager.getFilteredRuntimeMethodsPath()+String.format("/joularJX-%d-filtered-methods-power", appPid));
 					} else {
-						this.saveResults(methodsStats, threadCpuTimePercentages,
-								this.resultTreeManager.getAllRuntimeMethodsPath() + String.format(
-										"/joularJX-%d-%d-all-methods-power", appPid, System.currentTimeMillis()));
-						this.saveResults(methodsStatsFiltered, threadCpuTimePercentages,
-								this.resultTreeManager.getFilteredRuntimeMethodsPath() + String.format(
-										"/joularJX-%d-%d-filtered-methods-power", appPid, System.currentTimeMillis()));
+						this.saveResults(methodsStats, threadCpuTimePercentages, this.resultTreeManager.getAllRuntimeMethodsPath()+String.format("/joularJX-%d-%d-all-methods-power", appPid, System.currentTimeMillis()));
+						this.saveResults(methodsStatsFiltered, threadCpuTimePercentages, this.resultTreeManager.getFilteredRuntimeMethodsPath()+String.format("/joularJX-%d-%d-filtered-methods-power", appPid, System.currentTimeMillis()));
 					}
 				}
 
@@ -221,9 +200,7 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
 
 	/**
 	 * Performs the sampling step. Collects a set of stack traces for each thread.
-	 * The sampling step is performed multiple time at the frequecy of
-	 * SAMPLE_RATE_MILLSECONDS, for the duration of SAMPLE_TIME_MILLISECONDS
-	 *
+	 * The sampling step is performed multiple time at the frequecy of SAMPLE_RATE_MILLSECONDS, for the duration of SAMPLE_TIME_MILLISECONDS
 	 * @return for each Thread, a List of it's the stack traces
 	 */
 	private Map<Thread, List<StackTraceElement[]>> sample() {
@@ -232,14 +209,15 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
 			for (int duration = 0; duration < sampleTimeMilliseconds; duration += sampleRateMilliseconds) {
 				for (var entry : Thread.getAllStackTraces().entrySet()) {
 					String threadName = entry.getKey().getName();
-					// Ignoring agent related threads, if option is enabled
-					if (this.properties.hideAgentConsumption() && (threadName.equals(Agent.COMPUTATION_THREAD_NAME))) {
-						continue; // Ignoring the thread
+					//Ignoring agent related threads, if option is enabled
+					if(this.properties.hideAgentConsumption() && (threadName.equals(Agent.COMPUTATION_THREAD_NAME))) {
+						continue; //Ignoring the thread
 					}
 
 					// Only check runnable threads (not waiting or blocked)
 					if (entry.getKey().getState() == Thread.State.RUNNABLE) {
-						var target = result.computeIfAbsent(entry.getKey(), t -> new ArrayList<>(sampleIterations));
+						var target = result.computeIfAbsent(entry.getKey(),
+								t -> new ArrayList<>(sampleIterations));
 						target.add(entry.getValue());
 					}
 				}
@@ -255,15 +233,12 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
 
 	/**
 	 * Return the occurences of each method call during monitoring loop, per thread.
-	 *
-	 * @param samples the result of the sampking step. A List of StackTraces of each
-	 *                Thread
-	 * @param covers  a Predicate, used to filter method names
-	 * @return for each Thread, a Map of each method and its occurences during the
-	 *         last monitoring loop
+	 * @param samples the result of the sampking step. A List of StackTraces of each Thread
+	 * @param covers a Predicate, used to filter method names
+	 * @return for each Thread, a Map of each method and its occurences during the last monitoring loop
 	 */
 	private Map<Thread, Map<String, Integer>> extractStats(Map<Thread, List<StackTraceElement[]>> samples,
-			Predicate<String> covers) {
+														   Predicate<String> covers) {
 		Map<Thread, Map<String, Integer>> stats = new HashMap<>();
 
 		for (var entry : samples.entrySet()) {
@@ -271,21 +246,25 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
 			stats.put(entry.getKey(), target);
 
 			for (StackTraceElement[] stackTrace : entry.getValue()) {
-				for (final StackTraceElement stackTraceElement : stackTrace) {
-					String cleanedMethodName = stackTraceElement.getMethodName();
-					if (stackTraceElement.getMethodName().contains("lambda")
-							|| stackTraceElement.getMethodName().contains("$")) {
-						cleanedMethodName = stackTraceElement.getMethodName().replaceAll("^lambda\\$(.*?)\\$\\d+$",
-								"$1");
-					}
+				for (StackTraceElement stackTraceElement : stackTrace) {
+					try {
+						// Get class and method details
+						String className = stackTraceElement.getClassName();
+						String methodName = stackTraceElement.getMethodName();
+						int lineNumber = stackTraceElement.getLineNumber();
 
-					// Use the resolve method to get the fully qualified method name with parameters
-					String resolved = resolve(stackTraceElement.getClassName(), cleanedMethodName,
-							stackTraceElement.getLineNumber());
+						// Use the resolve method to get the full method name
+						String fullMethodName = resolve("target/test-classes" +
+								"/ca" +
+								"/concordia/ptidej/spectra/example" +
+								"/OverloadTest.class", methodName, lineNumber);
 
-					if (resolved != null && covers.test(resolved)) {
-						target.merge(resolved, 1, Integer::sum);
-						break;
+						if (fullMethodName != null && covers.test(fullMethodName)) {
+							target.merge(fullMethodName, 1, Integer::sum);
+							break;
+						}
+					} catch (Exception e) {
+						logger.log(Level.WARNING, "Error resolving method: " + stackTraceElement, e);
 					}
 				}
 			}
@@ -293,18 +272,13 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
 
 		return stats;
 	}
-
 	/**
 	 * Returns the occurences of each call tree during monitoring loop, per thread.
-	 *
-	 * @param samples the result of the sampling step. A List of StackTraces of each
-	 *                Thread.
-	 * @param filter  a Predicate, used to filter method names within the call tree.
-	 * @return for each Thread, a Map of each CallTree and its occurences during the
-	 *         last monitoring loop.
+	 * @param samples the result of the sampling step. A List of StackTraces of each Thread.
+	 * @param filter a Predicate, used to filter method names within the call tree.
+	 * @return for each Thread, a Map of each CallTree and its occurences during the last monitoring loop.
 	 */
-	private Map<Thread, Map<CallTree, Integer>> extractCallTreesStats(Map<Thread, List<StackTraceElement[]>> samples,
-			Predicate<String> filter) {
+	private Map<Thread, Map<CallTree, Integer>> extractCallTreesStats(Map<Thread, List<StackTraceElement[]>> samples, Predicate<String> filter){
 		Map<Thread, Map<CallTree, Integer>> stats = new HashMap<>();
 
 		for (var entry : samples.entrySet()) {
@@ -322,26 +296,22 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
 		return stats;
 	}
 
+
 	/**
-	 * Updates the CPU times for each Thread. Returns for each thread (PID) it's
-	 * percentage of CPU time used
-	 *
-	 * @param methodsStats   a map of method occurrences for each thread
-	 * @param threadsCpuTime a map of CPU time per PID, contains the cpu time for
-	 *                       each tread, resulting from the last call to
-	 *                       getThreadCpuTime(threadId)
-	 * @param processEnergy  the energy consumed by the process in the last
-	 *                       monitoring period
+	 * Updates the CPU times for each Thread.
+	 * Returns for each thread (PID) it's percentage of CPU time used
+	 * @param methodsStats a map of method occurrences for each thread
+	 * @param threadsCpuTime a map of CPU time per PID, contains the cpu time for each tread, resulting from the last call to getThreadCpuTime(threadId)
+	 * @param processEnergy the energy consumed by the process in the last monitoring period
 	 * @return for each PID, the percentage of energy used by the associated thread
 	 */
 	private Map<Long, Double> getThreadsCpuTimePercentage(Map<Thread, Map<String, Integer>> methodsStats,
-			Map<Long, Long> threadsCpuTime, double processEnergy) {
+														  Map<Long, Long> threadsCpuTime, double processEnergy) {
 		Map<Long, Double> threadsCpuTimePercentage = new HashMap<Long, Double>();
 
 		Map<Long, Double> actualThreadsCpuTime = new HashMap<Long, Double>();
 		double totalThreadsCpuTime = 0;
-		// first compute the proportion of cpu time for each thread in the last sampling
-		// period
+		// first compute the proportion of cpu time for each thread in the last sampling period
 		for (Entry<Thread, Map<String, Integer>> threadEntry : methodsStats.entrySet()) {
 			long threadId = threadEntry.getKey().getId();
 			long currentThreadCpuTime = threadBean.getThreadCpuTime(threadId);
@@ -350,24 +320,19 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
 				// TODO ignore last sampling period??
 				long jump = this.sampleRateMilliseconds / 10;
 				currentThreadCpuTime = previousThreadCpuTime + jump; // assume interval of 1 millisecond
-				logger.info("Thread CPU time negative, taking previous time + " + jump + " : " + currentThreadCpuTime
-						+ " for thread: " + threadId);
+				logger.info("Thread CPU time negative, taking previous time + " + jump + " : " + currentThreadCpuTime + " for thread: " + threadId);
 			}
 
 			threadsCpuTime.put(threadId, currentThreadCpuTime);
 			long delta = currentThreadCpuTime - previousThreadCpuTime;
-			double adjustedThreadCpuTime = delta * threadEntry.getValue().values().stream().mapToDouble(i -> i).sum()
-					/ sampleIterations;
+			double adjustedThreadCpuTime = delta * threadEntry.getValue().values().stream().mapToDouble(i -> i).sum() / sampleIterations;
 			totalThreadsCpuTime += adjustedThreadCpuTime;
 			actualThreadsCpuTime.put(threadId, adjustedThreadCpuTime);
 		}
 
-		// compute the proportion of total energy consumed by the thread using its
-		// proportion of cpu time in the last sampling period
+		// compute the proportion of total energy consumed by the thread using its proportion of cpu time in the last sampling period
 		for (Entry<Long, Double> threadEntry : actualThreadsCpuTime.entrySet()) {
-			double threadEnergy = totalThreadsCpuTime > 0d
-					? threadEntry.getValue() * processEnergy / totalThreadsCpuTime
-					: 0d;
+			double threadEnergy = totalThreadsCpuTime > 0d?threadEntry.getValue() * processEnergy / totalThreadsCpuTime : 0d;
 			threadsCpuTimePercentage.put(threadEntry.getKey(), threadEnergy);
 		}
 
@@ -376,52 +341,32 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
 
 	/**
 	 * Update method's consumed energy.
-	 *
-	 * @param methodsStats               method's encounters statistics per Thread
-	 * @param threadCpuTimePercentages   a map of CPU time usage per PID
-	 * @param updateMethodConsumedEnergy an object consumer, used to update all or
-	 *                                   only filtered methods
-	 * @param scope                      the scope (all methods or only filterd
-	 *                                   methods). Used for energy consumption
-	 *                                   tracking
+	 * @param methodsStats method's encounters statistics per Thread
+	 * @param threadCpuTimePercentages a map of CPU time usage per PID
+	 * @param updateMethodConsumedEnergy an object consumer, used to update all or only filtered methods
+	 * @param scope the scope (all methods or only filterd methods). Used for energy consumption tracking
 	 */
 	private void updateMethodsConsumedEnergy(Map<Thread, Map<String, Integer>> methodsStats,
-			Map<Long, Double> threadCpuTimePercentages, ObjDoubleConsumer<String> updateMethodConsumedEnergy,
-			Scope scope) {
+											 Map<Long, Double> threadCpuTimePercentages,
+											 ObjDoubleConsumer<String> updateMethodConsumedEnergy,
+											 Scope scope) {
 		for (var threadEntry : methodsStats.entrySet()) {
 			double totalEncounters = threadEntry.getValue().values().stream().mapToDouble(i -> i).sum();
 			for (var methodEntry : threadEntry.getValue().entrySet()) {
 				double methodPower = 0.0;
-				if (totalEncounters >= Double.MIN_VALUE) {
-					methodPower = threadCpuTimePercentages.get(threadEntry.getKey().getId())
-							* (methodEntry.getValue() / totalEncounters);
+				if(totalEncounters >= Double.MIN_VALUE) {
+					methodPower = threadCpuTimePercentages.get(threadEntry.getKey().getId()) * (methodEntry.getValue() / totalEncounters);
 				}
 
-				// --- NEW LOGIC: Extract and resolve method signature using JavaParser ---
-				String rawMethod = methodEntry.getKey();
-				String resolvedMethod = rawMethod; // fallback in case resolution fails
-				try {
-					String[] parts = rawMethod.split("\\(")[0].split(":");
-					if (parts.length >= 3) {
-						String className = parts[0];
-						String methodName = parts[1];
-						int lineNumber = Integer.parseInt(parts[2]);
-						String resolved = resolve(className, methodName, lineNumber);
-						if (resolved != null) {
-							resolvedMethod = resolved;
-						}
-					}
-				} catch (Exception e) {
-					// System.out.println("Failed to resolve method: " + rawMethod);
-				}
-
-				// Track method consumption evolution
+				//Only of consumption evolution tracking is enabled
 				if (this.properties.trackConsumptionEvolution()) {
+					//computing the UNIX EPOCH timestamp
 					long unixTimestamp = System.currentTimeMillis() / 1000L;
+
 					if (scope == Scope.ALL) {
-						this.status.trackMethodConsumption(resolvedMethod, unixTimestamp, methodPower);
+						this.status.trackMethodConsumption(methodEntry.getKey(), unixTimestamp, methodPower);
 					} else {
-						this.status.trackFilteredMethodConsumption(resolvedMethod, unixTimestamp, methodPower);
+						this.status.trackFilteredMethodConsumption(methodEntry.getKey(), unixTimestamp, methodPower);
 					}
 				}
 
@@ -432,22 +377,18 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
 
 	/**
 	 * Update call trees consumed energy.
-	 *
-	 * @param stats                    call trees encounters statistics per Thread
+	 * @param stats call trees encounters statistics per Thread
 	 * @param threadCpuTimePercentages map of CPU time usage per PID
-	 * @param callTreeConsumer         the method used to update the energy
-	 *                                 consumption
+	 * @param callTreeConsumer the method used to update the energy consumption
 	 */
-	private void updateCallTreesConsumedEnergy(Map<Thread, Map<CallTree, Integer>> stats,
-			Map<Long, Double> threadCpuTimePercentages, ObjDoubleConsumer<CallTree> callTreeConsumer) {
+	private void updateCallTreesConsumedEnergy(Map<Thread, Map<CallTree, Integer>> stats, Map<Long, Double> threadCpuTimePercentages, ObjDoubleConsumer<CallTree> callTreeConsumer) {
 		for (var entry : stats.entrySet()) {
 			double totalEncounters = entry.getValue().values().stream().mapToDouble(i -> i).sum();
 
 			for (var callTreeEntry : entry.getValue().entrySet()) {
 				double stackTracePower = 0.0;
 				if (totalEncounters >= Double.MIN_VALUE) {
-					stackTracePower = threadCpuTimePercentages.get(entry.getKey().getId())
-							* (callTreeEntry.getValue() / totalEncounters);
+					stackTracePower = threadCpuTimePercentages.get(entry.getKey().getId()) * (callTreeEntry.getValue() / totalEncounters);
 				}
 
 				callTreeConsumer.accept(callTreeEntry.getKey(), stackTracePower);
@@ -457,10 +398,9 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
 
 	/**
 	 * Calculate process energy consumption
-	 *
-	 * @param totalCpuUsage   Total CPU usage
+	 * @param totalCpuUsage Total CPU usage
 	 * @param processCpuUsage Process CPU usage
-	 * @param cpuEnergy       CPU energy
+	 * @param cpuEnergy CPU energy
 	 * @return Process energy consumption
 	 */
 	private double calculateProcessCpuEnergy(double totalCpuUsage, double processCpuUsage, double cpuEnergy) {
@@ -468,70 +408,27 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
 	}
 
 	/**
-	 * Writes the results in a file. The filename is partially defined by the given
-	 * parameters.
-	 *
-	 * @param <K>                      The type of key that will be written in the
-	 *                                 file. Must implement the toString() method.
-	 * @param stats                    the data to be written, given under the form
-	 *                                 of a Map<Thread, Map<K>, Double>> where the
-	 *                                 Double is the enrgy consumption.
+	 * Writes the results in a file. The filename is partially defined by the given parameters.
+	 * @param <K> The type of key that will be written in the file. Must implement the toString() method.
+	 * @param stats the data to be written, given under the form of a Map<Thread, Map<K>, Double>> where the Double is the enrgy consumption.
 	 * @param threadCpuTimePercentages a map of CPU time usage per Thread (PID)
-	 * @param filePath                 the path of the file where the data will be
-	 *                                 written
+	 * @param filePath the path of the file where the data will be written
 	 * @throws IOException if an I/O error occurs while writing the file
 	 */
-	public <K> void saveResults(Map<Thread, Map<K, Integer>> stats, Map<Long, Double> threadCpuTimePercentages,
-			String filePath) throws IOException {
+	public <K> void saveResults(Map<Thread, Map<K,Integer>> stats,  Map<Long, Double> threadCpuTimePercentages, String filePath) throws IOException {
 		resultWriter.setTarget(filePath, true);
 
 		for (var statEntry : stats.entrySet()) {
 			for (var entry : statEntry.getValue().entrySet()) {
-				K key = entry.getKey();
-				if (key == null) { // Null check for the key
-					System.out.println("Warning: Null key encountered in saveResults. Skipping entry.");
-					continue;
-				}
-				String resolvedMethodName;
-				Double power;
-				if (key instanceof Iterable) {
-					StringBuilder resolvedMethodNameBuilder = new StringBuilder();
-					for (Object element : (Iterable<?>) key) {
-						if (element instanceof StackTraceElement) {
-							StackTraceElement stackTraceElement = (StackTraceElement) element;
-							String resolved = resolve(stackTraceElement.getClassName(),
-									stackTraceElement.getMethodName(), stackTraceElement.getLineNumber());
-							if (resolved != null) {
-								resolvedMethodNameBuilder.append(resolved).append(", ");
-							}
-						} else {
-							resolvedMethodNameBuilder.append(element.toString()).append(", ");
-						}
-					}
-					// Remove the trailing comma and space
-					resolvedMethodName = resolvedMethodNameBuilder.length() > 0
-							? resolvedMethodNameBuilder.substring(0, resolvedMethodNameBuilder.length() - 2)
-							: "";
-				} else if (key instanceof StackTraceElement) {
-					StackTraceElement stackTraceElement = (StackTraceElement) key;
-					resolvedMethodName = resolve(stackTraceElement.getClassName(), stackTraceElement.getMethodName(),
-							stackTraceElement.getLineNumber());
-				} else {
-					resolvedMethodName = resolve(key.toString(), null, -1);
-				}
-				power = threadCpuTimePercentages.get(statEntry.getKey().getId()) * (entry.getValue() / 100.0);
-
-				System.out.println("Final Data: " + resolvedMethodName + " " + power);
-				resultWriter.write(resolvedMethodName, power);
+				double power = threadCpuTimePercentages.get(statEntry.getKey().getId()) * (entry.getValue() / 100.0);
+				resultWriter.write(entry.getKey().toString(), power);
 			}
 		}
-
 		resultWriter.closeTarget();
 	}
 
 	/**
 	 * Indicate if the JVM is destroying
-	 *
 	 * @return true if the JVM destroying thread is present, false otherwise
 	 */
 	private boolean destroyingVM() {
@@ -543,137 +440,56 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
 		}
 	}
 
-	private boolean destroyingVM(double d) {
-		if (!this.properties.isApplicationServer()) {
-			Double d1 = d;
-			return true;
-		} else {
-			return false;
-		}
-	}
 
-	private boolean destroyingVM(String s) {
-		if (!this.properties.isApplicationServer()) {
-			String d1 = s;
-			return true;
-		} else {
-			return false;
-		}
-	}
 
-	/**
-	 * Retrieves correct version of overloaded method with optional line number
-	 * using JavaParser.
-	 */
-	public static String resolve(String className, String methodName, int lineNumber) {
+	public static String resolve(String classFilePath, String methodName, int lineNumber) {
 		try {
-			if (className == null || methodName == null || lineNumber < 0) {
-				// System.out.println("Skipping resolve: null className/methodName or invalid
-				// lineNumber" + methodName+" " + className + " "+lineNumber);
-				return null;
-			}
+			// Parse the class file
+			ClassParser parser = new ClassParser(classFilePath);
+			JavaClass javaClass = parser.parse();
 
-			// Ignore system and third-party classes
-			if (className.startsWith("java.") || className.startsWith("sun.") || className.startsWith("jdk.")
-					|| className.startsWith("javax.") || className.startsWith("org.apache.maven.")
-					|| className.contains("$$") // synthetic proxy classes
-					|| className.contains("$Lambda$") // lambdas generated by compiler
-					|| className.contains("lambda$") // anonymous lambda methods
-					|| className.contains("com.intellij.")) {
-				return null;
-			}
+			// Get the class name and package name
+			String className = javaClass.getClassName();
+			String packageName = javaClass.getPackageName();
 
-			List<Path> sourceRoots = List.of(
-					Paths.get(System.getProperty("user.home"), "Documents", "RA", "SPECTRA", "src", "main",
-							"java"),
-					Paths.get(System.getProperty("user.home"), "Documents", "RA", "SPECTRA", "src", "test",
-							"java"));
+			// Iterate through methods
+			for (Method method : javaClass.getMethods()) {
+				// Get the LineNumberTable attribute
+				LineNumberTable lineNumberTable = method.getLineNumberTable();
+				if (lineNumberTable != null) {
+					int startLine = -1;
+					int endLine = -1;
+					if (lineNumberTable != null) {
+						var lineNumbers = lineNumberTable.getLineNumberTable();
+						if (lineNumbers.length > 0) {
+							startLine = lineNumbers[0].getLineNumber();
+							endLine = lineNumbers[lineNumbers.length - 1].getLineNumber();
+						}
+					}
+					// Check if the line number falls within the method's range
+					if (method.getName().equals(methodName) && lineNumber >= startLine && lineNumber <= endLine) {
+						// Build the method signature
+						StringBuilder params = new StringBuilder();
+						for (Type paramType : method.getArgumentTypes()) {
+							params.append(paramType.toString()).append(", ");
+						}
+						if (params.length() > 0) {
+							params.setLength(params.length() - 2); // Remove trailing comma and space
+						}
 
-			// Only resolve methods in your source tree
-			String relativePath = className.replace(".", "/") + ".java";
-			for (Path srcPath : sourceRoots) {
-				Path filePath = srcPath.resolve(relativePath);
-				if (!Files.exists(filePath)) {
-					// System.out.println("File not found in " + filePath);
-					continue;
-				}
+						String realName = method.getName().equals("<init>") ? "<init>" : methodName;
 
-				SourceRoot sourceRoot = new SourceRoot(srcPath);
-				CompilationUnit cu;
-				try {
-					String relativeDir = srcPath.relativize(filePath.getParent()).toString();
-					// Normalize empty relative directory
-					if (relativeDir.isEmpty())
-						relativeDir = "";
-					cu = sourceRoot.parse(relativeDir, filePath.getFileName().toString());
-				} catch (Exception e) {
-					// System.out.println("Failed to parse " + filePath + " — " + e.getMessage());
-					continue;
-				}
-
-				var resolved = cu.findAll(ClassOrInterfaceDeclaration.class).stream().flatMap(c -> {
-					List<CallableDeclaration<?>> methods = new ArrayList<>();
-					methods.addAll(c.getMethods());
-					methods.addAll(c.getConstructors());
-					return methods.stream();
-				}).filter(m -> m.getNameAsString().equals(methodName)).filter(m -> m.getRange().isPresent()
-						&& lineNumber >= m.getRange().get().begin.line && lineNumber <= m.getRange().get().end.line)
-						.map(m -> {
-							String classShort = m.findAncestor(ClassOrInterfaceDeclaration.class)
-									.map(ClassOrInterfaceDeclaration::getNameAsString).orElse("Unknown");
-							String pkg = m.findCompilationUnit().flatMap(cu2 -> cu2.getPackageDeclaration())
-									.map(pd -> pd.getNameAsString()).orElse("");
-							String params = m.getParameters().stream().map(p -> p.getType().asString())
-									.reduce((a, b) -> a + ", " + b).orElse("");
-							String realName = m instanceof ConstructorDeclaration ? "<init>" : methodName;
-							return (pkg.isEmpty() ? classShort : pkg + "." + classShort) + "." + realName + "(" + params
-									+ ")";
-						}).findFirst().orElse(null);
-
-				if (resolved != null) {
-					System.out.println("Resolved: " + resolved);
-					return resolved;
-				} else {
-					System.out.println("Could not resolve  " + methodName + " in " + filePath);
+						return (packageName.isEmpty() ? className : packageName + "." + className) + "." + realName + "(" + params + ")";
+					}
 				}
 			}
 
-			// Not found in any source root
-			// System.out.println("Could not find source for " + className + "." +
-			// methodName + " @ line " + lineNumber);
+			// Method not found
 			return null;
 
-		} catch (Exception e) {
-			// System.out.println("Exception resolving method: " + className + "." +
-			// methodName + " @ line " + lineNumber);
+		} catch (IOException e) {
 			e.printStackTrace();
-			return className + "." + methodName + "(?)"; // fallback even on exception
+			return null;
 		}
-	}
-
-	private static final Map<String, Double> methodToEnergyMap = new HashMap<>();
-	private static boolean running = false;
-
-	public static void start() {
-		running = true;
-		methodToEnergyMap.clear();
-	}
-
-	public static void stop() {
-		running = false;
-	}
-
-	public static void reset() {
-		methodToEnergyMap.clear();
-	}
-
-	public static void record(String methodSignature, double energy) {
-		if (!running)
-			return;
-		methodToEnergyMap.put(methodSignature, methodToEnergyMap.getOrDefault(methodSignature, 0.0) + energy);
-	}
-
-	public static Map<String, Double> getMethodToEnergyMap() {
-		return methodToEnergyMap;
 	}
 }

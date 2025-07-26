@@ -72,29 +72,29 @@
 			<artifactId>poi-ooxml-schemas</artifactId>
 			<version>4.1.2</version>
 		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.bcel</groupId>
-			<artifactId>bcel</artifactId>
-			<version>6.7.0</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.github.javaparser</groupId>
-			<artifactId>javaparser-core</artifactId>
-			<version>3.27.0</version>
-			<scope>compile</scope>
-		</dependency>
-    <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <scope>test</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter</artifactId>
-        <scope>test</scope>
-    </dependency>
+
+	<dependency>
+		<groupId>org.apache.bcel</groupId>
+		<artifactId>bcel</artifactId>
+		<version>6.10.0</version>
+		<scope>compile</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.aspectj</groupId>
+		<artifactId>aspectjtools</artifactId>
+		<version>1.6.2</version>
+	</dependency>
+	<dependency>
+		<groupId>com.github.javaparser</groupId>
+		<artifactId>javaparser-core</artifactId>
+		<version>3.25.0</version>
+	</dependency>
+	<dependency>
+		<groupId>org.junit.jupiter</groupId>
+		<artifactId>junit-jupiter</artifactId>
+		<version>5.10.0</version>
+		<scope>test</scope>
+	</dependency>
 </dependencies>
 
 	<build>
@@ -102,6 +102,10 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludeDevtools>true</excludeDevtools>
+					<classifier>exec</classifier>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -112,6 +116,32 @@
 					<compilerArgs>--enable-preview</compilerArgs>
 				</configuration>
 			</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-shade-plugin</artifactId>
+						<version>3.5.3</version>
+						<executions>
+							<execution>
+								<id>shade-jar-with-dependencies</id>
+								<phase>package</phase>
+								<goals><goal>shade</goal></goals>
+								<configuration>
+									<createDependencyReducedPom>false</createDependencyReducedPom>
+									<transformers>
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+											<manifestEntries>
+												<Premain-Class>ca.concordia.ptidej.spectra.joularjx.Agent</Premain-Class>
+											</manifestEntries>
+
+										</transformer>
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+									</transformers>
+									<finalName>${project.artifactId}-with-dependencies</finalName>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
 		</plugins>
 	</build>
 
