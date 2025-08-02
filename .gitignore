@@ -14,7 +14,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-
+bcel-6.10.0.jar
 ### STS ###x
 .apt_generated
 .classpath
