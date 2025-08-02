@@ -23,7 +23,6 @@ import org.noureddine.joularjx.result.ResultWriter;
 public class TestOverloadMethods {
     @Test
     public void test1() throws IllegalConnectorArgumentsException, VMStartException, IOException {
-        File path = new File("Output/Joularjx/");
 
         final Map<String, Double> methodsPowers = new HashMap<String, Double>();
         ResultWriter writer = new CsvResultWriter();

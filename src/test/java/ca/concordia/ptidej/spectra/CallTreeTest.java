@@ -127,19 +127,19 @@ public class CallTreeTest {
 
     @Test
     public void testCorrectMethod() {
-        String resolved = resolve("org.noureddine.joularjx.monitor.MonitoringHandler"
+        String resolved = resolve("org.noureddine.joularjx.monitor.MonitoringHandler".getClass()
                 , "destroyingVM", 402);
         assertEquals("org.noureddine.joularjx.monitor.MonitoringHandler.destroyingVM()", resolved);
     }
     @Test
     public void testCorrectMethod2() {
-        String resolved = resolve("org.noureddine.joularjx.monitor.MonitoringHandler"
+        String resolved = resolve("org.noureddine.joularjx.monitor.MonitoringHandler".getClass()
                 , "destroyingVM", 410);
         assertEquals("org.noureddine.joularjx.monitor.MonitoringHandler.destroyingVM(double)", resolved);
     }
     @Test
     public void testCorrectMethod3() {
-        String resolved = resolve("org.noureddine.joularjx.monitor.MonitoringHandler"
+        String resolved = resolve("org.noureddine.joularjx.monitor.MonitoringHandler".getClass()
                 , "destroyingVM", 418);
         System.out.println(resolved);
         assertEquals("org.noureddine.joularjx.monitor.MonitoringHandler.destroyingVM(String)", resolved);
