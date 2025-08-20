@@ -15,7 +15,6 @@ import org.noureddine.joularjx.monitor.MonitoringStatus;
 import org.noureddine.joularjx.result.ResultWriter;
 import org.noureddine.joularjx.utils.AgentProperties;
 import org.noureddine.joularjx.utils.JoularJXLogging;
-import org.noureddine.joularjx.monitor.ShutdownHandler;
 
 
 import com.sun.management.OperatingSystemMXBean;
@@ -46,7 +45,8 @@ public class Agent {
         long appPid = ProcessHandle.current().pid();
 
         // Creating the required folders to store the result files generated later on
-        ResultTreeManager resultTreeManager = new ResultTreeManager(properties, appPid, System.currentTimeMillis());
+        ResultTreeManager resultTreeManager = new ResultTreeManager(properties, 123,
+                123456789);
         if (!resultTreeManager.create()) {
             logger.log(Level.WARNING,
                     "Error(s) occurred while creating the result folder hierarchy. Some results may not be reported.");

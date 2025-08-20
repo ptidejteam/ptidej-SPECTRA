@@ -36,8 +36,7 @@ public class ResultTreeManager  extends  org.noureddine.joularjx.result.ResultTr
         super(properties, pid, startTimestamp);
         this.properties = properties;
         Object[] var10002 = new Object[]{pid, startTimestamp};
-        this.runDirectoryPath = "Output/Joularjx/" + String.format("%d-%d",
-                var10002);
+        this.runDirectoryPath = "Output/Joularjx/data/";
         String allDirectoryPath = this.runDirectoryPath + "/all";
         String filteredDirectoryPath = this.runDirectoryPath + "/app";
         this.allTotalMethodsPath = allDirectoryPath + "/total/methods";
@@ -54,7 +53,7 @@ public class ResultTreeManager  extends  org.noureddine.joularjx.result.ResultTr
 
     public boolean create() {
         boolean verif = true;
-        logger.log(Level.INFO, String.format("Results will be stored in %s/", this.runDirectoryPath));
+        logger.log(Level.INFO, String.format("Results will be stored in %s", this.runDirectoryPath));
         List<String> directoriesToCreate = new ArrayList();
         directoriesToCreate.add(this.allTotalMethodsPath);
         directoriesToCreate.add(this.filteredTotalMethodsPath);

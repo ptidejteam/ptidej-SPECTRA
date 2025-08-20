@@ -64,7 +64,7 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
                              MonitoringStatus status, OperatingSystemMXBean osBean, ThreadMXBean threadBean, ResultTreeManager resultTreeManager) {
         super(appPid, properties, resultWriter, cpu, status, osBean,
                 threadBean, resultTreeManager);
-        this.appPid = appPid;
+        this.appPid = 123;
         this.properties = properties;
         this.resultWriter = resultWriter;
         this.cpu = cpu;
@@ -147,8 +147,8 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
                             this.saveResults(callTreesStats, threadCpuTimePercentages, this.resultTreeManager.getAllRuntimeCallTreePath() + String.format("/joularJX-%d-all-call-trees-power", appPid));
                             this.saveResults(filteredCallTreeStats, threadCpuTimePercentages, this.resultTreeManager.getFilteredRuntimeCallTreePath() + String.format("/joularJX-%d-filtered-call-trees-power", appPid));
                         } else {
-                            this.saveResults(callTreesStats, threadCpuTimePercentages, this.resultTreeManager.getAllRuntimeCallTreePath() + String.format("/joularJX-%d-%d-all-call-trees-power", appPid, System.currentTimeMillis()));
-                            this.saveResults(filteredCallTreeStats, threadCpuTimePercentages, this.resultTreeManager.getFilteredRuntimeCallTreePath() + String.format("/joularJX-%d-%d-filtered-call-trees-power", appPid, System.currentTimeMillis()));
+                            this.saveResults(callTreesStats, threadCpuTimePercentages, this.resultTreeManager.getAllRuntimeCallTreePath() + String.format("/joularJX-%d-%d-all-call-trees-power", appPid  ));
+                            this.saveResults(filteredCallTreeStats, threadCpuTimePercentages, this.resultTreeManager.getFilteredRuntimeCallTreePath() + String.format("/joularJX-%d-%d-filtered-call-trees-power", appPid  ));
                         }
                     }
                 }
@@ -156,11 +156,12 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
                 //Writing runtime method's power only if option is enabled
                 if (this.properties.savesRuntimeData()) {
                     if (this.properties.overwritesRuntimeData()) {
-                        this.saveResults(methodsStats, threadCpuTimePercentages, this.resultTreeManager.getAllRuntimeMethodsPath() + String.format("/joularJX-%d-all-methods-power", appPid));
-                        this.saveResults(methodsStatsFiltered, threadCpuTimePercentages, this.resultTreeManager.getFilteredRuntimeMethodsPath() + String.format("/joularJX-%d-filtered-methods-power", appPid));
+                        this.saveResults(methodsStats, threadCpuTimePercentages, this.resultTreeManager.getAllRuntimeMethodsPath() + String.format("/joularJX--all-methods-power", appPid));
+                        this.saveResults(methodsStatsFiltered, threadCpuTimePercentages, this.resultTreeManager.getFilteredRuntimeMethodsPath() + String.format("/joularJX--filtered-methods-power", appPid));
                     } else {
-                        this.saveResults(methodsStats, threadCpuTimePercentages, this.resultTreeManager.getAllRuntimeMethodsPath() + String.format("/joularJX-%d-%d-all-methods-power", appPid, System.currentTimeMillis()));
-                        this.saveResults(methodsStatsFiltered, threadCpuTimePercentages, this.resultTreeManager.getFilteredRuntimeMethodsPath() + String.format("/joularJX-%d-%d-filtered-methods-power", appPid, System.currentTimeMillis()));
+                        this.saveResults(methodsStats, threadCpuTimePercentages,
+                                this.resultTreeManager.getAllRuntimeMethodsPath() + String.format("/joularJX-%d-all-methods-power", appPid));
+                        this.saveResults(methodsStatsFiltered, threadCpuTimePercentages, this.resultTreeManager.getFilteredRuntimeMethodsPath() + String.format("/joularJX-%dfiltered-methods-power", appPid  ));
                     }
                 }
 
