@@ -59,8 +59,8 @@ public class ShutdownHandler extends org.noureddine.joularjx.monitor.ShutdownHan
 
         try {
             //Writing methods and filtered methods energy consumption
-            this.saveResults(status.getMethodsConsumedEnergy(), this.resultTreeManager.getAllTotalMethodsPath()+String.format("/joularJX-%d-all-methods-energy", appPid));
-            this.saveResults(status.getFilteredMethodsConsumedEnergy(), this.resultTreeManager.getFilteredTotalMethodsPath()+String.format("/joularJX-%d-filtered-methods-energy", appPid));
+            this.saveResults(status.getMethodsConsumedEnergy(), "Output/Joularjx/data"+String.format("/joularJX-%d-all-methods-energy", appPid));
+            this.saveResults(status.getFilteredMethodsConsumedEnergy(), "Output/Joularjx/data"+String.format("/joularJX-%d-filtered-methods-energy", appPid));
 
             //Writing consumption evolution files only if the option is enabled
             if (this.properties.trackConsumptionEvolution()) {
@@ -100,7 +100,7 @@ public class ShutdownHandler extends org.noureddine.joularjx.monitor.ShutdownHan
 
         for (var entry : consumedEnergyMap.entrySet()) {
             resultWriter.write(entry.getKey().toString(), entry.getValue());
-            if (filePath.contains("-all-methods-energy"))
+            if (filePath.contains("-all-methods-energy") && !entry.getValue().toString().contains("$$Lambda/0x0"))
             System.out.println(entry.getKey().toString()+" : "+ entry.getValue());
 
 

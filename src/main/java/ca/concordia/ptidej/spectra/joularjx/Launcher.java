@@ -5,47 +5,122 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
-import ca.concordia.ptidej.spectra.analysis.CSVMerger;
+import com.sun.jdi.connect.IllegalConnectorArgumentsException;
+import com.sun.jdi.connect.VMStartException;
+import org.noureddine.joularjx.result.ResultWriter;
+
 import com.sun.jdi.Bootstrap;
 import com.sun.jdi.VirtualMachine;
 import com.sun.jdi.connect.Connector;
-
-import java.util.Map;
-
 import com.sun.jdi.connect.LaunchingConnector;
-import org.noureddine.joularjx.result.ResultWriter;
+
+import ca.concordia.ptidej.spectra.analysis.CSVMerger;
 
 public class Launcher {
-    private Process launchExternal(final ResultWriter aWriter,
-                                   final String aClasspath, final String aFQN) throws IOException {
 
-        Process process = this.launchJVMs(aClasspath, aFQN);
-        return process; // This method is not used in the current implementation
+    public void launch(final ResultWriter aWriter, final String aClasspath,
+                       final String aFQN, final String... programArgs) throws IOException {
+
+       final long pid = this.launchExternal(aWriter, aClasspath, aFQN, programArgs);
+        if (pid > 0) {
+            CSVMerger.runCSVMerger(Arrays.toString(programArgs));
+        }
 
     }
 
-    private Process launchJProfiler(String javaPath, String jprofilerAgent, String classpath, String mainClass) throws IOException {
+    private long launchExternal(final ResultWriter aWriter,
+                                final String aClasspath, final String aFQN,
+                                final String... programArgs) throws IOException {
+
+        return this.launchJVMs(aClasspath, aFQN, programArgs);
 
 
-        LaunchingConnector launchingConnector = Bootstrap.virtualMachineManager().defaultConnector();
-        Map<String, Connector.Argument> arguments = launchingConnector.defaultArguments();
+    }
+
+    private long launchJVMs(final String aClasspath, final String aFQN,
+                            final String... programArgs)
+            throws IOException {
+
+        // Path to the Java executable
+        final String javaPath = System.getProperty("java.home");
+        final String myAgentPath = Constants.MY_AGENT_PATH;
+
+        final String jprofilerAgent = Constants.JPROFILER_AGENT;
+
+        // 1. Launch JVM with JProfiler agent
+        final long jprofilerProcessId = this.launchJProfiler(javaPath,
+                jprofilerAgent, aClasspath, aFQN, programArgs);
+        if (jprofilerProcessId > 0) {
+            System.out.println("Finished Executing JProfiler with PID: " + jprofilerProcessId);
+        } else {
+            throw new RuntimeException("Failed to launch JProfiler.");
+        }
+        //2. Launch Jpexport for profiling data
+        System.out.println("Launching Jpexport...");
+        Process jpexport = launchJpexport();
+        try {
+            jpexport.waitFor();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        // 3. Launch JVM with Joularjx and Spectra agent
+        System.out.println("Launching Joularjx with Spectra agent...");
+
+        String aClasspathWithJoularjx = Constants.JOULARJX_PATH
+                + File.pathSeparator + aClasspath;
+        long joularProcessid = launchJoularjx(javaPath, Constants.JOULARJX_PATH,
+                myAgentPath, aClasspath, aFQN, programArgs);
+
+        if (joularProcessid > 0) {
+            System.out.println(
+                    "Finished Executing Joular with PID: " + joularProcessid);
+            System.out.println("Launched all JVMs and tools.");
+
+        } else {
+            throw new RuntimeException("Failed to launch Joular.");
+        }
+
+        return joularProcessid;
+
+    }
+
+    private long launchJProfiler(final String javaPath, final String jprofilerAgent,
+                                 final String classpath, final String mainClass,
+                                final String... programArgs) throws IOException {
+
+        final LaunchingConnector launchingConnector = Bootstrap
+                .virtualMachineManager().defaultConnector();
+        final Map<String, Connector.Argument> arguments = launchingConnector
+                .defaultArguments();
+
 
         // Set main class and program arguments
-        StringBuilder mainArg = new StringBuilder(mainClass);
+        final StringBuilder mainArg = new StringBuilder(mainClass);
+        if (programArgs != null) {
+            for (String arg : programArgs) {
+                mainArg.append(" ").append(arg);
+            }
+        }
+        System.out.println("Classpath:" + classpath);
         arguments.get("main").setValue(mainArg.toString());
 
         // Set options: agentpath and classpath
-        StringBuilder options = new StringBuilder();
+        final StringBuilder options = new StringBuilder();
         if (jprofilerAgent != null && !jprofilerAgent.isEmpty()) {
             options.append("-agentpath:").append(jprofilerAgent)
-                    .append("=port=8849,nowait," +
-                            "config=/Users/mac/Desktop/jprofiler_config.xml ");
+                    .append("=port=8849,nowait,config=src/main/resources/jprofiler_config.xml ");
 
         }
+//        options.append("-javaagent:")
+//                .append(Constants.MY_AGENT_PATH)
+//                .append(" ");
+
         if (classpath != null && !classpath.isEmpty()) {
             options.append("-cp ").append(classpath).append(" ");
         }
@@ -60,30 +135,30 @@ public class Launcher {
         }
 
         try {
-            VirtualMachine vm = launchingConnector.launch(arguments);
+            final VirtualMachine vm = launchingConnector.launch(arguments);
             System.out.println("Launched JVM with PID: " + vm.process().pid());
             Thread.sleep(2000);
 
-            Process process = vm.process();
+            final Process process = vm.process();
             Process jpcontroller = null;
             try {
-                jpcontroller = new ProcessBuilder(
-                        "/Applications/JProfiler" +
-                                ".app/Contents/Resources/app/bin/jpcontroller",
-                        "-n", "-f",
-                        "output/jprofiler/command.txt").inheritIO().start();
+                jpcontroller = new ProcessBuilder(Constants.JPCONTROLLER_PATH,
+                        "-n", "-f", "output/jprofiler/command.txt").inheritIO()
+                        .start();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 
             if (process != null) {
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                try (BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(process.getInputStream()))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         System.out.println(line);
                     }
                 }
-                try (BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+                try (BufferedReader errorReader = new BufferedReader(
+                        new InputStreamReader(process.getErrorStream()))) {
                     String errorLine;
                     while ((errorLine = errorReader.readLine()) != null) {
                         System.err.println(errorLine);
@@ -92,39 +167,45 @@ public class Launcher {
                 int exitCode = process.waitFor();
                 System.out.println("Process exited with code: " + exitCode);
             } else {
-                System.out.println("No local process handle available (remote or unsupported connector).");
+                System.out.println(
+                        "No local process handle available (remote or unsupported connector).");
             }
-            return vm.process();
+            return vm.process().pid();
         } catch (Exception e) {
-            throw new IOException("Failed to launch JVM with LaunchingConnector", e);
+            throw new IOException(
+                    "Failed to launch JVM with LaunchingConnector", e);
         }
-
 
     }
 
     // 2. Launch Jpexport for profiling data
     private Process launchJpexport() throws IOException {
-        List<String> command = List.of(
-                "/Applications/JProfiler.app/Contents/Resources/app/bin/jpexport",
-                "output/jprofiler/snapshot.jps", "AllObjects", "-format=csv",
-                "output/Jprofiler/allobjects.csv", "CallTree", "-format=xml",
-                "-aggregation=method", "output/Jprofiler/calltree.csv.xml",
-                "Hotspots", "-format=csv", "output/Jprofiler/hotspots.csv"
-        );
+        final List<String> command = Constants.JPEXPORT_COMMAND;
         return new ProcessBuilder(command).inheritIO().start();
     }
 
-    // 3. Launch JVM with Joularjx and Spectra agent
-    private Process launchJoularjx(String javaPath, String joularjxPath, String spectraAgentPath, String classpath, String mainClass) throws IOException {
+    //	 3. Launch JVM with Joularjx and Spectra agent
+    private long launchJoularjx(final String javaPath, final String joularjxPath,
+                                final String spectraAgentPath,final String classpath,
+                                final String mainClass, final String... programArgs)
+            throws IOException {
 
-        List<String> command = new ArrayList<>();
+        final List<String> command = new ArrayList<>();
         command.add("sudo");
         command.add("-S");
-        command.add(javaPath + "/bin"+"/java");
+        command.add(javaPath + "/bin" + "/java");
+        //command.add("-Djoularjx.config=src/test/resources/config.properties");
         command.add("-javaagent:" + spectraAgentPath);
         command.add("-cp");
-        command.add(joularjxPath + File.pathSeparator + classpath);
+        command.add(/**joularjxPath + "=include=*,exclude=-XX:-Inline" + File.pathSeparator + */classpath);
         command.add(mainClass);
+        if (programArgs != null) {
+            for (String arg : programArgs) {
+                command.add(arg);
+            }
+        }
+        System.out.println("Classpath:" + classpath);
+
         System.out.println("Command2 " + command);
 
         final ProcessBuilder processBuilder = new ProcessBuilder(command);
@@ -145,7 +226,6 @@ public class Launcher {
             }
         }
 
-
         try (final BufferedReader errorReader = new BufferedReader(
                 new InputStreamReader(process.getErrorStream()))) {
             String errorLine;
@@ -162,59 +242,10 @@ public class Launcher {
             throw new IOException("Process was interrupted", e);
         }
 
-        return process;
+        return process.pid();
 
     }
 
-    private Process launchJVMs(final String aClasspath, final String aFQN) throws IOException {
-
-
-        // Path to the Java executable
-        final String javaPath = System.getProperty("java.home"); // "../../../Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/bin/java"
-        // agent JAR path
-        final String myAgentPath = "target/Spectra-with-dependencies.jar";
-        final String JoularjxPath = "../../../Downloads/joularjx/joularjx/target" +
-                "/joularjx-3.0.1" +
-                ".jar";
-
-        final String jprofilerAgent = "/Applications/JProfiler" +
-                ".app/Contents/Resources/app/bin/macos/libjprofilerti.jnilib";
-
-
-        // 1. Launch JVM with JProfiler agent
-        Process jprofilerProcess = launchJProfiler(javaPath, jprofilerAgent, aClasspath, aFQN);
-        long pid = jprofilerProcess.pid();
-
-       //  2. Launch Jpexport for profiling data
-        System.out.println("Launching Jpexport...");
-        Process jpexport = launchJpexport();
-        try {
-            jpexport.waitFor();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        // 3. Launch JVM with Joularjx and Spectra agent
-        System.out.println("Launching Joularjx with Spectra agent...");
-        String aClasspathWithJoularjx = JoularjxPath + File.pathSeparator + aClasspath;
-        Process joularProcess = launchJoularjx(javaPath, JoularjxPath, myAgentPath,
-                aClasspath, aFQN);
-
-        System.out.println("Launched all JVMs and tools.");
-
-        return joularProcess; // Return the process for further handling if needed
-
-    }
-
-    public void launch(final ResultWriter aWriter, final String aClasspath, final String aFQN) throws IOException {
-
-        final Process process = this.launchExternal(aWriter, aClasspath, aFQN);
-
-        if (process.exitValue() == 0) {
-			CSVMerger.runCSVMerger();
-		}
-
-
-    }
 
     private void enterPassword(Process process) throws IOException {
         try (OutputStream os = process.getOutputStream()) {
@@ -222,42 +253,20 @@ public class Launcher {
             os.flush();
         }
     }
-    //	public static Process launchInternal(final ResultWriter aWriter,
-    //			final String classpath, final String aFQN) throws IOException {
-    //
-    //		String agentJarPath = System.getProperty("user.dir")
-    //				+ "/target/Spectra-with-dependencies.jar";
-    //		String joularjxPath = System.getProperty("user.home")
-    //				+ "/Downloads/joularjx-3.0.1.jar";
-    //
-    //		LaunchingConnector connector = Bootstrap.virtualMachineManager()
-    //				.defaultConnector();
-    //		Map<String, Connector.Argument> arguments = connector
-    //				.defaultArguments();
-    //
-    //		// Set the main class to run
-    //		arguments.get("main").setValue(aFQN);
-    //
-    //		String VMOptions = "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,"
-    //				+ "address=*:5005";
-    //		String javaAgent = "-javaagent:" + agentJarPath;
-    //		String fullClasspath = "-cp " + joularjxPath + File.pathSeparator
-    //				+ classpath;
-    //
-    //		String finalOptions = String.join(" ", VMOptions, javaAgent,
-    //				fullClasspath);
-    //
-    //		// Set JVM options
-    //		arguments.get("options").setValue(finalOptions);
-    //
-    //		try {
-    //			return connector.launch(arguments).process();
-    //		}
-    //		catch (VMStartException | IllegalConnectorArgumentsException e) {
-    //			throw new RuntimeException("VM failed to start", e);
-    //
-    //		}
-    //	}
+
+    public final class Constants {
+        public static final String JOULARJX_PATH = "src/main/resources/joularjx-3.0.1.jar";
+        public static final String JPROFILER_AGENT = "/Applications/JProfiler.app/Contents/Resources/app/bin/macos/libjprofilerti.jnilib";
+        public static final String MY_AGENT_PATH = "target/Spectra-with-dependencies.jar";
+        public static final String JPCONTROLLER_PATH = "/Applications/JProfiler.app/Contents/Resources/app/bin/jpcontroller";
+        public static final List<String> JPEXPORT_COMMAND = List.of(
+                "/Applications/JProfiler.app/Contents/Resources/app/bin/jpexport",
+                "output/jprofiler/snapshot.jps", "AllObjects", "-format=csv",
+                "output/Jprofiler/allobjects.csv", "CallTree", "-format=xml",
+                "-aggregation=method", "output/Jprofiler/calltree.csv.xml",
+                "Hotspots", "-format=csv", "output/Jprofiler/hotspots.csv");
+
+    }
 
 }
 
@@ -281,7 +290,7 @@ public class Launcher {
 //                options.append(joularjxPath).append(" "+File.pathSeparator+" " +classpath).append(" ");
 //            }
 //
-////        options.append("-Djdk.attach.allowAttachSelf=true");
+//        options.append("-Djdk.attach.allowAttachSelf=true");
 //            arguments.get("options").setValue(options.toString().trim());
 //        arguments.get("suspend").setValue("false");
 //
@@ -327,6 +336,4 @@ public class Launcher {
 //
 //
 //    }
-
-
 

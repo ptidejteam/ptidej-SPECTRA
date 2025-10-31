@@ -161,7 +161,7 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
                     } else {
                         this.saveResults(methodsStats, threadCpuTimePercentages,
                                 this.resultTreeManager.getAllRuntimeMethodsPath() + String.format("/joularJX-%d-all-methods-power", appPid));
-                        this.saveResults(methodsStatsFiltered, threadCpuTimePercentages, this.resultTreeManager.getFilteredRuntimeMethodsPath() + String.format("/joularJX-%dfiltered-methods-power", appPid  ));
+                        this.saveResults(methodsStatsFiltered, threadCpuTimePercentages, this.resultTreeManager.getFilteredRuntimeMethodsPath() + String.format("/joularJX-%d-filtered-methods-power", appPid  ));
                     }
                 }
 
@@ -232,7 +232,8 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
                         int lineNumber = stackTraceElement.getLineNumber();
 
                         // Use the resolve method to get the full method name
-                        String fullMethodName = resolve(Class.forName("ca.concordia.ptidej.spectra.example.OverloadTest"), methodName, lineNumber);
+                        String fullMethodName = resolve(Class.forName(className), methodName,
+                                lineNumber);
                         if (fullMethodName != null && covers.test(fullMethodName)) {
                             target.merge(fullMethodName, 1, Integer::sum);
                             break;

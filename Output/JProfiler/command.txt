@@ -2,9 +2,11 @@ startCPURecording true
 startAllocRecording true
 startMonitorRecording
 startThreadProfiling
-sleep 50
+sleep 500
 stopCPURecording
 stopAllocRecording
 stopMonitorRecording
 stopThreadProfiling
-saveSnapshot Jprofiler/snapshot.jps
+saveSnapshot Output/Jprofiler/snapshot.jps
+
+
