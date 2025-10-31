@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config version="14.0.6">
+  <sessions>
+    <session id="119" name="spectra filter" jvmConfigurationId="100" methodCallRecordingType="instrumentation" lineNumbers="true" samplingFrequency="1" recordArrayAlloc="false" recordingProfileId="10">
+    </session>
+  </sessions>
+</config>
