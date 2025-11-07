@@ -23,14 +23,16 @@ import ca.concordia.ptidej.spectra.analysis.CSVMerger;
 
 public class Launcher {
 
-    public void launch(final ResultWriter aWriter, final String aClasspath,
+    public boolean launch(final ResultWriter aWriter, final String aClasspath,
                        final String aFQN, final String... programArgs) throws IOException {
 
        final long pid = this.launchExternal(aWriter, aClasspath, aFQN, programArgs);
         if (pid > 0) {
-            CSVMerger.runCSVMerger(Arrays.toString(programArgs));
+            String fileName = programArgs.length > 0 ?  Arrays.toString(programArgs) : aFQN ;
+            System.out.println("Merging CSV results for: " + fileName);
+            return CSVMerger.runCSVMerger(fileName);
         }
-
+        return false;
     }
 
     private long launchExternal(final ResultWriter aWriter,
