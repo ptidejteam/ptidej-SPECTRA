@@ -30,7 +30,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class CSVMerger {
-    public static void runCSVMerger(String fileName) {
+    public static boolean runCSVMerger(String fileName) {
         final String xmlFilePath = Constants.XML_FILE_PATH;
         final String allObjectsCsvPath = Constants.ALL_OBJECTS_CSV_PATH;
         final String hotspotsCsvPath = Constants.HOTSPOTS_CSV_PATH;
@@ -75,10 +75,13 @@ public class CSVMerger {
             System.err.println(
                     "Error during CSVMerger execution: " + e.getMessage());
             e.printStackTrace();
+            return false;
         }
 
         System.out.println(
                 "Data successfully merged and written to Excel files.");
+        return true;
+
     }
 
     private static class MethodData {
@@ -580,16 +583,16 @@ public class CSVMerger {
         }
 
         public static String getXmlEnergyOutputPath(String fileName, String type) {
-            return String.format("Results/%s.%s.%s.spectra.xlsx", fileName, type, timestamp);
+            return String.format("Results/%s.%s.%s.spectra.xlsx", timestamp, fileName, type);
 
         }
 
         public static String getAllObjectsEnergyOutputPath(String fileName, String type ) {
-            return String.format("Results/%s.%s.%s.spectra.xlsx", fileName, type, timestamp);
+            return String.format("Results/%s.%s.%s.spectra.xlsx",timestamp, fileName, type);
         }
 
         public static String getHotSpotEnergyOutputPath(String fileName, String type) {
-            return String.format("Results/%s.%s.%s.spectra.xlsx", fileName, type, timestamp);
+            return String.format("Results/%s.%s.%s.spectra.xlsx",timestamp, fileName, type);
         }
         static String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(
                 "yyMMdd'H'HHmm"));
