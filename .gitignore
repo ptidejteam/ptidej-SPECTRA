@@ -51,6 +51,13 @@ joularjx-result/*
 .DS_Store
 Output/.DS_Store
 
+src/test/java/ca/concordia/ptidej/spectra/example/OverloadTest.java
+src/test/java/ca/concordia/ptidej/spectra/example/TestCityDataApp
+src/test/java/ca/concordia/ptidej/spectra/example/TestJHChartMethods
+src/test/java/ca/concordia/ptidej/spectra/example/TestJHotDrawAnimationSample
+src/test/java/ca/concordia/ptidej/spectra/example/TestJHotDrawMiniDraw
+src/test/java/ca/concordia/ptidej/spectra/example/TestOverloadMethods
+
 ### VS Code ###
 .vscode/
 
