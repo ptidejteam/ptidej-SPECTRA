@@ -1,7 +1,7 @@
 package ca.concordia.ptidej.spectra.example;
 
 import ca.concordia.ptidej.spectra.joularjx.Launcher;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.noureddine.joularjx.result.CsvResultWriter;
 import org.noureddine.joularjx.result.ResultWriter;
 
@@ -14,12 +14,11 @@ public class TestPtidejPOMLoadJDK {
         ResultWriter writer = new CsvResultWriter();
         final Launcher launcher = new Launcher();
 
-        String junitPath = "~/.m2/repository/junit/junit/4.12/junit-4.12.jar";
+        String junitPath = "~/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar";
         String hamcrestPath = "~/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar";
 
-        String ptidejClasspath = "../Ptidej/ptidej-Ptidej/POM/target/test-classes"
-                + File.pathSeparator + "../Ptidej/ptidej-Ptidej/POM/target/pom-core-1.0" +
-                ".0-jar-with-dependencies.jar"
+        String ptidejClasspath = "../POM/target/pom-core-1.0.0-tests.jar"
+                + File.pathSeparator + "../POM/target/pom-core-1.0.0-jar-with-dependencies.jar"
                 + File.pathSeparator + junitPath
                 + File.pathSeparator + hamcrestPath;
 

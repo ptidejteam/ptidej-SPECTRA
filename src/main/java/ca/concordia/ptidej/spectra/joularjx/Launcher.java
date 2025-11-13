@@ -99,47 +99,40 @@ public class Launcher {
         final Map<String, Connector.Argument> arguments = launchingConnector
                 .defaultArguments();
 
+        final List<String> command = new ArrayList<>();
+        command.add("sudo");
+        command.add("-S");
+        command.add(javaPath + "/bin" + "/java");
+        command.add("-agentpath:" + jprofilerAgent +"=port=8849,offline,config="+ Constants.SPECTRA_PATH + "src/main/resources/jprofiler_config.xml");
+        //command.add();
 
-        // Set main class and program arguments
-        final StringBuilder mainArg = new StringBuilder(mainClass);
+        command.add("-cp");
+        command.add(classpath);
+        command.add("-Djdk.attach.allowAttachSelf=true");
+        command.add(mainClass);
         if (programArgs != null) {
             for (String arg : programArgs) {
-                mainArg.append(" ").append(arg);
+                command.add(arg);
             }
         }
         System.out.println("Classpath:" + classpath);
-        arguments.get("main").setValue(mainArg.toString());
 
-        // Set options: agentpath and classpath
-        final StringBuilder options = new StringBuilder();
-        if (jprofilerAgent != null && !jprofilerAgent.isEmpty()) {
-            options.append("-agentpath:").append(jprofilerAgent)
-                    .append("=port=8849,nowait,config=src/main/resources/jprofiler_config.xml ");
+        System.out.println("Command2 " + command);
 
-        }
-//        options.append("-javaagent:")
-//                .append(Constants.MY_AGENT_PATH)
-//                .append(" ");
+        final ProcessBuilder processBuilder = new ProcessBuilder(command);
+        processBuilder.redirectErrorStream(true);
 
-        if (classpath != null && !classpath.isEmpty()) {
-            options.append("-cp ").append(classpath).append(" ");
-        }
-        options.append("-Djdk.attach.allowAttachSelf=true");
-        arguments.get("options").setValue(options.toString().trim());
-        arguments.get("suspend").setValue("false");
+        // Change Current Working Directory
+        File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/POM/");
+        processBuilder.directory(newCurrentWorkingDirectory);
+        // Start the process
+        final Process processJProfiler = processBuilder.start();
 
-        System.out.println("Command: " + arguments);
-        // Set java executable path if needed (optional)
-        if (javaPath != null && !javaPath.isEmpty()) {
-            arguments.get("home").setValue(javaPath);
-        }
+        // Provide the sudo password
+    enterPassword(processJProfiler);
+//
+            System.out.println("Launched JVM with PID: " + processJProfiler.pid());
 
-        try {
-            final VirtualMachine vm = launchingConnector.launch(arguments);
-            System.out.println("Launched JVM with PID: " + vm.process().pid());
-            Thread.sleep(2000);
-
-            final Process process = vm.process();
             Process jpcontroller = null;
             try {
                 jpcontroller = new ProcessBuilder(Constants.JPCONTROLLER_PATH,
@@ -148,33 +141,35 @@ public class Launcher {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
-            if (process != null) {
+//
+            if ( processJProfiler!= null) {
                 try (BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(process.getInputStream()))) {
+                        new InputStreamReader(processJProfiler.getInputStream()))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         System.out.println(line);
                     }
                 }
                 try (BufferedReader errorReader = new BufferedReader(
-                        new InputStreamReader(process.getErrorStream()))) {
+                        new InputStreamReader(processJProfiler.getErrorStream()))) {
                     String errorLine;
                     while ((errorLine = errorReader.readLine()) != null) {
                         System.err.println(errorLine);
                     }
                 }
-                int exitCode = process.waitFor();
+                int exitCode = 0;
+                try {
+                    exitCode = processJProfiler.waitFor();
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
                 System.out.println("Process exited with code: " + exitCode);
             } else {
                 System.out.println(
                         "No local process handle available (remote or unsupported connector).");
             }
-            return vm.process().pid();
-        } catch (Exception e) {
-            throw new IOException(
-                    "Failed to launch JVM with LaunchingConnector", e);
-        }
+            return processJProfiler.pid();
+
 
     }
 
@@ -210,7 +205,9 @@ public class Launcher {
 
         final ProcessBuilder processBuilder = new ProcessBuilder(command);
         processBuilder.redirectErrorStream(true);
-
+// Change Current Working Directory
+        File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/POM");
+        processBuilder.directory(newCurrentWorkingDirectory);
         // Start the process
         final Process process = processBuilder.start();
 
@@ -249,22 +246,23 @@ public class Launcher {
 
     private void enterPassword(Process process) throws IOException {
         try (OutputStream os = process.getOutputStream()) {
-            os.write("1234".getBytes());
+            os.write("Le2User44Sharing".getBytes());
             os.flush();
         }
     }
 
     public final class Constants {
-        public static final String JOULARJX_PATH = "src/main/resources/joularjx-3.0.1.jar";
-        public static final String JPROFILER_AGENT = "/Applications/JProfiler.app/Contents/Resources/app/bin/macos/libjprofilerti.jnilib";
-        public static final String MY_AGENT_PATH = "target/Spectra-with-dependencies.jar";
-        public static final String JPCONTROLLER_PATH = "/Applications/JProfiler.app/Contents/Resources/app/bin/jpcontroller";
+        public static final String SPECTRA_PATH = "/home/ubuntu/Desktop/Experiment/ptidej-SPECTRA/";
+        public static final String JOULARJX_PATH = SPECTRA_PATH + "src/main/resources/joularjx-3.0.1.jar";
+        public static final String JPROFILER_AGENT = "/opt/jprofiler14/bin/linux-x64/libjprofilerti.so";
+        public static final String MY_AGENT_PATH = SPECTRA_PATH + "target/Spectra-with-dependencies.jar";
+        public static final String JPCONTROLLER_PATH = "/opt/jprofiler14/bin/jpcontroller";
         public static final List<String> JPEXPORT_COMMAND = List.of(
-                "/Applications/JProfiler.app/Contents/Resources/app/bin/jpexport",
-                "output/jprofiler/snapshot.jps", "AllObjects", "-format=csv",
-                "output/Jprofiler/allobjects.csv", "CallTree", "-format=xml",
-                "-aggregation=method", "output/Jprofiler/calltree.csv.xml",
-                "Hotspots", "-format=csv", "output/Jprofiler/hotspots.csv");
+                "/opt/jprofiler14/bin/jpexport",
+                SPECTRA_PATH + "output/jprofiler/snapshot.jps", "AllObjects", "-format=csv",
+                SPECTRA_PATH + "output/Jprofiler/allobjects.csv", "CallTree", "-format=xml",
+                "-aggregation=method", SPECTRA_PATH + "output/Jprofiler/calltree.csv.xml",
+                "Hotspots", "-format=csv", SPECTRA_PATH + "output/Jprofiler/hotspots.csv");
 
     }
 
