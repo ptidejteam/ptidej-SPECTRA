@@ -1,6 +1,6 @@
 package ca.concordia.ptidej.spectra.example;
 
-import ca.concordia.ptidej.spectra.Profile.Launcher;
+import ca.concordia.ptidej.spectra.joularjx.Launcher;
 import org.junit.Test;
 import org.noureddine.joularjx.result.CsvResultWriter;
 import org.noureddine.joularjx.result.ResultWriter;

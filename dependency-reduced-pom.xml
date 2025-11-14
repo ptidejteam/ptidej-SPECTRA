@@ -45,7 +45,7 @@
               <transformers>
                 <transformer>
                   <manifestEntries>
-                    <Premain-Class>ca.concordia.ptidej.spectra.Profile.Agent</Premain-Class>
+                    <Premain-Class>ca.concordia.ptidej.spectra.joularjx.Agent</Premain-Class>
                   </manifestEntries>
                 </transformer>
                 <transformer />

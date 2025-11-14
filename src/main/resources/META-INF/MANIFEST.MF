@@ -1,1 +1,1 @@
-Premain-Class: ca.concordia.ptidej.spectra.Profile.Agent
+Premain-Class: ca.concordia.ptidej.spectra.joularjx.Agent

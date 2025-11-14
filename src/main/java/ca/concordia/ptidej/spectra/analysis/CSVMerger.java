@@ -29,8 +29,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import static ca.concordia.ptidej.spectra.Profile.Constants.PROJECT_ROOT;
-
 public class CSVMerger {
     public static boolean runCSVMerger(String fileName) {
         final String xmlFilePath = Constants.XML_FILE_PATH;
@@ -573,6 +571,7 @@ public class CSVMerger {
     }
 
     public final class Constants {
+        public static final String PROJECT_ROOT = "/Users/mac/Documents/RA/SPECTRA";
         public static final String XML_FILE_PATH =  PROJECT_ROOT + "/Output/JProfiler/calltree.csv.xml";
         public static final String ALL_OBJECTS_CSV_PATH = PROJECT_ROOT + "/Output/Jprofiler/allobjects.csv";
         public static final String HOTSPOTS_CSV_PATH = PROJECT_ROOT + "/Output/Jprofiler/hotspots.csv";
