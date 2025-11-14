@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import com.sun.jdi.connect.IllegalConnectorArgumentsException;
 import com.sun.jdi.connect.VMStartException;
@@ -26,7 +29,7 @@ public class Launcher {
     public void launch(final ResultWriter aWriter, final String aClasspath,
                        final String aFQN, final String... programArgs) throws IOException {
 
-       final long pid = this.launchExternal(aWriter, aClasspath, aFQN, programArgs);
+        final long pid = this.launchExternal(aWriter, aClasspath, aFQN, programArgs);
         if (pid > 0) {
             CSVMerger.runCSVMerger(Arrays.toString(programArgs));
         }
@@ -92,7 +95,7 @@ public class Launcher {
 
     private long launchJProfiler(final String javaPath, final String jprofilerAgent,
                                  final String classpath, final String mainClass,
-                                final String... programArgs) throws IOException {
+                                 final String... programArgs) throws IOException {
 
         final LaunchingConnector launchingConnector = Bootstrap
                 .virtualMachineManager().defaultConnector();
@@ -100,12 +103,8 @@ public class Launcher {
                 .defaultArguments();
 
         final List<String> command = new ArrayList<>();
-        command.add("sudo");
-        command.add("-S");
         command.add(javaPath + "/bin" + "/java");
-        command.add("-agentpath:" + jprofilerAgent +"=port=8849,offline,config="+ Constants.SPECTRA_PATH + "src/main/resources/jprofiler_config.xml");
-        //command.add();
-
+        command.add("-agentpath:" + jprofilerAgent + "=port=8849,nowait,config=" + Constants.SPECTRA_PATH + "/src/main/resources/jprofiler_config.xml");
         command.add("-cp");
         command.add(classpath);
         command.add("-Djdk.attach.allowAttachSelf=true");
@@ -121,7 +120,6 @@ public class Launcher {
 
         final ProcessBuilder processBuilder = new ProcessBuilder(command);
         processBuilder.redirectErrorStream(true);
-
         // Change Current Working Directory
         File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/POM/");
         processBuilder.directory(newCurrentWorkingDirectory);
@@ -129,46 +127,68 @@ public class Launcher {
         final Process processJProfiler = processBuilder.start();
 
         // Provide the sudo password
-    enterPassword(processJProfiler);
-//
-            System.out.println("Launched JVM with PID: " + processJProfiler.pid());
+        enterPassword(processJProfiler);
+        System.out.println("Launched JVM with PID: " + processJProfiler.pid());
 
-            Process jpcontroller = null;
-            try {
-                jpcontroller = new ProcessBuilder(Constants.JPCONTROLLER_PATH,
-                        "-n", "-f", "output/jprofiler/command.txt").inheritIO()
-                        .start();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        try {
+            Thread.sleep(5000); // Wait for the JVM to start and be ready for profiling
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        // Schedule JVM stop after 5 minutes
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.schedule(() -> {
+            if (processJProfiler.isAlive()) {
+                System.out.println("5  minutes elapsed; destroying JVM process.");
+                processJProfiler.destroy();
             }
-//
-            if ( processJProfiler!= null) {
-                try (BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(processJProfiler.getInputStream()))) {
+            scheduler.shutdown();
+        }, 5, TimeUnit.MINUTES);
+
+
+        Process jpcontroller = null;
+        try {
+            jpcontroller = new ProcessBuilder(Constants.JPCONTROLLER_PATH,
+                    "-n", "-f", Constants.SPECTRA_PATH + "/Output/JProfiler/command.txt").inheritIO().start();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        if (processJProfiler != null) {
+            // Async stream - Consume the output stream
+            new Thread(() -> {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(processJProfiler.getInputStream()))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         System.out.println(line);
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                try (BufferedReader errorReader = new BufferedReader(
-                        new InputStreamReader(processJProfiler.getErrorStream()))) {
-                    String errorLine;
-                    while ((errorLine = errorReader.readLine()) != null) {
-                        System.err.println(errorLine);
+            }).start();
+
+            // Async stream - Consume the error stream
+            new Thread(() -> {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(processJProfiler.getErrorStream()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        System.err.println( line);
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                int exitCode = 0;
-                try {
-                    exitCode = processJProfiler.waitFor();
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
-                System.out.println("Process exited with code: " + exitCode);
-            } else {
-                System.out.println(
-                        "No local process handle available (remote or unsupported connector).");
+            }).start();
+            int exitCode = 0;
+            try {
+                exitCode = processJProfiler.waitFor();
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
             }
-            return processJProfiler.pid();
+            System.out.println("Process exited with code: " + exitCode);
+        } else {
+            System.out.println(
+                    "No local process handle available (remote or unsupported connector).");
+        }
+        return processJProfiler.pid();
 
 
     }
@@ -181,7 +201,7 @@ public class Launcher {
 
     //	 3. Launch JVM with Joularjx and Spectra agent
     private long launchJoularjx(final String javaPath, final String joularjxPath,
-                                final String spectraAgentPath,final String classpath,
+                                final String spectraAgentPath, final String classpath,
                                 final String mainClass, final String... programArgs)
             throws IOException {
 
@@ -189,7 +209,7 @@ public class Launcher {
         command.add("sudo");
         command.add("-S");
         command.add(javaPath + "/bin" + "/java");
-        //command.add("-Djoularjx.config=src/test/resources/config.properties");
+        command.add("-Djoularjx.config=" + Constants.SPECTRA_PATH + "/src/test/resources/config.properties");
         command.add("-javaagent:" + spectraAgentPath);
         command.add("-cp");
         command.add(/**joularjxPath + "=include=*,exclude=-XX:-Inline" + File.pathSeparator + */classpath);
@@ -205,7 +225,7 @@ public class Launcher {
 
         final ProcessBuilder processBuilder = new ProcessBuilder(command);
         processBuilder.redirectErrorStream(true);
-// Change Current Working Directory
+        // Change Current Working Directory
         File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/POM");
         processBuilder.directory(newCurrentWorkingDirectory);
         // Start the process
@@ -214,22 +234,41 @@ public class Launcher {
         // Provide the sudo password
         enterPassword(process);
 
-        // Consume the output stream
-        try (final BufferedReader reader = new BufferedReader(
-                new InputStreamReader(process.getInputStream()))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println("Output: " + line);
+        // Schedule JVM stop after 5 minutes
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.schedule(() -> {
+            if (process.isAlive()) {
+                System.out.println("5  minutes elapsed; destroying JVM process.");
+                process.destroy();
             }
-        }
+            scheduler.shutdown();
+        }, 5, TimeUnit.MINUTES);
 
-        try (final BufferedReader errorReader = new BufferedReader(
-                new InputStreamReader(process.getErrorStream()))) {
-            String errorLine;
-            while ((errorLine = errorReader.readLine()) != null) {
-                System.err.println("Error: " + errorLine);
+
+        // Async stream - Consume the output stream
+        new Thread(() -> {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    System.out.println(line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        }
+        }).start();
+
+        // Async stream - Consume the error stream
+        new Thread(() -> {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    System.err.println( line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
 
         try {
             int exitCode = process.waitFor();
@@ -246,92 +285,23 @@ public class Launcher {
 
     private void enterPassword(Process process) throws IOException {
         try (OutputStream os = process.getOutputStream()) {
-            os.write("Le2User44Sharing".getBytes());
+            os.write("1234".getBytes());
             os.flush();
         }
     }
 
     public final class Constants {
-        public static final String SPECTRA_PATH = "/home/ubuntu/Desktop/Experiment/ptidej-SPECTRA/";
-        public static final String JOULARJX_PATH = SPECTRA_PATH + "src/main/resources/joularjx-3.0.1.jar";
-        public static final String JPROFILER_AGENT = "/opt/jprofiler14/bin/linux-x64/libjprofilerti.so";
-        public static final String MY_AGENT_PATH = SPECTRA_PATH + "target/Spectra-with-dependencies.jar";
-        public static final String JPCONTROLLER_PATH = "/opt/jprofiler14/bin/jpcontroller";
+        public static final String SPECTRA_PATH = "/Users/mac/Documents/RA/SPECTRA";
+        public static final String JOULARJX_PATH = SPECTRA_PATH + "/src/main/resources/joularjx-3.0.1.jar";
+        public static final String JPROFILER_AGENT = "/Applications/JProfiler.app/Contents/Resources/app/bin/macos/libjprofilerti.jnilib";
+        public static final String MY_AGENT_PATH = SPECTRA_PATH + "/target/Spectra-with-dependencies.jar";
+        public static final String JPCONTROLLER_PATH = "/Applications/JProfiler.app/Contents/Resources/app/bin/jpcontroller";
         public static final List<String> JPEXPORT_COMMAND = List.of(
-                "/opt/jprofiler14/bin/jpexport",
-                SPECTRA_PATH + "output/jprofiler/snapshot.jps", "AllObjects", "-format=csv",
-                SPECTRA_PATH + "output/Jprofiler/allobjects.csv", "CallTree", "-format=xml",
-                "-aggregation=method", SPECTRA_PATH + "output/Jprofiler/calltree.csv.xml",
-                "Hotspots", "-format=csv", SPECTRA_PATH + "output/Jprofiler/hotspots.csv");
+                "/Applications/JProfiler.app/Contents/Resources/app/bin/jpexport",
+                SPECTRA_PATH + "/output/jprofiler/snapshot.jps", "AllObjects", "-format=csv",
+                SPECTRA_PATH + "/output/Jprofiler/allobjects.csv", "CallTree", "-format=xml",
+                "-aggregation=method", SPECTRA_PATH + "/output/Jprofiler/calltree.csv.xml",
+                "Hotspots", "-format=csv", SPECTRA_PATH + "/output/Jprofiler/hotspots.csv");
 
     }
-
 }
-
-// // 3. Launch JVM with Joularjx and Spectra agent
-//    private Process launchJoularjx(String javaPath, String joularjxPath, String spectraAgentPath, String classpath, String mainClass) throws IOException {
-//        LaunchingConnector launchingConnector = Bootstrap.virtualMachineManager().defaultConnector();
-//        Map<String, Connector.Argument> arguments = launchingConnector.defaultArguments();
-//
-//        // Build main class and arguments
-//            arguments.get("main").setValue(mainClass);
-//
-//            // Build options for agents and classpath
-//            StringBuilder options = new StringBuilder();
-//            if (spectraAgentPath != null && !spectraAgentPath.isEmpty()) {
-//                options.append("-javaagent:").append(spectraAgentPath).append(" ");
-//                options.append("-cp ");
-//
-//            }
-//
-//            if (joularjxPath != null && !joularjxPath.isEmpty()) {
-//                options.append(joularjxPath).append(" "+File.pathSeparator+" " +classpath).append(" ");
-//            }
-//
-//        options.append("-Djdk.attach.allowAttachSelf=true");
-//            arguments.get("options").setValue(options.toString().trim());
-//        arguments.get("suspend").setValue("false");
-//
-//        System.out.println("Command: "+arguments);
-//            // Set java home if needed (optional)
-//            if (javaPath != null && !javaPath.isEmpty()) {
-//                arguments.get("home").setValue(javaPath);
-//            }
-//
-//            try {
-//                VirtualMachine vm = launchingConnector.launch(arguments);
-//
-//                // Optionally: capture output (works for local launch)
-//                Process process = vm.process();
-//                if (process != null) {
-//                    new Thread(() -> {
-//                        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-//                            String line;
-//                            while ((line = reader.readLine()) != null) {
-//                                System.out.println("Output: " + line);
-//                            }
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }).start();
-//
-//                    new Thread(() -> {
-//                        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
-//                            String line;
-//                            while ((line = reader.readLine()) != null) {
-//                                System.err.println("Error: " + line);
-//                            }
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }).start();
-//                }
-//
-//                return vm.process();
-//            } catch (Exception e) {
-//                throw new IOException("Failed to launch JVM with LaunchingConnector", e);
-//            }
-//
-//
-//    }
-

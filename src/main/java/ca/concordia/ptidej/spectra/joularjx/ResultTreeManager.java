@@ -9,6 +9,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.noureddine.joularjx.utils.JoularJXLogging;
 
+import static ca.concordia.ptidej.spectra.joularjx.Launcher.Constants.SPECTRA_PATH;
+
 public class ResultTreeManager  extends  org.noureddine.joularjx.result.ResultTreeManager {
     private static final Logger logger = JoularJXLogging.getLogger();
     public static final String GLOBAL_RESULT_DIRECTORY_NAME = "joularjx-result";
@@ -36,7 +38,7 @@ public class ResultTreeManager  extends  org.noureddine.joularjx.result.ResultTr
         super(properties, pid, startTimestamp);
         this.properties = properties;
         Object[] var10002 = new Object[]{pid, startTimestamp};
-        this.runDirectoryPath = "Output/Joularjx/data/";
+        this.runDirectoryPath = SPECTRA_PATH + "/Output/Joularjx/data/";
         String allDirectoryPath = this.runDirectoryPath + "/all";
         String filteredDirectoryPath = this.runDirectoryPath + "/app";
         this.allTotalMethodsPath = allDirectoryPath + "/total/methods";

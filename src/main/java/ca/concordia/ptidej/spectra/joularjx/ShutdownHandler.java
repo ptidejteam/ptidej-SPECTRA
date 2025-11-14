@@ -11,6 +11,8 @@ import org.noureddine.joularjx.result.ResultWriter;
 import org.noureddine.joularjx.utils.AgentProperties;
 import org.noureddine.joularjx.utils.JoularJXLogging;
 
+import static ca.concordia.ptidej.spectra.analysis.CSVMerger.Constants.PROJECT_ROOT;
+
 /**
  * The ShutdownHandler is meant to be called at the end of the agent and is responsible for displaying and writing all the consumption data in dedicated files.
  * It also performs resource closing operations.
@@ -59,8 +61,8 @@ public class ShutdownHandler extends org.noureddine.joularjx.monitor.ShutdownHan
 
         try {
             //Writing methods and filtered methods energy consumption
-            this.saveResults(status.getMethodsConsumedEnergy(), "Output/Joularjx/data"+String.format("/joularJX-%d-all-methods-energy", appPid));
-            this.saveResults(status.getFilteredMethodsConsumedEnergy(), "Output/Joularjx/data"+String.format("/joularJX-%d-filtered-methods-energy", appPid));
+            this.saveResults(status.getMethodsConsumedEnergy(), PROJECT_ROOT + "/Output/Joularjx/data"+String.format("/joularJX-%d-all-methods-energy", appPid));
+            this.saveResults(status.getFilteredMethodsConsumedEnergy(), PROJECT_ROOT + "/Output/Joularjx/data"+String.format("/joularJX-%d-filtered-methods-energy", appPid));
 
             //Writing consumption evolution files only if the option is enabled
             if (this.properties.trackConsumptionEvolution()) {
