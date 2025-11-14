@@ -1,4 +1,4 @@
-package ca.concordia.ptidej.spectra.joularjx;
+package ca.concordia.ptidej.spectra.Profile;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,16 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
-import com.sun.jdi.connect.IllegalConnectorArgumentsException;
-import com.sun.jdi.connect.VMStartException;
 import org.noureddine.joularjx.result.ResultWriter;
 
 import com.sun.jdi.Bootstrap;
-import com.sun.jdi.VirtualMachine;
 import com.sun.jdi.connect.Connector;
 import com.sun.jdi.connect.LaunchingConnector;
 
@@ -104,7 +98,7 @@ public class Launcher {
 
         final List<String> command = new ArrayList<>();
         command.add(javaPath + "/bin" + "/java");
-        command.add("-agentpath:" + jprofilerAgent + "=port=8849,nowait,config=" + Constants.SPECTRA_PATH + "/src/main/resources/jprofiler_config.xml");
+        command.add("-agentpath:" + jprofilerAgent + "=port=8849,nowait,config=" + Constants.PROJECT_ROOT + "/src/main/resources/jprofiler_config.xml");
         command.add("-cp");
         command.add(classpath);
         command.add("-Djdk.attach.allowAttachSelf=true");
@@ -149,7 +143,7 @@ public class Launcher {
         Process jpcontroller = null;
         try {
             jpcontroller = new ProcessBuilder(Constants.JPCONTROLLER_PATH,
-                    "-n", "-f", Constants.SPECTRA_PATH + "/Output/JProfiler/command.txt").inheritIO().start();
+                    "-n", "-f", Constants.PROJECT_ROOT + "/Output/JProfiler/command.txt").inheritIO().start();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -209,7 +203,7 @@ public class Launcher {
         command.add("sudo");
         command.add("-S");
         command.add(javaPath + "/bin" + "/java");
-        command.add("-Djoularjx.config=" + Constants.SPECTRA_PATH + "/src/test/resources/config.properties");
+        command.add("-Djoularjx.config=" + Constants.PROJECT_ROOT + "/src/test/resources/config.properties");
         command.add("-javaagent:" + spectraAgentPath);
         command.add("-cp");
         command.add(/**joularjxPath + "=include=*,exclude=-XX:-Inline" + File.pathSeparator + */classpath);
@@ -288,20 +282,5 @@ public class Launcher {
             os.write("1234".getBytes());
             os.flush();
         }
-    }
-
-    public final class Constants {
-        public static final String SPECTRA_PATH = "/Users/mac/Documents/RA/SPECTRA";
-        public static final String JOULARJX_PATH = SPECTRA_PATH + "/src/main/resources/joularjx-3.0.1.jar";
-        public static final String JPROFILER_AGENT = "/Applications/JProfiler.app/Contents/Resources/app/bin/macos/libjprofilerti.jnilib";
-        public static final String MY_AGENT_PATH = SPECTRA_PATH + "/target/Spectra-with-dependencies.jar";
-        public static final String JPCONTROLLER_PATH = "/Applications/JProfiler.app/Contents/Resources/app/bin/jpcontroller";
-        public static final List<String> JPEXPORT_COMMAND = List.of(
-                "/Applications/JProfiler.app/Contents/Resources/app/bin/jpexport",
-                SPECTRA_PATH + "/output/jprofiler/snapshot.jps", "AllObjects", "-format=csv",
-                SPECTRA_PATH + "/output/Jprofiler/allobjects.csv", "CallTree", "-format=xml",
-                "-aggregation=method", SPECTRA_PATH + "/output/Jprofiler/calltree.csv.xml",
-                "Hotspots", "-format=csv", SPECTRA_PATH + "/output/Jprofiler/hotspots.csv");
-
     }
 }

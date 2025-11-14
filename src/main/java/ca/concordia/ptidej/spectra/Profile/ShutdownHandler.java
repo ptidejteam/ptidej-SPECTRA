@@ -1,4 +1,4 @@
-package ca.concordia.ptidej.spectra.joularjx;
+package ca.concordia.ptidej.spectra.Profile;
 
 import java.io.IOException;
 import java.util.Map;
@@ -11,7 +11,8 @@ import org.noureddine.joularjx.result.ResultWriter;
 import org.noureddine.joularjx.utils.AgentProperties;
 import org.noureddine.joularjx.utils.JoularJXLogging;
 
-import static ca.concordia.ptidej.spectra.analysis.CSVMerger.Constants.PROJECT_ROOT;
+import static ca.concordia.ptidej.spectra.Profile.Constants.PROJECT_ROOT;
+
 
 /**
  * The ShutdownHandler is meant to be called at the end of the agent and is responsible for displaying and writing all the consumption data in dedicated files.
