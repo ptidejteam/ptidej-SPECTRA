@@ -1,4 +1,4 @@
-package ca.concordia.ptidej.spectra.Profile;
+package ca.concordia.ptidej.spectra.joularjx;
 import org.noureddine.joularjx.utils.AgentProperties;
 
 
@@ -9,8 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.noureddine.joularjx.utils.JoularJXLogging;
 
-import static ca.concordia.ptidej.spectra.Profile.Constants.PROJECT_ROOT;
-
+import static ca.concordia.ptidej.spectra.joularjx.Launcher.Constants.SPECTRA_PATH;
 
 public class ResultTreeManager  extends  org.noureddine.joularjx.result.ResultTreeManager {
     private static final Logger logger = JoularJXLogging.getLogger();
@@ -39,7 +38,7 @@ public class ResultTreeManager  extends  org.noureddine.joularjx.result.ResultTr
         super(properties, pid, startTimestamp);
         this.properties = properties;
         Object[] var10002 = new Object[]{pid, startTimestamp};
-        this.runDirectoryPath = PROJECT_ROOT + "/Output/Joularjx/data/";
+        this.runDirectoryPath = SPECTRA_PATH + "/Output/Joularjx/data/";
         String allDirectoryPath = this.runDirectoryPath + "/all";
         String filteredDirectoryPath = this.runDirectoryPath + "/app";
         this.allTotalMethodsPath = allDirectoryPath + "/total/methods";

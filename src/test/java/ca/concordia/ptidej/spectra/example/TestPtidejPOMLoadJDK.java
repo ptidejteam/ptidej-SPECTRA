@@ -1,6 +1,6 @@
 package ca.concordia.ptidej.spectra.example;
 
-import ca.concordia.ptidej.spectra.Profile.Launcher;
+import ca.concordia.ptidej.spectra.joularjx.Launcher;
 import org.junit.Test;
 import org.noureddine.joularjx.result.CsvResultWriter;
 import org.noureddine.joularjx.result.ResultWriter;
@@ -14,12 +14,12 @@ public class TestPtidejPOMLoadJDK {
         ResultWriter writer = new CsvResultWriter();
         final Launcher launcher = new Launcher();
 
-    String classpath = "../POM/target/test-classes:../POM/target/pom-core-1.0.0-tests.jar"
+    String ptidejClasspath = "../POM/target/test-classes:../POM/target/pom-core-1.0.0-tests.jar"
             + File.pathSeparator + "../POM/target/pom-core-1.0.0-jar-with-dependencies.jar";
 
         launcher.launch(
                 writer,
-                classpath, "org.junit.runner.JUnitCore",
+                ptidejClasspath, "org.junit.runner.JUnitCore",
                         "pom.test.classfile.general.TestLoadJDK10"
         );
 
