@@ -570,26 +570,25 @@ public class CSVMerger {
     }
 
     public final class Constants {
-        public static final String XML_FILE_PATH = "Output/JProfiler/calltree.csv.xml";
-        public static final String ALL_OBJECTS_CSV_PATH = "Output/Jprofiler/allobjects.csv";
-        public static final String HOTSPOTS_CSV_PATH = "Output/Jprofiler/hotspots.csv";
-        public static final String ENERGY_CSV_PATH = "Output/Joularjx/data/joularJX-123" +
-                "-all-methods-energy.csv";
+        public static final String XML_FILE_PATH = "/home/ubuntu/Desktop/Experiment/ptidej-SPECTRA/Output/JProfiler/calltree.csv.xml";
+        public static final String ALL_OBJECTS_CSV_PATH = "/home/ubuntu/Desktop/Experiment/ptidej-SPECTRA/Output/Jprofiler/allobjects.csv";
+        public static final String HOTSPOTS_CSV_PATH = "/home/ubuntu/Desktop/Experiment/ptidej-SPECTRA/Output/Jprofiler/hotspots.csv";
+        public static final String ENERGY_CSV_PATH = "/home/ubuntu/Desktop/Experiment/ptidej-SPECTRA/Output/Joularjx/data/joularJX-123-all-methods-energy.csv";
 
         private Constants() {
         }
 
         public static String getXmlEnergyOutputPath(String fileName, String type) {
-            return String.format("Results/%s.%s.%s.spectra.xlsx", fileName, type, timestamp);
+            return String.format("/home/ubuntu/Desktop/Experiment/ptidej-SPECTRA/Results/%s.%s.%s.spectra.xlsx", fileName, type, timestamp);
 
         }
 
         public static String getAllObjectsEnergyOutputPath(String fileName, String type ) {
-            return String.format("Results/%s.%s.%s.spectra.xlsx", fileName, type, timestamp);
+            return String.format("/home/ubuntu/Desktop/Experiment/ptidej-SPECTRA/Results/%s.%s.%s.spectra.xlsx", fileName, type, timestamp);
         }
 
         public static String getHotSpotEnergyOutputPath(String fileName, String type) {
-            return String.format("Results/%s.%s.%s.spectra.xlsx", fileName, type, timestamp);
+            return String.format("/home/ubuntu/Desktop/Experiment/ptidej-SPECTRA/Results/%s.%s.%s.spectra.xlsx", fileName, type, timestamp);
         }
         static String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(
                 "yyMMdd'H'HHmm"));
