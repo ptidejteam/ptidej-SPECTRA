@@ -30,7 +30,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class CSVMerger {
-    public static void runCSVMerger(String fileName) {
+    public static boolean runCSVMerger(String fileName) {
         final String xmlFilePath = Constants.XML_FILE_PATH;
         final String allObjectsCsvPath = Constants.ALL_OBJECTS_CSV_PATH;
         final String hotspotsCsvPath = Constants.HOTSPOTS_CSV_PATH;
@@ -79,6 +79,7 @@ public class CSVMerger {
 
         System.out.println(
                 "Data successfully merged and written to Excel files.");
+        return true;
     }
 
     private static class MethodData {
@@ -570,25 +571,26 @@ public class CSVMerger {
     }
 
     public final class Constants {
-        public static final String XML_FILE_PATH = "/home/ubuntu/Desktop/Experiment/ptidej-SPECTRA/Output/JProfiler/calltree.csv.xml";
-        public static final String ALL_OBJECTS_CSV_PATH = "/home/ubuntu/Desktop/Experiment/ptidej-SPECTRA/Output/Jprofiler/allobjects.csv";
-        public static final String HOTSPOTS_CSV_PATH = "/home/ubuntu/Desktop/Experiment/ptidej-SPECTRA/Output/Jprofiler/hotspots.csv";
-        public static final String ENERGY_CSV_PATH = "/home/ubuntu/Desktop/Experiment/ptidej-SPECTRA/Output/Joularjx/data/joularJX-123-all-methods-energy.csv";
+        public static final String PROJECT_ROOT = "/Users/mac/Documents/RA/SPECTRA";
+        public static final String XML_FILE_PATH =  PROJECT_ROOT + "/Output/JProfiler/calltree.csv.xml";
+        public static final String ALL_OBJECTS_CSV_PATH = PROJECT_ROOT + "/Output/Jprofiler/allobjects.csv";
+        public static final String HOTSPOTS_CSV_PATH = PROJECT_ROOT + "/Output/Jprofiler/hotspots.csv";
+        public static final String ENERGY_CSV_PATH = PROJECT_ROOT + "/Output/Joularjx/data/joularJX-123-all-methods-energy.csv";
 
         private Constants() {
         }
 
         public static String getXmlEnergyOutputPath(String fileName, String type) {
-            return String.format("/home/ubuntu/Desktop/Experiment/ptidej-SPECTRA/Results/%s.%s.%s.spectra.xlsx", fileName, type, timestamp);
+            return String.format(PROJECT_ROOT + "/Results/%s.%s.%s.spectra.xlsx", fileName, type, timestamp);
 
         }
 
         public static String getAllObjectsEnergyOutputPath(String fileName, String type ) {
-            return String.format("/home/ubuntu/Desktop/Experiment/ptidej-SPECTRA/Results/%s.%s.%s.spectra.xlsx", fileName, type, timestamp);
+            return String.format(PROJECT_ROOT + "/Results/%s.%s.%s.spectra.xlsx", fileName, type, timestamp);
         }
 
         public static String getHotSpotEnergyOutputPath(String fileName, String type) {
-            return String.format("/home/ubuntu/Desktop/Experiment/ptidej-SPECTRA/Results/%s.%s.%s.spectra.xlsx", fileName, type, timestamp);
+            return String.format(PROJECT_ROOT + "/Results/%s.%s.%s.spectra.xlsx", fileName, type, timestamp);
         }
         static String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(
                 "yyMMdd'H'HHmm"));

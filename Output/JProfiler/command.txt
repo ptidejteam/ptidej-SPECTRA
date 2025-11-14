@@ -2,7 +2,7 @@ startCPURecording true
 startAllocRecording true
 startMonitorRecording
 startThreadProfiling
-sleep 2
+sleep 10
 stopCPURecording
 stopAllocRecording
 stopMonitorRecording

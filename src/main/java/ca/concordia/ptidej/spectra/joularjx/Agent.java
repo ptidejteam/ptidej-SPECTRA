@@ -36,7 +36,7 @@ public class Agent {
         JoularJXLogging.updateLevel(properties.getLoggerLevel());
 
         logger.info("+---------------------------------+");
-        logger.info("| Spectra-JoularJX Agent Version 3.0.2   |");
+        logger.info("| Spectra-JoularJX Agent  |");
         logger.info("+---------------------------------+");
 
         ThreadMXBean threadBean = createThreadBean();
