@@ -135,6 +135,15 @@ public class Launcher {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        // Schedule JVM stop after 5 minutes
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.schedule(() -> {
+            if (processJProfiler.isAlive()) {
+                System.out.println("5  minutes elapsed; destroying JVM process.");
+                processJProfiler.destroy();
+            }
+            scheduler.shutdown();
+        }, 5, TimeUnit.MINUTES);
 
 
         Process jpcontroller = null;
@@ -184,7 +193,7 @@ public class Launcher {
 
     }
 
-    // 2. Launch Jpexport for process data
+    // 2. Launch Jpexport for profiling data
     private Process launchJpexport() throws IOException {
         final List<String> command = Constants.JPEXPORT_COMMAND;
         return new ProcessBuilder(command).inheritIO().start();
@@ -224,6 +233,16 @@ public class Launcher {
 
         // Provide the sudo password
         enterPassword(process);
+
+        // Schedule JVM stop after 5 minutes
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.schedule(() -> {
+            if (process.isAlive()) {
+                System.out.println("5  minutes elapsed; destroying JVM process.");
+                process.destroy();
+            }
+            scheduler.shutdown();
+        }, 5, TimeUnit.MINUTES);
 
 
         // Async stream - Consume the output stream
