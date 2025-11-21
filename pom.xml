@@ -90,6 +90,43 @@
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.jprofiler</groupId>
+            <artifactId>jprofiler-controller</artifactId>
+            <version>14.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jprofiler</groupId>
+            <artifactId>jprofiler-mbean</artifactId>
+            <version>14.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.ptidej.pom</groupId>
+            <artifactId>pom-core</artifactId>
+            <version>1.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.platform</groupId>
+                    <artifactId>org.eclipse.osgi</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>net.ptidej.pom</groupId>
+            <artifactId>pom-core</artifactId>
+            <version>1.0.0</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.platform</groupId>
+                    <artifactId>org.eclipse.osgi</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -121,6 +158,9 @@
                                     <artifact>*:*</artifact>
                                     <excludes>
                                         <exclude>ca/concordia/ptidej/spectra/example/**</exclude>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
                                     </excludes>
                                 </filter>
                             </filters>
@@ -153,7 +193,7 @@
                     </archive>
                 </configuration>
             </plugin>
-	<plugin>
+            <plugin>
 <groupId>org.apache.maven.plugins</groupId>
 <artifactId>maven-install-plugin</artifactId>
 <version>3.0.1</version>
@@ -175,6 +215,24 @@
 </execution>
 </executions>
 </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>build-classpath</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>build-classpath</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>${project.build.directory}/classpath.txt</outputFile>
+                            <includeScope>test</includeScope>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

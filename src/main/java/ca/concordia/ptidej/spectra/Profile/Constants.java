@@ -10,7 +10,7 @@ public final class Constants {
         public static final String JPCONTROLLER_PATH = "/Applications/JProfiler.app/Contents/Resources/app/bin/jpcontroller";
         public static final List<String> JPEXPORT_COMMAND = List.of(
                 "/Applications/JProfiler.app/Contents/Resources/app/bin/jpexport",
-                PROJECT_ROOT + "/output/jprofiler/snapshot.jps", "AllObjects", "-format=csv",
+                PROJECT_ROOT + "/Output/JProfiler/snapshot.jps", "AllObjects", "-format=csv",
                 PROJECT_ROOT + "/output/Jprofiler/allobjects.csv", "CallTree", "-format=xml",
                 "-aggregation=method", PROJECT_ROOT + "/output/Jprofiler/calltree.csv.xml",
                 "Hotspots", "-format=csv", PROJECT_ROOT + "/output/Jprofiler/hotspots.csv");

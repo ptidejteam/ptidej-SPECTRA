@@ -14,8 +14,7 @@ public class TestPtidejPOMLoadJDK {
         ResultWriter writer = new CsvResultWriter();
         final Launcher launcher = new Launcher();
 
-    String classpath = "../POM/target/test-classes:../POM/target/pom-core-1.0.0-tests.jar"
-            + File.pathSeparator + "../POM/target/pom-core-1.0.0-jar-with-dependencies.jar";
+    String classpath = "/Users/mac/Documents/RA/SPECTRA/src/main/resources/junit-4.13.2.jar:../POM/target/test-classes:../POM/target/pom-core-1.0.0-tests.jar";
 
         launcher.launch(
                 writer,

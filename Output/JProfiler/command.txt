@@ -2,11 +2,14 @@ startCPURecording true
 startAllocRecording true
 startMonitorRecording
 startThreadProfiling
-sleep 10
+sleep 38
 stopCPURecording
 stopAllocRecording
 stopMonitorRecording
 stopThreadProfiling
-saveSnapshot Output/Jprofiler/snapshot.jps
+saveSnapshot /Users/mac/Documents/RA/SPECTRA/Output/JProfiler/snapshot.jps
+
+
+
 
 
