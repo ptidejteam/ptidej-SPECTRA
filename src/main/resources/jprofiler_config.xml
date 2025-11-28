@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config version="14.0.6">
   <sessions>
-    <session id="119" name="spectra filter" jvmConfigurationId="100" methodCallRecordingType="instrumentation" lineNumbers="true" samplingFrequency="1" recordArrayAlloc="false" recordingProfileId="1">
+    <session id="110" name="spectra filter" type="launch" jvmConfigurationId="100" methodCallRecordingType="instrumentation" lineNumbers="true" samplingFrequency="1" recordArrayAlloc="false"
+             allocationFrequency="0" autoUpdatePeriodLong="4" utilConcurrentHandling="false" autoTuneMaxAverage="10"
+             vmExitHandling="keepAlive" recordingProfileId="10">
+
     </session>
   </sessions>
 </config>

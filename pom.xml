@@ -137,7 +137,7 @@
                 <configuration>
                     <source>25</source>
                     <target>25</target>
-                    <compilerArgs>--enable-preview</compilerArgs>
+                    <!--                    <compilerArgs>&#45;&#45;enable-preview</compilerArgs>-->
                 </configuration>
             </plugin>
             <plugin>
@@ -194,27 +194,27 @@
                 </configuration>
             </plugin>
             <plugin>
-<groupId>org.apache.maven.plugins</groupId>
-<artifactId>maven-install-plugin</artifactId>
-<version>3.0.1</version>
-<executions>
-<execution>
-<id>install-joularjx</id>
-<phase>validate</phase>
-<goals>
-<goal>install-file</goal>
-</goals>
-<configuration>
-<file>src/main/resources/joularjx-3.0.1.jar</file>
-<groupId>org.noureddine</groupId>
-<artifactId>joularjx</artifactId>
-<version>3.0.1</version>
-<packaging>jar</packaging>
-<generatePom>true</generatePom>
-</configuration>
-</execution>
-</executions>
-</plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>install-joularjx</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>src/main/resources/joularjx-3.0.1.jar</file>
+                            <groupId>org.noureddine</groupId>
+                            <artifactId>joularjx</artifactId>
+                            <version>3.0.1</version>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>

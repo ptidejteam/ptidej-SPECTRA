@@ -1,0 +1,1166 @@
+"Name","Instance Count","Size (bytes)"
+"byte[ ]",32625,12549104
+"java.lang.String",21082,505968
+"java.lang.Object[ ]",5334,308608
+"java.lang.StringBuilder",5263,126312
+"int[ ]",3755,3084104
+"java.util.concurrent.ConcurrentHashMap$Node",3420,109440
+"java.util.HashMap$Node",3325,106400
+"java.lang.Class",2716,355656
+"jdk.internal.classfile.impl.AbstractPoolEntry$Utf8EntryImpl",2561,163904
+"jdk.internal.util.StrongReferenceKey",2384,38144
+"java.lang.Class[ ]",1881,50744
+"java.lang.invoke.LambdaForm$Name",1300,41600
+"java.lang.invoke.MethodType",1285,51400
+"java.lang.invoke.MemberName",1240,59520
+"jdk.internal.classfile.impl.StackMapGenerator$Type",1129,27096
+"com.jprofiler.agent.util.InterceptionDefinition",1113,97944
+"java.util.ArrayList",1009,24216
+"java.lang.Integer",902,14432
+"java.lang.String[ ]",894,32600
+"java.util.HashMap",804,38592
+"jdk.internal.classfile.impl.AbstractPoolEntry$ClassEntryImpl",742,29680
+"jdk.internal.classfile.impl.AttributeHolder",715,17160
+"jdk.internal.constant.ClassOrInterfaceDescImpl",661,15864
+"java.util.ImmutableCollections$SetN$SetNIterator",597,14328
+"jdk.internal.classfile.impl.LabelImpl",546,13104
+"java.util.HashMap$Node[ ]",545,60840
+"jdk.internal.util.WeakReferenceKey",536,17152
+"jdk.internal.classfile.impl.AbstractPoolEntry$NameAndTypeEntryImpl",529,16928
+"java.lang.invoke.LambdaForm$Name[ ]",510,24256
+"java.io.File",499,15968
+"jdk.internal.classfile.impl.RawBytecodeHelper",480,15360
+"java.lang.Object",476,7616
+"jdk.internal.classfile.impl.BufWriterImpl",476,22848
+"jdk.internal.classfile.impl.StackMapGenerator$Type[ ]",460,27312
+"java.util.ImmutableCollections$ListItr",456,14592
+"java.lang.constant.ClassDesc[ ]",438,11536
+"jdk.internal.constant.MethodTypeDescImpl",429,10296
+"java.net.URL",381,24384
+"java.lang.invoke.ResolvedMethodName",377,9048
+"java.lang.module.ModuleDescriptor$Exports",369,8856
+"java.util.LinkedHashMap$Entry",362,14480
+"java.util.KeyValueHolder",349,8376
+"jdk.internal.classfile.impl.AbstractPoolEntry$MethodRefEntryImpl",347,11104
+"java.util.ImmutableCollections$Set12$1",337,8088
+"java.lang.classfile.Attribute[ ]",336,10736
+"java.lang.reflect.Field",299,21528
+"java.util.Optional",292,4672
+"java.util.HashSet",283,4528
+"sun.security.util.KnownOIDs",280,11200
+"jdk.internal.ref.CleanerImpl$PhantomCleanableRef",273,13104
+"char[ ]",272,105552
+"java.util.ArrayList$Itr",268,8576
+"java.util.ImmutableCollections$Set12",268,6432
+"java.lang.ref.ReferenceQueue$Lock",261,4176
+"java.util.ImmutableCollections$List12",260,6240
+"java.lang.ref.ReferenceQueue",259,8288
+"java.lang.Long",258,6192
+"java.lang.reflect.Method",258,22704
+"jdk.internal.classfile.impl.DirectCodeBuilder",252,30240
+"jdk.internal.classfile.impl.DirectCodeBuilder$4",252,6048
+"jdk.internal.classfile.impl.DirectMethodBuilder",252,12096
+"jdk.internal.classfile.impl.RawBytecodeHelper$CodeRange",252,6048
+"java.lang.ref.SoftReference[ ]",230,17480
+"jdk.internal.classfile.impl.ClassHierarchyImpl",228,3648
+"jdk.internal.classfile.impl.ClassHierarchyImpl$CachedClassHierarchyResolver",228,5472
+"jdk.internal.classfile.impl.ClassHierarchyImpl$CachedClassHierarchyResolver$1",228,3648
+"jdk.internal.classfile.impl.StackMapGenerator",228,18240
+"jdk.internal.classfile.impl.StackMapGenerator$Frame",228,12768
+"long[ ]",224,57624
+"java.lang.classfile.Opcode",213,8520
+"java.lang.ref.SoftReference",208,8320
+"java.util.concurrent.ConcurrentHashMap",197,12608
+"jdk.internal.classfile.impl.Util$Writable[ ]",197,9488
+"jdk.internal.classfile.impl.AbstractPoolEntry$FieldRefEntryImpl",187,5984
+"java.util.ImmutableCollections$SetN",186,4464
+"java.util.concurrent.atomic.AtomicInteger",176,2816
+"java.security.Provider$ServiceKey",175,4200
+"java.util.concurrent.locks.ReentrantLock$NonfairSync",172,5504
+"jdk.internal.module.ServicesCatalog$ServiceProvider",171,4104
+"com.jprofiler.agent.util.a.a.b.h$m",164,10496
+"java.util.HashMap$EntryIterator",164,5248
+"java.util.concurrent.atomic.AtomicReferenceArray",164,2624
+"java.util.jar.Attributes$Name",164,3936
+"jdk.internal.classfile.impl.Util$1WithCodeMethodHandler",164,2624
+"java.lang.invoke.LambdaForm$NamedFunction",161,3864
+"short[ ]",160,12928
+"com.jprofiler.agent.probe.structures.n",153,7344
+"java.lang.invoke.MethodTypeForm",153,6120
+"java.lang.invoke.BoundMethodHandle$Species_L",149,5960
+"jdk.internal.loader.FileURLMapper",149,3576
+"jdk.internal.loader.URLClassPath$JarLoader",149,4768
+"java.nio.file.attribute.FileTime",142,4544
+"java.lang.module.ModuleDescriptor$Requires",141,4512
+"java.lang.invoke.MethodHandles$Lookup",139,4448
+"java.util.WeakHashMap$Entry",139,5560
+"java.util.zip.ZipFile$ZipFileInputStream",131,7336
+"java.util.zip.ZipFile$EntryPos",130,3120
+"java.util.zip.ZipFile$InflaterCleanupAction",130,3120
+"java.util.zip.ZipFile$ZipFileInflaterInputStream",130,6240
+"java.lang.Character",128,2048
+"java.util.jar.JarFile$JarFileEntry",128,13312
+"java.lang.invoke.LambdaFormEditor",127,2032
+"java.lang.invoke.LambdaFormEditor$TransformKey",127,3048
+"java.lang.invoke.LambdaForm",124,5952
+"jdk.internal.classfile.impl.StackCounter$Target",114,2736
+"java.lang.classfile.constantpool.PoolEntry[ ]",112,460544
+"jdk.internal.classfile.impl.BootstrapMethodEntryImpl[ ]",112,5376
+"jdk.internal.classfile.impl.DirectClassBuilder",112,8064
+"jdk.internal.classfile.impl.EntryMap",112,4480
+"jdk.internal.classfile.impl.SplitConstantPool",112,6272
+"java.lang.invoke.BoundMethodHandle$Species_LL",110,4400
+"java.lang.invoke.MethodHandles$Lookup$ClassDefiner",109,3488
+"java.util.HashMap$EntrySet",109,1744
+"java.lang.invoke.DirectMethodHandle$StaticAccessor",108,6048
+"java.util.concurrent.ConcurrentHashMap$Node[ ]",105,39312
+"char[ ][ ]",103,2472
+"java.util.ArrayDeque",103,2472
+"java.lang.WeakPairMap$Pair$Lookup",100,2400
+"jdk.internal.classfile.impl.DirectFieldBuilder",99,3960
+"java.lang.invoke.DirectMethodHandle$Constructor",98,4704
+"java.lang.Class$ReflectionData",93,5952
+"java.lang.invoke.DirectMethodHandle",93,3720
+"jdk.internal.module.ServicesCatalog$ServiceProvider[ ]",92,2448
+"com.jprofiler.agent.probe.structures.n[ ]",91,2184
+"java.util.Arrays$ArrayList",88,2112
+"java.lang.Byte",83,1328
+"java.security.Provider$UString",83,1992
+"java.io.FileDescriptor",82,3280
+"com.jprofiler.agent.util.a.b.aa",79,5688
+"java.io.FileCleanable",78,4368
+"java.io.FileNotFoundException",78,3120
+"java.lang.invoke.MethodHandle[ ]",75,8864
+"java.util.concurrent.ConcurrentHashMap$ReservationNode",75,2400
+"java.util.concurrent.ConcurrentHashMap$ValueIterator",75,4200
+"sun.nio.fs.UnixPath",75,2400
+"java.util.Collections$SetFromMap",74,1776
+"java.util.WeakHashMap$Entry[ ]",74,5920
+"java.nio.file.LinkOption[ ]",73,1168
+"java.io.RandomAccessFile",72,2880
+"java.util.WeakHashMap",72,3456
+"java.util.WeakHashMap$KeySet",72,1152
+"sun.nio.fs.UnixFileAttributes",72,10368
+"java.lang.ref.WeakReference",71,2272
+"java.util.jar.JarFile",71,4544
+"java.util.zip.ZipFile$CleanableResource",71,2272
+"java.util.zip.ZipFile$Source",71,5680
+"java.util.zip.ZipFile$Source$End",71,3408
+"java.util.zip.ZipFile$Source$Key",71,1704
+"sun.nio.fs.BsdFileAttributeViews$Basic",71,1704
+"sun.nio.fs.UnixFileAttributes$UnixAsBasicFileAttributes",71,1136
+"sun.nio.fs.UnixFileKey",71,2272
+"java.lang.Module",70,3920
+"java.util.concurrent.CopyOnWriteArrayList",70,1680
+"java.util.zip.Inflater",70,4480
+"java.util.zip.Inflater$InflaterZStreamRef",70,1680
+"com.jprofiler.agent.util.InterceptionDefinition[ ]",68,14120
+"java.security.Provider$Service",68,4352
+"java.security.CodeSource",65,2600
+"jdk.internal.classfile.impl.SuperclassImpl",65,1040
+"java.lang.module.ModuleDescriptor",63,4032
+"java.lang.module.ResolvedModule[ ]",63,2264
+"java.net.URI",63,5040
+"java.lang.module.ModuleDescriptor$Exports[ ]",61,2576
+"java.lang.module.ModuleDescriptor$Opens[ ]",61,1000
+"java.lang.module.ModuleDescriptor$Provides[ ]",61,1328
+"java.lang.module.ModuleDescriptor$Requires[ ]",61,1680
+"java.lang.module.ResolvedModule",61,1464
+"java.security.SecureClassLoader$1",61,976
+"java.security.SecureClassLoader$CodeSourceKey",61,976
+"jdk.internal.classfile.impl.UnboundAttribute$UnboundSourceFileAttribute",61,1464
+"jdk.internal.loader.BuiltinClassLoader$2",61,976
+"jdk.internal.loader.BuiltinClassLoader$LoadedModule",61,1952
+"jdk.internal.module.Builder",61,3416
+"jdk.internal.module.ModuleReferenceImpl",61,3416
+"jdk.internal.module.SystemModuleFinders$1",61,976
+"jdk.internal.module.SystemModuleFinders$SystemModuleReader",61,1464
+"java.lang.invoke.InvokerBytecodeGenerator",60,3360
+"java.lang.invoke.InvokerBytecodeGenerator$1",60,1440
+"java.lang.invoke.InvokerBytecodeGenerator$2",60,1440
+"java.lang.invoke.InvokerBytecodeGenerator$3",60,960
+"java.lang.invoke.InvokerBytecodeGenerator$4",60,1440
+"java.lang.invoke.InvokerBytecodeGenerator$4$1",60,1440
+"java.lang.invoke.InvokerBytecodeGenerator$ClassData",60,1440
+"java.lang.module.ModuleDescriptor$Provides",59,1416
+"java.lang.reflect.Constructor",58,4176
+"jdk.internal.module.SystemModuleFinders$2",58,928
+"jdk.internal.loader.URLClassPath$JarLoader$1",57,2280
+"java.lang.PublicMethods$MethodList",56,1344
+"java.util.zip.CRC32",56,896
+"java.lang.invoke.ConstantCallSite",53,2120
+"java.lang.invoke.LambdaForm$Kind",52,1664
+"java.lang.reflect.Field[ ]",52,1992
+"java.lang.classfile.constantpool.ClassEntry[ ]",51,1216
+"java.util.concurrent.atomic.AtomicIntegerArray",51,816
+"jdk.internal.classfile.impl.AbstractPseudoInstruction$ExceptionCatchImpl",51,1632
+"java.util.BitSet",50,1200
+"jdk.internal.classfile.impl.InterfacesImpl",50,800
+"java.lang.invoke.InfoFromMemberName",47,1128
+"java.lang.invoke.InnerClassLambdaMetafactory",47,5264
+"java.lang.invoke.InnerClassLambdaMetafactory$1",47,1128
+"java.lang.invoke.InnerClassLambdaMetafactory$3",47,752
+"java.lang.invoke.InnerClassLambdaMetafactory$6",47,1128
+"java.lang.reflect.Method[ ]",45,1760
+"java.util.stream.ReferencePipeline$Head",45,2520
+"java.util.concurrent.ConcurrentHashMap$MapEntry",44,1056
+"com.jprofiler.agent.q$a",43,1032
+"java.util.concurrent.ConcurrentHashMap$ValuesView",40,640
+"jdk.internal.classfile.impl.StackMapDecoder$StackMapFrameImpl",39,1248
+"java.io.ObjectStreamField",38,1520
+"java.util.ImmutableCollections$ListN",38,912
+"jdk.internal.vm.FillerElement[ ]",37,4567160
+"com.jprofiler.agent.probe.structures.h",36,1440
+"com.jprofiler.agent.util.f",36,1152
+"javax.management.ObjectName$Property[ ]",35,1216
+"jdk.internal.reflect.MethodHandleObjectFieldAccessorImpl",35,1120
+"com.jprofiler.agent.probe.structures.MetaDataImpl",34,2720
+"java.util.LinkedHashMap",33,2112
+"java.util.concurrent.ConcurrentHashMap$ForwardingNode",33,1056
+"java.security.Provider$EngineDescription",32,768
+"java.lang.invoke.VarHandle$AccessMode",31,992
+"java.lang.invoke.ClassSpecializer$Factory$1$1Var",30,1200
+"java.util.HashMap$Values",30,480
+"jdk.internal.classfile.impl.StackMapDecoder$ObjectVerificationTypeInfoImpl",30,480
+"sun.util.locale.BaseLocale",30,960
+"java.lang.NoSuchFieldException",29,1160
+"java.util.Locale",29,928
+"com.jprofiler.agent.util.a.a.b.g",28,1792
+"com.jprofiler.agent.util.a.a.b.h",28,2912
+"com.jprofiler.agent.util.a.a.b.h$m[ ]",28,1104
+"java.lang.WeakPairMap$Pair$Weak",28,1120
+"java.lang.WeakPairMap$Pair$Weak$1",28,896
+"java.lang.invoke.LambdaFormBuffer",28,1344
+"java.lang.invoke.LambdaFormEditor$Transform",28,1344
+"java.util.Hashtable$Entry",28,896
+"java.lang.classfile.Opcode$Kind",26,624
+"java.lang.reflect.ClassFileFormatVersion",26,832
+"java.util.HashMap$ValueIterator",26,832
+"java.util.concurrent.atomic.AtomicLong",26,624
+"java.util.HashMap$KeyIterator",24,768
+"jdk.internal.classfile.impl.StackCounter",24,1536
+"jdk.internal.classfile.impl.UnboundAttribute$UnboundExceptionsAttribute",24,576
+"java.lang.NoSuchMethodError",23,920
+"java.lang.reflect.AccessFlag",23,920
+"com.jprofiler.agent.JProfilerCarrierThreadLocal",22,528
+"com.jprofiler.agent.g$a$1",22,352
+"java.lang.StackTraceElement",22,1056
+"java.lang.classfile.attribute.StackMapFrameInfo[ ]",22,520
+"java.util.HashMap$KeySet",22,352
+"javax.management.ObjectName$Property",22,528
+"jdk.internal.util.SoftReferenceKey",22,880
+"com.jprofiler.agent.sampler.Sampler$a",21,672
+"java.lang.Thread$FieldHolder",21,1008
+"java.lang.classfile.attribute.StackMapFrameInfo$VerificationTypeInfo[ ]",21,480
+"jdk.internal.classfile.impl.StackMapDecoder$1",21,336
+"jdk.internal.classfile.impl.UnboundAttribute$UnboundStackMapTableAttribute",21,504
+"java.lang.invoke.Invokers",20,480
+"java.lang.reflect.Constructor[ ]",20,480
+"java.nio.HeapCharBuffer",20,1120
+"java.util.StringJoiner",20,800
+"jdk.internal.loader.NativeLibraries$NativeLibraryContext$1",20,320
+"com.jprofiler.agent.probe.g.c",19,3040
+"com.jprofiler.agent.probe.g.c$1",19,304
+"com.jprofiler.agent.probe.g.d",19,1064
+"com.jprofiler.agent.probe.g.d$1",19,304
+"com.jprofiler.agent.probe.payload.BasePayloadInfo[ ]",19,304
+"com.jprofiler.agent.probe.structures.o$a",19,456
+"com.jprofiler.agent.probe.structures.o$b",19,456
+"com.jprofiler.agent.probe.structures.o$c",19,456
+"com.jprofiler.api.agent.probe.ThreadLocalStack",19,304
+"com.jprofiler.api.agent.probe.ThreadLocalStack$1",19,304
+"java.io.ByteArrayOutputStream",19,456
+"java.lang.PublicMethods$Key",19,456
+"java.lang.invoke.MethodType[ ]",19,768
+"java.lang.reflect.AccessFlag[ ]",19,1208
+"java.util.Collections$1",19,456
+"java.util.concurrent.atomic.AtomicBoolean",19,304
+"com.jprofiler.agent.probe.g.a",18,432
+"com.jprofiler.agent.probe.structures.a",18,432
+"jdk.internal.classfile.impl.AbstractPoolEntry$StringEntryImpl",18,576
+"jdk.internal.constant.ArrayClassDescImpl",18,432
+"jdk.internal.reflect.ConstantPool",18,288
+"java.lang.invoke.DirectMethodHandle$Accessor",17,816
+"jdk.internal.reflect.DirectConstructorHandleAccessor",17,408
+"java.lang.management.MemoryUsage",16,768
+"java.util.Collections$SingletonSet",16,256
+"com.jprofiler.agent.probe.a$1",15,240
+"java.io.ObjectStreamField[ ]",15,440
+"java.lang.constant.ConstantDesc[ ]",15,272
+"java.lang.reflect.ProxyGenerator$ProxyMethod",15,720
+"java.lang.reflect.ProxyGenerator$ProxyMethod$$Lambda.0x000000016711c398",15,240
+"java.lang.reflect.ProxyGenerator$ProxyMethod$$Lambda.0x000000016711c870",15,240
+"java.util.Hashtable$Entry[ ]",15,944
+"java.util.jar.Attributes",15,240
+"java.util.jar.Manifest$FastInputStream",15,480
+"java.util.regex.Pattern$BmpCharProperty",15,360
+"sun.invoke.util.ValueConversions$WrapperCache",15,240
+"java.lang.WeakPairMap$$Lambda.0x0000000167069c70",14,224
+"java.lang.invoke.MemberName[ ]",14,2016
+"java.lang.invoke.VarForm",14,448
+"java.nio.DirectByteBuffer",14,896
+"java.nio.HeapByteBuffer",14,784
+"java.util.Hashtable",14,672
+"java.io.ByteArrayInputStream",13,416
+"java.lang.Package",13,416
+"java.lang.Thread",13,1456
+"java.util.LinkedHashMap$LinkedValueIterator",13,416
+"java.util.Vector",13,416
+"java.util.regex.Pattern$$Lambda.0x0000000167130960",13,208
+"sun.security.jca.ProviderConfig",13,416
+"java.lang.Package$VersionInfo",12,480
+"javax.management.ObjectName",12,384
+"jdk.internal.constant.DirectMethodHandleDescImpl",12,384
+"sun.util.locale.LanguageTag",12,480
+"java.lang.OutOfMemoryError",11,440
+"java.lang.constant.DirectMethodHandleDesc$Kind",11,352
+"java.lang.invoke.LambdaForm$NamedFunction[ ]",11,392
+"java.util.stream.Collectors$CollectorImpl",11,352
+"java.util.stream.ReduceOps$3",11,352
+"java.util.stream.ReduceOps$3ReducingSink",11,352
+"jdk.internal.reflect.DirectMethodHandleAccessor",11,352
+"sun.util.locale.InternalLocaleBuilder",11,440
+"java.lang.classfile.TypeKind",10,400
+"java.lang.invoke.MethodHandleImpl$Intrinsic",10,240
+"java.nio.charset.CoderResult",10,240
+"java.nio.file.StandardOpenOption",10,240
+"java.text.ParsePosition",10,240
+"java.util.Collections$UnmodifiableSet",10,160
+"java.util.concurrent.CopyOnWriteArrayList$COWIterator",10,240
+"java.util.regex.Pattern$Curly",10,320
+"sun.invoke.util.Wrapper",10,720
+"sun.reflect.generics.factory.CoreReflectionFactory",10,240
+"sun.reflect.generics.parser.SignatureParser",10,240
+"sun.reflect.generics.scope.ClassScope",10,240
+"sun.reflect.generics.tree.ClassTypeSignature",10,160
+"sun.reflect.generics.tree.SimpleClassTypeSignature",10,240
+"sun.reflect.generics.tree.TypeArgument[ ]",10,160
+"sun.reflect.generics.visitor.Reifier",10,240
+"sun.util.locale.StringTokenIterator",10,400
+"java.lang.reflect.AccessFlag$Location",9,288
+"java.security.Principal[ ]",9,144
+"java.security.ProtectionDomain",9,288
+"jdk.internal.constant.PrimitiveClassDescImpl",9,360
+"sun.util.logging.PlatformLogger$Level",9,288
+"com.jprofiler.agent.probe.f.a$a",8,128
+"com.jprofiler.api.agent.probe.DataType",8,128
+"java.lang.reflect.ProxyGenerator$PrimitiveTypeInfo",8,320
+"java.math.RoundingMode",8,256
+"java.nio.DirectByteBufferR",8,512
+"java.util.Vector$Itr",8,256
+"java.util.stream.StreamOpFlag$Type[ ]",8,320
+"jdk.internal.loader.NativeLibraries$1",8,128
+"jdk.internal.loader.NativeLibraries$2",8,128
+"jdk.internal.loader.NativeLibraries$CountedLock",8,192
+"sun.management.MemoryPoolImpl",8,448
+"sun.management.MemoryPoolImpl$CollectionSensor",8,320
+"sun.management.MemoryPoolImpl$PoolSensor",8,320
+"sun.util.resources.Bundles$CacheKey",8,256
+"com.jprofiler.api.agent.probe.Unit",7,112
+"java.lang.NoSuchMethodException",7,280
+"java.lang.System$Logger$Level",7,224
+"java.lang.ThreadLocal$ThreadLocalMap$Entry",7,224
+"java.lang.annotation.Annotation[ ]",7,112
+"java.lang.classfile.AnnotationElement[ ]",7,112
+"java.lang.classfile.attribute.StackMapFrameInfo$SimpleVerificationTypeInfo",7,224
+"java.lang.constant.DirectMethodHandleDesc$Kind[ ]",7,480
+"java.lang.invoke.BoundMethodHandle$SpeciesData",7,336
+"java.lang.invoke.BoundMethodHandle$SpeciesData[ ]",7,280
+"java.lang.invoke.BoundMethodHandle$Species_LLL",7,336
+"java.lang.invoke.VarHandle$AccessDescriptor",7,280
+"java.util.HashMap$ValueSpliterator",7,280
+"java.util.ImmutableCollections$MapN",7,224
+"java.util.LinkedHashMap$LinkedValues",7,168
+"java.util.Spliterators$ArraySpliterator",7,280
+"java.util.concurrent.ConcurrentLinkedQueue$Node",7,168
+"java.util.concurrent.TimeUnit",7,560
+"java.util.stream.StreamOpFlag[ ]",7,280
+"jdk.internal.classfile.impl.AnnotationImpl",7,168
+"jdk.internal.loader.AbstractClassLoaderValue$Sub",7,168
+"sun.invoke.util.Wrapper[ ]",7,416
+"boolean[ ]",6,896
+"com.jprofiler.agent.f.a.e",6,192
+"com.jprofiler.api.agent.probe.InterceptionMethod[ ]",6,144
+"java.lang.Thread$State",6,144
+"java.lang.classfile.Annotation[ ]",6,176
+"java.lang.invoke.BoundMethodHandle$Species_LLLLL",6,336
+"java.lang.invoke.ClassSpecializer$Factory$1$5",6,240
+"java.lang.invoke.ClassSpecializer$Factory$1$5$1",6,240
+"java.lang.invoke.LambdaForm$BasicType",6,240
+"java.nio.DirectLongBufferU",6,336
+"java.util.ArrayDeque$DeqIterator",6,192
+"java.util.EnumMap",6,240
+"java.util.IdentityHashMap",6,240
+"java.util.Map$Entry[ ]",6,1200
+"java.util.concurrent.ConcurrentLinkedQueue",6,144
+"java.util.stream.ReferencePipeline$2",6,336
+"java.util.stream.ReferencePipeline$2$1",6,144
+"java.util.stream.StreamOpFlag",6,288
+"java.util.stream.StreamOpFlag$MaskBuilder",6,96
+"jdk.internal.classfile.impl.DirectCodeBuilder$DeferredLabel",6,192
+"jdk.internal.classfile.impl.UnboundAttribute$UnboundRuntimeVisibleAnnotationsAttribute",6,144
+"jdk.internal.loader.NativeLibraries$NativeLibraryImpl",6,240
+"jdk.internal.perf.PerfCounter",6,144
+"com.jprofiler.agent.LockManager$a",5,80
+"com.jprofiler.agent.util.b.e$6",5,80
+"double[ ]",5,352
+"java.io.FileInputStream",5,200
+"java.lang.StackTraceElement[ ]",5,200
+"java.lang.classfile.AttributeMapper$AttributeStability",5,120
+"java.lang.invoke.MethodHandleImpl$AsVarargsCollector",5,240
+"java.lang.invoke.VarHandle$AccessType",5,160
+"java.lang.invoke.VarHandleReferences$FieldInstanceReadWrite",5,240
+"java.util.Collections$UnmodifiableCollection$1",5,120
+"java.util.RegularEnumSet",5,160
+"java.util.ServiceLoader",5,280
+"java.util.ServiceLoader$1",5,120
+"java.util.ServiceLoader$2",5,120
+"java.util.ServiceLoader$LazyClassPathLookupIterator",5,200
+"java.util.ServiceLoader$ModuleServicesLookupIterator",5,160
+"java.util.ServiceLoader$ProviderImpl",5,160
+"java.util.TreeMap$Entry",5,200
+"java.util.stream.ReferencePipeline$3",5,280
+"java.util.stream.ReferencePipeline$3$1",5,120
+"java.util.stream.StreamOpFlag$Type",5,120
+"jdk.internal.classfile.impl.AbstractPoolEntry$InterfaceMethodRefEntryImpl",5,160
+"jdk.internal.loader.AbstractClassLoaderValue$Memoizer",5,200
+"jdk.internal.loader.ClassLoaderValue",5,80
+"jdk.internal.loader.NativeLibraries",5,160
+"jdk.internal.math.FloatingDecimal$PreparedASCIIToBinaryBuffer",5,120
+"jdk.internal.util.Preconditions$4",5,80
+"jdk.internal.util.ReferencedKeyMap",5,120
+"org.junit.runner.Description",5,160
+"sun.util.locale.provider.LocaleProviderAdapter$Type",5,200
+"com.jprofiler.agent.LockManager$1",4,64
+"com.jprofiler.agent.probe.g.d[ ]",4,144
+"com.jprofiler.agent.util.a.a.b.h$c[ ]",4,128
+"com.jprofiler.agent.util.a.b.af",4,160
+"java.lang.Class$AnnotationData",4,96
+"java.lang.ClassNotFoundException",4,160
+"java.lang.ClassValue$Entry",4,96
+"java.lang.ClassValue$Identity",4,64
+"java.lang.ClassValue$Version",4,64
+"java.lang.Integer[ ]",4,1120
+"java.lang.PublicMethods",4,96
+"java.lang.ThreadGroup",4,192
+"java.lang.ThreadLocal",4,64
+"java.lang.ThreadLocal$ThreadLocalMap",4,96
+"java.lang.ThreadLocal$ThreadLocalMap$Entry[ ]",4,320
+"java.lang.classfile.TypeKind[ ]",4,224
+"java.lang.invoke.LambdaForm$BasicType[ ]",4,160
+"java.lang.invoke.MethodHandleImpl$IntrinsicMethodHandle",4,192
+"java.lang.module.ModuleDescriptor$Modifier",4,128
+"java.lang.module.ModuleDescriptor$Opens",4,96
+"java.lang.module.ModuleDescriptor$Requires$Modifier",4,128
+"java.security.Permissions",4,96
+"java.util.Collections$SingletonList",4,96
+"java.util.Formatter$FixedString",4,96
+"java.util.Formatter$FormatSpecifier",4,128
+"java.util.jar.Manifest",4,96
+"java.util.regex.Pattern$GroupHead",4,96
+"java.util.regex.Pattern$GroupTail",4,96
+"java.util.regex.Pattern$Qtype",4,96
+"java.util.stream.StreamShape",4,96
+"jdk.internal.classfile.impl.AbstractPoolEntry$Utf8EntryImpl$State",4,96
+"jdk.internal.classfile.impl.DirectCodeBuilder$DeferredLabel[ ]",4,160
+"jdk.internal.loader.BuiltinClassLoader$1",4,128
+"jdk.internal.loader.URLClassPath$FileLoader",4,128
+"jdk.internal.logger.BootstrapLogger$LoggingBackend",4,128
+"jdk.internal.module.ServicesCatalog",4,64
+"jdk.internal.util.ClassFileDumper",4,128
+"jdk.internal.vm.Continuation$Pinned",4,96
+"sun.nio.cs.UTF_8$Encoder",4,192
+"sun.reflect.annotation.AnnotationInvocationHandler",4,96
+"com.jprofiler.agent.JProfilerThreadManager$Platform",3,144
+"com.jprofiler.agent.probe.a.f.g",3,96
+"com.jprofiler.agent.probe.d.e",3,48
+"com.jprofiler.agent.probe.i.h",3,72
+"com.jprofiler.agent.probe.l",3,72
+"com.jprofiler.agent.triggers.nanoxml.XMLElement",3,144
+"com.jprofiler.agent.util.a.e",3,168
+"com.jprofiler.agent.util.a.e$a[ ]",3,240
+"com.jprofiler.api.agent.ProbeObjectType",3,96
+"com.sun.management.internal.GarbageCollectorExtImpl",3,144
+"java.io.BufferedOutputStream",3,120
+"java.io.BufferedWriter",3,120
+"java.io.DataOutputStream",3,120
+"java.io.FileInputStream$1",3,48
+"java.io.OutputStreamWriter",3,72
+"java.lang.ClassValue$Entry[ ]",3,312
+"java.lang.Double",3,72
+"java.lang.NamedPackage",3,72
+"java.lang.Object[ ][ ]",3,5248
+"java.lang.Runtime$Version",3,96
+"java.lang.WeakPairMap",3,72
+"java.lang.annotation.RetentionPolicy",3,72
+"java.lang.classfile.ClassFile$StackMapsOption",3,72
+"java.lang.constant.DynamicConstantDesc$AnonymousDynamicConstantDesc",3,96
+"java.lang.invoke.BoundMethodHandle$Species_LLLL",3,144
+"java.lang.invoke.DirectMethodHandle$Interface",3,120
+"java.lang.invoke.LambdaForm[ ]",3,576
+"java.lang.invoke.MethodHandleImpl$ArrayAccess",3,72
+"java.lang.invoke.VarHandle$AccessType[ ]",3,120
+"java.lang.invoke.VarHandleByteArrayAsInts$ArrayHandle",3,96
+"java.lang.invoke.VarHandleByteArrayAsLongs$ArrayHandle",3,96
+"java.lang.reflect.Proxy$ProxyBuilder",3,72
+"java.lang.reflect.Proxy$ProxyBuilder$ProxyClassContext",3,72
+"java.lang.reflect.ProxyGenerator",3,264
+"java.lang.reflect.ProxyGenerator$$Lambda.0x000000016711b1a0",3,48
+"java.lang.reflect.ProxyGenerator$$Lambda.0x000000016711bea8",3,48
+"java.lang.reflect.ProxyGenerator$$Lambda.0x000000016711e570",3,48
+"java.lang.reflect.ProxyGenerator$$Lambda.0x000000016711e7b0",3,48
+"java.lang.reflect.ProxyGenerator$$Lambda.0x000000016711ee68",3,48
+"java.nio.charset.CodingErrorAction",3,48
+"java.util.Collections$UnmodifiableRandomAccessList",3,72
+"java.util.IdentityHashMap$KeySet",3,48
+"java.util.LinkedHashSet",3,48
+"java.util.ResourceBundle$NoFallbackControl",3,48
+"java.util.concurrent.ConcurrentHashMap$KeySetView",3,72
+"java.util.regex.Pattern",3,264
+"java.util.regex.Pattern$BitClass",3,48
+"java.util.regex.Pattern$BmpCharPropertyGreedy",3,72
+"java.util.regex.Pattern$GroupHead[ ]",3,168
+"java.util.regex.Pattern$TreeInfo",3,72
+"java.util.stream.Collector$Characteristics",3,72
+"jdk.internal.jimage.BasicImageReader$1",3,72
+"jdk.internal.jimage.ImageLocation",3,72
+"jdk.internal.loader.URLClassPath$1",3,96
+"jdk.internal.math.FloatingDecimal$ExceptionalBinaryToASCIIBuffer",3,72
+"jdk.internal.misc.Signal",3,72
+"jdk.internal.module.ModuleBootstrap$IllegalNativeAccess",3,72
+"sun.invoke.util.ValueConversions$WrapperCache[ ]",3,112
+"sun.management.spi.PlatformMBeanProvider$PlatformComponent$$Lambda.0x000000016710b9e8",3,48
+"sun.management.spi.PlatformMBeanProvider$PlatformComponent$$Lambda.0x000000016710bc48",3,48
+"sun.nio.cs.StreamEncoder",3,144
+"sun.reflect.annotation.AnnotationType",3,96
+"sun.security.provider.NativePRNG$RandomIO",3,216
+"sun.security.provider.NativePRNG$Variant",3,72
+"sun.util.resources.Bundles$BundleReference",3,120
+"com.jprofiler.agent.probe.a.a.f",2,64
+"com.jprofiler.agent.probe.a.a.j",2,64
+"com.jprofiler.agent.probe.a.a.k",2,64
+"com.jprofiler.agent.probe.a.e.f",2,64
+"com.jprofiler.agent.probe.h.a",2,96
+"com.jprofiler.agent.probe.structures.g",2,144
+"com.jprofiler.agent.probe.structures.g$a",2,80
+"com.jprofiler.agent.probe.structures.g$a[ ]",2,48
+"com.jprofiler.agent.util.a.b.x",2,160
+"float[ ]",2,80
+"java.io.ClassCache$1",2,64
+"java.io.ClassCache$CacheRef",2,96
+"java.io.File$PathStatus",2,48
+"java.io.PrintStream",2,80
+"java.io.PrintWriter",2,80
+"java.lang.Boolean",2,32
+"java.lang.ClassValue$ClassValueMap",2,128
+"java.lang.CompoundEnumeration",2,48
+"java.lang.ModuleLayer",2,80
+"java.lang.NoClassDefFoundError",2,80
+"java.lang.OutOfMemoryError[ ]",2,80
+"java.lang.Shutdown$Lock",2,32
+"java.lang.System$Logger$Level[ ]",2,96
+"java.lang.System$Out",2,64
+"java.lang.UnsupportedOperationException",2,80
+"java.lang.annotation.RetentionPolicy[ ]",2,64
+"java.lang.classfile.AttributeMapper$AttributeStability[ ]",2,80
+"java.lang.classfile.Opcode[ ]",2,1744
+"java.lang.invoke.BoundMethodHandle$Species_LI",2,80
+"java.lang.invoke.LambdaForm$Kind[ ]",2,448
+"java.lang.invoke.LambdaFormEditor$1",2,32
+"java.lang.invoke.LambdaFormEditor$Transform[ ]",2,64
+"java.lang.invoke.MethodHandleImpl$Intrinsic[ ]",2,112
+"java.lang.invoke.MethodHandle[ ][ ]",2,80
+"java.lang.invoke.VarHandle$AccessMode[ ]",2,288
+"java.lang.management.ManagementFactory$$Lambda.0x0000000167105ee8",2,32
+"java.lang.management.ManagementFactory$PlatformMBeanFinder$$Lambda.0x00000001671048c8",2,32
+"java.lang.management.MemoryType",2,64
+"java.lang.module.Configuration",2,80
+"java.lang.module.ModuleDescriptor$Builder",2,128
+"java.lang.ref.ReferenceQueue$Null",2,64
+"java.net.URI$Parser",2,64
+"java.net.URL[ ]",2,344
+"java.nio.ByteOrder",2,32
+"java.nio.DirectIntBufferRU",2,112
+"java.nio.charset.CoderResult[ ]",2,64
+"java.nio.file.attribute.FileAttribute[ ]",2,32
+"java.security.ProtectionDomain[ ]",2,48
+"java.security.Security$1",2,112
+"java.security.Security$SecPropLoader$LoadingMode",2,48
+"java.text.DecimalFormatSymbols",2,176
+"java.util.AbstractList$Itr",2,64
+"java.util.ArrayList$ArrayListSpliterator",2,64
+"java.util.Arrays$ArrayItr",2,48
+"java.util.Enumeration[ ]",2,48
+"java.util.Formatter",2,48
+"java.util.Hashtable$Enumerator",2,96
+"java.util.HexFormat",2,64
+"java.util.IdentityHashMap$KeyIterator",2,80
+"java.util.ImmutableCollections$MapN$1",2,32
+"java.util.ImmutableCollections$MapN$MapNIterator",2,48
+"java.util.Locale$Category",2,96
+"java.util.Properties",2,112
+"java.util.ResourceBundle$SingleFormatControl",2,32
+"java.util.StringTokenizer",2,96
+"java.util.TreeMap",2,96
+"java.util.TreeMap$EntryIterator",2,64
+"java.util.TreeMap$EntrySet",2,32
+"java.util.concurrent.ForkJoinPool",2,720
+"java.util.concurrent.ForkJoinPool$WorkQueue[ ]",2,160
+"java.util.jar.JarVerifier",2,128
+"java.util.regex.Pattern$CharProperty",2,48
+"java.util.regex.Pattern$CharPropertyGreedy",2,48
+"java.util.regex.Pattern$Start",2,48
+"java.util.stream.Collector$Characteristics[ ]",2,64
+"java.util.stream.Collectors$$Lambda.0x00000001671279d8",2,48
+"java.util.stream.FindOps$FindOp",2,64
+"java.util.stream.FindOps$FindSink$OfRef",2,48
+"java.util.stream.ReferencePipeline$7",2,112
+"java.util.stream.ReferencePipeline$7$1FlatMap",2,48
+"jdk.internal.classfile.impl.ClassFileImpl",2,112
+"jdk.internal.classfile.impl.ClassHierarchyImpl$ClassHierarchyInfoImpl",2,48
+"jdk.internal.loader.URLClassPath",2,80
+"jdk.internal.loader.URLClassPath$FileLoader$1",2,64
+"jdk.internal.math.FloatingDecimal$ASCIIToBinaryBuffer",2,64
+"jdk.internal.math.FloatingDecimal$BinaryToASCIIBuffer",2,80
+"jdk.internal.misc.InnocuousThread",2,240
+"jdk.internal.misc.Signal$NativeHandler",2,48
+"jdk.internal.reflect.ReflectionFactory$Config",2,32
+"jdk.internal.util.OSVersion",2,48
+"jdk.internal.util.ReferencedKeyMap$1",2,32
+"jdk.internal.util.ReferencedKeySet",2,32
+"jdk.internal.vm.SharedThreadContainer",2,80
+"jdk.proxy1.$Proxy0",2,32
+"sun.management.MemoryManagerImpl",2,80
+"sun.net.www.protocol.jar.Handler",2,32
+"sun.security.jca.ProviderConfig[ ]",2,88
+"sun.security.jca.ProviderList",2,48
+"sun.security.jca.ProviderList$2",2,48
+"sun.security.provider.FileInputStreamPool$StreamRef",2,64
+"sun.security.provider.FileInputStreamPool$UnclosableInputStream",2,32
+"sun.security.util.KnownOIDs[ ]",2,2272
+"sun.util.locale.provider.LocaleResources$ResourceReference",2,80
+"sun.util.logging.PlatformLogger$Level[ ]",2,104
+"ca.concordia.ptidej.spectra.ChildJVM.SpectraShutdownJVMThread",1,112
+"char[ ][ ][ ]",1,432
+"com.jprofiler.agent.ControllerImpl$3",1,120
+"com.jprofiler.agent.InstrumentationCallee$1",1,16
+"com.jprofiler.agent.JProfilerThreadManager$1",1,16
+"com.jprofiler.agent.JProfilerThreadManager$Platform[ ]",1,24
+"com.jprofiler.agent.c.a$1",1,16
+"com.jprofiler.agent.f.a.d[ ]",1,16
+"com.jprofiler.agent.f.a.e[ ]",1,40
+"com.jprofiler.agent.f.a.f[ ]",1,16
+"com.jprofiler.agent.f.a.g[ ]",1,16
+"com.jprofiler.agent.f.e",1,16
+"com.jprofiler.agent.g",1,24
+"com.jprofiler.agent.n$1",1,16
+"com.jprofiler.agent.probe.JavaCollector",1,80
+"com.jprofiler.agent.probe.ProbeHandler$1",1,16
+"com.jprofiler.agent.probe.ProbeHandler$2",1,16
+"com.jprofiler.agent.probe.ProbeHandler$a",1,120
+"com.jprofiler.agent.probe.a.a$1",1,16
+"com.jprofiler.agent.probe.a.a.a",1,56
+"com.jprofiler.agent.probe.a.a.c",1,56
+"com.jprofiler.agent.probe.a.a.f[ ]",1,24
+"com.jprofiler.agent.probe.a.a.g$1",1,16
+"com.jprofiler.agent.probe.a.a.g$2",1,16
+"com.jprofiler.agent.probe.a.a.g$6",1,16
+"com.jprofiler.agent.probe.a.a.h",1,40
+"com.jprofiler.agent.probe.a.a.j[ ]",1,24
+"com.jprofiler.agent.probe.a.a.k[ ]",1,24
+"com.jprofiler.agent.probe.a.a.m",1,80
+"com.jprofiler.agent.probe.a.a.s",1,48
+"com.jprofiler.agent.probe.a.b",1,40
+"com.jprofiler.agent.probe.a.b$1",1,16
+"com.jprofiler.agent.probe.a.b$b",1,16
+"com.jprofiler.agent.probe.a.b.a",1,56
+"com.jprofiler.agent.probe.a.b.d$1",1,16
+"com.jprofiler.agent.probe.a.b.e",1,24
+"com.jprofiler.agent.probe.a.c.f",1,40
+"com.jprofiler.agent.probe.a.c.f$1",1,16
+"com.jprofiler.agent.probe.a.d.a",1,40
+"com.jprofiler.agent.probe.a.d.b",1,40
+"com.jprofiler.agent.probe.a.d.c",1,40
+"com.jprofiler.agent.probe.a.d.d",1,40
+"com.jprofiler.agent.probe.a.d.e",1,40
+"com.jprofiler.agent.probe.a.d.f",1,32
+"com.jprofiler.agent.probe.a.d.f$1",1,16
+"com.jprofiler.agent.probe.a.d.g",1,32
+"com.jprofiler.agent.probe.a.e",1,40
+"com.jprofiler.agent.probe.a.e.b",1,64
+"com.jprofiler.agent.probe.a.e.b$1",1,16
+"com.jprofiler.agent.probe.a.e.c",1,24
+"com.jprofiler.agent.probe.a.e.d",1,56
+"com.jprofiler.agent.probe.a.e.d$1",1,16
+"com.jprofiler.agent.probe.a.e.d$e",1,16
+"com.jprofiler.agent.probe.a.e.e",1,32
+"com.jprofiler.agent.probe.a.e.f[ ]",1,24
+"com.jprofiler.agent.probe.a.f",1,24
+"com.jprofiler.agent.probe.a.f.b",1,56
+"com.jprofiler.agent.probe.a.f.b$1",1,16
+"com.jprofiler.agent.probe.a.f.e$1",1,16
+"com.jprofiler.agent.probe.a.f.f",1,32
+"com.jprofiler.agent.probe.a.f.g[ ]",1,32
+"com.jprofiler.agent.probe.a.f.h",1,56
+"com.jprofiler.agent.probe.a.f.h$1",1,16
+"com.jprofiler.agent.probe.a.g",1,48
+"com.jprofiler.agent.probe.a.g$1",1,16
+"com.jprofiler.agent.probe.a.g$2",1,32
+"com.jprofiler.agent.probe.a.h",1,24
+"com.jprofiler.agent.probe.a.i",1,56
+"com.jprofiler.agent.probe.a.i$1",1,16
+"com.jprofiler.agent.probe.a.i$2",1,16
+"com.jprofiler.agent.probe.a.j",1,48
+"com.jprofiler.agent.probe.a.k",1,88
+"com.jprofiler.agent.probe.a.k$1",1,16
+"com.jprofiler.agent.probe.a.k$2",1,16
+"com.jprofiler.agent.probe.a.k$4",1,16
+"com.jprofiler.agent.probe.a.n$1",1,16
+"com.jprofiler.agent.probe.a.o",1,24
+"com.jprofiler.agent.probe.a.p",1,48
+"com.jprofiler.agent.probe.a.p$1",1,16
+"com.jprofiler.agent.probe.a.q",1,24
+"com.jprofiler.agent.probe.a.r",1,40
+"com.jprofiler.agent.probe.a.s",1,56
+"com.jprofiler.agent.probe.a.s$1",1,16
+"com.jprofiler.agent.probe.a.s$2",1,16
+"com.jprofiler.agent.probe.a.t",1,40
+"com.jprofiler.agent.probe.a.t$1",1,16
+"com.jprofiler.agent.probe.c$1",1,16
+"com.jprofiler.agent.probe.c.a",1,40
+"com.jprofiler.agent.probe.c.a$1",1,16
+"com.jprofiler.agent.probe.c.b",1,24
+"com.jprofiler.agent.probe.d.k[ ]",1,16
+"com.jprofiler.agent.probe.f.b",1,48
+"com.jprofiler.agent.probe.f.b$1",1,16
+"com.jprofiler.agent.probe.f.c",1,40
+"com.jprofiler.agent.probe.f.d",1,48
+"com.jprofiler.agent.probe.f.f",1,48
+"com.jprofiler.agent.probe.f.f$1",1,16
+"com.jprofiler.agent.probe.f.g",1,48
+"com.jprofiler.agent.probe.f.g$1",1,16
+"com.jprofiler.agent.probe.f.h",1,40
+"com.jprofiler.agent.probe.f.i",1,80
+"com.jprofiler.agent.probe.f.i$1",1,16
+"com.jprofiler.agent.probe.f.j",1,32
+"com.jprofiler.agent.probe.f.l",1,40
+"com.jprofiler.agent.probe.g.c$c",1,16
+"com.jprofiler.agent.probe.g.g$a",1,16
+"com.jprofiler.agent.probe.i.h[ ]",1,32
+"com.jprofiler.agent.probe.i.i",1,16
+"com.jprofiler.agent.probe.n",1,24
+"com.jprofiler.agent.probe.q",1,24
+"com.jprofiler.agent.sampler.Sampler",1,112
+"com.jprofiler.agent.sampler.c",1,96
+"com.jprofiler.agent.util.ModuleHelper$a",1,16
+"com.jprofiler.agent.util.a.a.a.a$a",1,16
+"com.jprofiler.agent.util.a.a.a.a$b",1,16
+"com.jprofiler.agent.util.a.a.b.e$a",1,24
+"com.jprofiler.agent.util.a.a.b.e$a[ ]",1,24
+"com.jprofiler.agent.util.a.a.b.h$1",1,16
+"com.jprofiler.agent.util.a.a.b.h$2",1,16
+"com.jprofiler.agent.util.a.a.b.h$3",1,16
+"com.jprofiler.agent.util.a.a.b.h$c$1",1,24
+"com.jprofiler.agent.util.a.a.b.h$c$2",1,24
+"com.jprofiler.agent.util.a.a.b.h$c$3",1,24
+"com.jprofiler.agent.util.a.a.b.h$c$4",1,24
+"com.jprofiler.agent.util.a.a.b.h$c$5",1,24
+"com.jprofiler.agent.util.a.a.b.h$c$6",1,24
+"com.jprofiler.agent.util.a.a.b.h$c$7",1,24
+"com.jprofiler.agent.util.a.a.b.h$c$8",1,24
+"com.jprofiler.agent.util.a.a.b.h$c[ ][ ]",1,32
+"com.jprofiler.agent.util.a.a.b.h$d",1,48
+"com.jprofiler.agent.util.a.a.b.h$e",1,16
+"com.jprofiler.agent.util.a.a.b.h$s$1",1,24
+"com.jprofiler.agent.util.a.a.b.h$s$2",1,24
+"com.jprofiler.agent.util.a.a.b.h$s$3",1,24
+"com.jprofiler.agent.util.a.a.b.h$s[ ]",1,32
+"com.jprofiler.agent.util.a.b.a.c",1,16
+"com.jprofiler.agent.util.a.b.aa$1",1,24
+"com.jprofiler.agent.util.a.b.ad",1,64
+"com.jprofiler.agent.util.a.b.r",1,40
+"com.jprofiler.agent.util.a.b.x$1",1,24
+"com.jprofiler.agent.util.e",1,24
+"com.jprofiler.agent.util.f[ ]",1,160
+"com.jprofiler.agent.util.v",1,16
+"com.jprofiler.agent.util.y",1,88
+"com.jprofiler.api.agent.ProbeObjectType[ ]",1,32
+"com.jprofiler.api.agent.probe.InterceptionMethod",1,24
+"com.sun.management.internal.DiagnosticCommandImpl",1,40
+"com.sun.management.internal.OperatingSystemImpl",1,32
+"com.sun.management.internal.OperatingSystemImpl$ProcessCpuTicks",1,40
+"com.sun.management.internal.OperatingSystemImpl$SystemCpuTicks",1,40
+"com.sun.management.internal.PlatformMBeanProviderImpl",1,16
+"com.sun.management.internal.PlatformMBeanProviderImpl$1",1,16
+"com.sun.management.internal.PlatformMBeanProviderImpl$2",1,24
+"com.sun.management.internal.PlatformMBeanProviderImpl$3",1,24
+"com.sun.management.internal.PlatformMBeanProviderImpl$4",1,16
+"com.sun.management.internal.PlatformMBeanProviderImpl$5",1,16
+"com.sun.management.internal.PlatformMBeanProviderImpl$6",1,24
+"java.io.BufferedInputStream",1,40
+"java.io.BufferedReader",1,48
+"java.io.File$PathStatus[ ]",1,24
+"java.io.FileDescriptor$1",1,16
+"java.io.FileOutputStream",1,32
+"java.io.FileReader",1,24
+"java.io.File[ ]",1,24
+"java.io.ObjectStreamClass",1,112
+"java.io.ObjectStreamClass$Caches$1",1,24
+"java.io.ObjectStreamClass$Caches$2",1,24
+"java.io.ObjectStreamClass$FieldReflector",1,40
+"java.io.ObjectStreamClass$FieldReflectorKey",1,24
+"java.io.RandomAccessFile$1",1,16
+"java.io.RandomAccessFile$2",1,16
+"java.io.StringWriter",1,24
+"java.io.UnixFileSystem",1,24
+"java.lang.ApplicationShutdownHooks$1",1,16
+"java.lang.ArithmeticException",1,40
+"java.lang.ArrayIndexOutOfBoundsException",1,40
+"java.lang.ArrayStoreException",1,40
+"java.lang.CharacterData00",1,16
+"java.lang.CharacterDataLatin1",1,16
+"java.lang.Character[ ]",1,528
+"java.lang.Class$$Lambda.0x0000000167127790",1,16
+"java.lang.ClassCastException",1,40
+"java.lang.ClassLoader[ ]",1,264
+"java.lang.Float",1,16
+"java.lang.IllegalArgumentException",1,40
+"java.lang.IncompatibleClassChangeError",1,40
+"java.lang.InternalError",1,40
+"java.lang.Long[ ]",1,1040
+"java.lang.Module$$Lambda.0x0000000167067878",1,16
+"java.lang.Module$ArchivedData",1,32
+"java.lang.ModuleLayer$Controller",1,16
+"java.lang.Module[ ]",1,264
+"java.lang.NullPointerException",1,48
+"java.lang.Runnable[ ]",1,56
+"java.lang.Runtime",1,16
+"java.lang.StackOverflowError",1,40
+"java.lang.String$$StringConcat.0x0000000167140000",1,24
+"java.lang.String$CaseInsensitiveComparator",1,16
+"java.lang.StringBuffer",1,32
+"java.lang.String[ ][ ]",1,120
+"java.lang.System$1",1,16
+"java.lang.System$In",1,40
+"java.lang.Terminator$1",1,16
+"java.lang.Thread$State[ ]",1,40
+"java.lang.ThreadGroup[ ]",1,32
+"java.lang.ThreadLocal$SuppliedThreadLocal",1,24
+"java.lang.Throwable$WrappedPrintWriter",1,16
+"java.lang.Throwable[ ]",1,16
+"java.lang.VirtualThread$$Lambda.0x00000001670cc6a0",1,16
+"java.lang.VirtualThread$$Lambda.0x00000001670d6e98",1,16
+"java.lang.VirtualThread$$Lambda.0x00000001670dfd08",1,16
+"java.lang.VirtualThread$$Lambda.0x00000001670fe430",1,16
+"java.lang.classfile.ClassFile$Option[ ]",1,24
+"java.lang.classfile.ClassFile$StackMapsOption[ ]",1,32
+"java.lang.classfile.ClassHierarchyResolver$1Factory",1,16
+"java.lang.classfile.Opcode$Kind[ ]",1,120
+"java.lang.classfile.attribute.StackMapFrameInfo$SimpleVerificationTypeInfo[ ]",1,48
+"java.lang.classfile.instruction.CharacterRange[ ]",1,16
+"java.lang.classfile.instruction.LocalVariableType[ ]",1,16
+"java.lang.classfile.instruction.LocalVariable[ ]",1,16
+"java.lang.invoke.BoundMethodHandle$Specializer",1,56
+"java.lang.invoke.BoundMethodHandle$Specializer$Factory",1,48
+"java.lang.invoke.ClassSpecializer$1",1,16
+"java.lang.invoke.ClassSpecializer$Factory$1",1,32
+"java.lang.invoke.ClassSpecializer$Factory$1$1",1,16
+"java.lang.invoke.ClassSpecializer$Factory$1$2",1,24
+"java.lang.invoke.ClassSpecializer$Factory$1$3",1,40
+"java.lang.invoke.ClassSpecializer$Factory$1$4",1,32
+"java.lang.invoke.LambdaForm$Name[ ][ ]",1,40
+"java.lang.invoke.MemberName$Factory",1,16
+"java.lang.invoke.MethodHandleImpl$1",1,16
+"java.lang.invoke.MethodHandleImpl$ArrayAccess[ ]",1,32
+"java.lang.invoke.MethodHandleImpl$ArrayAccessor$1",1,24
+"java.lang.invoke.MethodType$1",1,16
+"java.lang.invoke.SimpleMethodHandle",1,32
+"java.lang.invoke.StringConcatFactory$InlineHiddenClassStrategy$1",1,16
+"java.lang.invoke.StringConcatFactory$InlineHiddenClassStrategy$2",1,16
+"java.lang.invoke.StringConcatFactory$InlineHiddenClassStrategy$3",1,40
+"java.lang.invoke.StringConcatFactory$InlineHiddenClassStrategy$3$1",1,40
+"java.lang.invoke.StringConcatFactory$InlineHiddenClassStrategy$3$2",1,24
+"java.lang.invoke.StringConcatFactory$InlineHiddenClassStrategy$3$3",1,24
+"java.lang.invoke.StringConcatFactory$InlineHiddenClassStrategy$3$4",1,24
+"java.lang.invoke.StringConcatFactory$InlineHiddenClassStrategy$4",1,40
+"java.lang.invoke.StringConcatFactory$InlineHiddenClassStrategy$5",1,16
+"java.lang.invoke.StringConcatFactory$InlineHiddenClassStrategy$6",1,16
+"java.lang.invoke.StringConcatFactory$InlineHiddenClassStrategy$7",1,24
+"java.lang.invoke.StringConcatFactory$InlineHiddenClassStrategy$MethodHandlePair",1,24
+"java.lang.invoke.VarHandleBooleans$FieldInstanceReadWrite",1,40
+"java.lang.invoke.VarHandleByteArrayAsChars$ArrayHandle",1,32
+"java.lang.invoke.VarHandleByteArrayAsDoubles$ArrayHandle",1,32
+"java.lang.invoke.VarHandleByteArrayAsFloats$ArrayHandle",1,32
+"java.lang.invoke.VarHandleByteArrayAsShorts$ArrayHandle",1,32
+"java.lang.invoke.VarHandleInts$Array",1,40
+"java.lang.invoke.VarHandleInts$FieldInstanceReadWrite",1,40
+"java.lang.invoke.VarHandleReferences$Array",1,48
+"java.lang.management.DefaultPlatformMBeanProvider",1,16
+"java.lang.management.DefaultPlatformMBeanProvider$1",1,16
+"java.lang.management.DefaultPlatformMBeanProvider$10",1,16
+"java.lang.management.DefaultPlatformMBeanProvider$11",1,16
+"java.lang.management.DefaultPlatformMBeanProvider$2",1,16
+"java.lang.management.DefaultPlatformMBeanProvider$3",1,16
+"java.lang.management.DefaultPlatformMBeanProvider$4",1,16
+"java.lang.management.DefaultPlatformMBeanProvider$5",1,16
+"java.lang.management.DefaultPlatformMBeanProvider$6",1,16
+"java.lang.management.DefaultPlatformMBeanProvider$7",1,16
+"java.lang.management.DefaultPlatformMBeanProvider$8",1,16
+"java.lang.management.DefaultPlatformMBeanProvider$9",1,16
+"java.lang.management.ManagementFactory$PlatformMBeanFinder$$Lambda.0x000000016710dae0",1,16
+"java.lang.management.ManagementFactory$PlatformMBeanFinder$$Lambda.0x000000016710dd40",1,16
+"java.lang.management.MemoryManagerMXBean[ ]",1,40
+"java.lang.management.MemoryPoolMXBean[ ]",1,48
+"java.lang.management.MemoryType[ ]",1,24
+"java.lang.module.ModuleDescriptor$1",1,16
+"java.lang.module.ModuleDescriptor$Builder$$Lambda.0x0000000167117b70",1,16
+"java.lang.module.ModuleDescriptor$Modifier[ ]",1,32
+"java.lang.module.ModuleDescriptor$Requires$Modifier[ ]",1,32
+"java.lang.module.ModuleDescriptor$Version",1,32
+"java.lang.module.ModuleDescriptor[ ]",1,264
+"java.lang.module.ModuleReference[ ]",1,264
+"java.lang.ref.Cleaner",1,16
+"java.lang.ref.Cleaner$1",1,16
+"java.lang.ref.Finalizer$FinalizerThread",1,120
+"java.lang.ref.Reference$1",1,16
+"java.lang.ref.Reference$ReferenceHandler",1,112
+"java.lang.ref.WeakReference[ ]",1,32
+"java.lang.reflect.AccessFlag$Location[ ]",1,56
+"java.lang.reflect.ClassFileFormatVersion[ ]",1,120
+"java.lang.reflect.Proxy$$Lambda.0x0000000167115800",1,16
+"java.lang.reflect.Proxy$1",1,24
+"java.lang.reflect.Proxy$ProxyBuilder$$Lambda.0x0000000167116c30",1,16
+"java.lang.reflect.ProxyGenerator$$Lambda.0x000000016711aa88",1,16
+"java.lang.reflect.ProxyGenerator$PrimitiveTypeInfo[ ]",1,48
+"java.lang.reflect.ReflectAccess",1,16
+"java.math.RoundingMode[ ]",1,48
+"java.net.URI$1",1,16
+"java.net.URL$1",1,16
+"java.net.URL$DefaultFactory",1,16
+"java.nio.Bits$1",1,16
+"java.nio.Buffer$1",1,16
+"java.nio.Buffer$2",1,16
+"java.nio.ByteBuffer[ ]",1,4112
+"java.nio.DirectIntBufferU",1,56
+"java.nio.StringCharBuffer",1,56
+"java.nio.channels.spi.AbstractInterruptibleChannel$1",1,16
+"java.nio.file.OpenOption[ ]",1,16
+"java.nio.file.StandardOpenOption[ ]",1,56
+"java.security.AccessControlContext",1,24
+"java.security.AllPermission",1,16
+"java.security.MessageDigest$Delegate$CloneableDelegate",1,32
+"java.security.Provider$$Lambda.0x00000001670f0c10",1,16
+"java.security.Provider[ ]",1,16
+"java.security.SecureRandom",1,64
+"java.security.Security$2",1,16
+"java.security.Security$SecPropLoader$LoadingMode[ ]",1,24
+"java.security.cert.Certificate[ ]",1,16
+"java.text.DecimalFormat",1,144
+"java.text.DecimalFormat$FastPathData",1,72
+"java.text.DigitList",1,40
+"java.text.FieldPosition[ ]",1,16
+"java.util.AbstractMap$1",1,16
+"java.util.AbstractMap$KeyIterator",1,24
+"java.util.ArrayList$SubList",1,32
+"java.util.Collections$2",1,24
+"java.util.Collections$EmptyEnumeration",1,16
+"java.util.Collections$EmptyIterator",1,16
+"java.util.Collections$EmptyList",1,16
+"java.util.Collections$EmptyMap",1,24
+"java.util.Collections$EmptySet",1,16
+"java.util.Collections$SingletonMap",1,40
+"java.util.Collections$SynchronizedMap",1,32
+"java.util.Collections$UnmodifiableMap",1,32
+"java.util.EnumMap$1",1,16
+"java.util.ImmutableCollections$Access$1",1,16
+"java.util.LinkedHashMap$LinkedKeyIterator",1,32
+"java.util.LinkedHashMap$LinkedKeySet",1,24
+"java.util.LinkedList",1,32
+"java.util.LinkedList$ListItr",1,32
+"java.util.Locale$Builder",1,16
+"java.util.Locale$Category[ ]",1,24
+"java.util.Locale$LocaleCache",1,16
+"java.util.Properties$LineReader",1,40
+"java.util.ResourceBundle$1",1,16
+"java.util.ResourceBundle$2",1,40
+"java.util.ResourceBundle$Control",1,16
+"java.util.ResourceBundle$Control$$Lambda.0x000000016713aab8",1,16
+"java.util.ResourceBundle$Control$$Lambda.0x000000016713bf98",1,16
+"java.util.Set[ ]",1,136
+"java.util.Spliterators$1Adapter",1,24
+"java.util.Spliterators$EmptySpliterator$OfRef",1,16
+"java.util.concurrent.ConcurrentHashMap$EntryIterator",1,56
+"java.util.concurrent.ConcurrentHashMap$EntrySetView",1,16
+"java.util.concurrent.ForkJoinPool$1",1,16
+"java.util.concurrent.ForkJoinPool$DefaultForkJoinWorkerThreadFactory",1,16
+"java.util.concurrent.TimeUnit[ ]",1,48
+"java.util.jar.JavaUtilJarAccessImpl",1,16
+"java.util.regex.CharPredicates$$Lambda.0x000000016712fd98",1,16
+"java.util.regex.IntHashSet[ ]",1,16
+"java.util.regex.Matcher",1,80
+"java.util.regex.Pattern$$Lambda.0x0000000167130030",1,16
+"java.util.regex.Pattern$$Lambda.0x00000001671302a0",1,24
+"java.util.regex.Pattern$$Lambda.0x0000000167130bf8",1,16
+"java.util.regex.Pattern$LastNode",1,16
+"java.util.regex.Pattern$Node",1,16
+"java.util.regex.Pattern$Qtype[ ]",1,32
+"java.util.regex.Pattern$StartS",1,24
+"java.util.stream.Collectors$$Lambda.0x00000001670ce760",1,16
+"java.util.stream.Collectors$$Lambda.0x00000001670ce988",1,16
+"java.util.stream.Collectors$$Lambda.0x00000001670cebc0",1,16
+"java.util.stream.Collectors$$Lambda.0x00000001670cee10",1,16
+"java.util.stream.Collectors$$Lambda.0x0000000167106660",1,16
+"java.util.stream.Collectors$$Lambda.0x0000000167106888",1,16
+"java.util.stream.Collectors$$Lambda.0x0000000167106ac0",1,16
+"java.util.stream.Collectors$$Lambda.0x0000000167127c08",1,16
+"java.util.stream.Collectors$$Lambda.0x0000000167127e40",1,16
+"java.util.stream.Collectors$$Lambda.0x0000000167128090",1,16
+"java.util.stream.FindOps$FindSink$OfRef$$Lambda.0x0000000167105560",1,16
+"java.util.stream.FindOps$FindSink$OfRef$$Lambda.0x00000001671057b8",1,16
+"java.util.stream.ReduceOps$2",1,24
+"java.util.stream.ReduceOps$2ReducingSink",1,24
+"java.util.stream.StreamShape[ ]",1,32
+"java.util.zip.ZipCoder$UTF8ZipCoder",1,24
+"java.util.zip.ZipFile$1",1,16
+"java.util.zip.ZipFile$Source$$Lambda.0x0000000167121190",1,16
+"jdk.internal.classfile.impl.AbstractAttributeMapper$CodeMapper",1,24
+"jdk.internal.classfile.impl.AbstractAttributeMapper$ExceptionsMapper",1,24
+"jdk.internal.classfile.impl.AbstractAttributeMapper$RuntimeVisibleAnnotationsMapper",1,24
+"jdk.internal.classfile.impl.AbstractAttributeMapper$SourceFileMapper",1,24
+"jdk.internal.classfile.impl.AbstractAttributeMapper$StackMapTableMapper",1,24
+"jdk.internal.classfile.impl.AbstractPoolEntry$Utf8EntryImpl$State[ ]",1,32
+"jdk.internal.classfile.impl.ClassHierarchyImpl$ClassLoadingClassHierarchyResolver",1,16
+"jdk.internal.classfile.impl.ClassHierarchyImpl$ClassLoadingClassHierarchyResolver$1",1,16
+"jdk.internal.classfile.impl.RawBytecodeHelper$1",1,16
+"jdk.internal.classfile.impl.StackMapGenerator$Frame[ ]",1,16
+"jdk.internal.classfile.impl.TemporaryConstantPool",1,16
+"jdk.internal.event.SecurityProviderServiceEvent",1,40
+"jdk.internal.event.ThreadSleepEvent",1,40
+"jdk.internal.jimage.ImageHeader",1,48
+"jdk.internal.jimage.ImageReader",1,24
+"jdk.internal.jimage.ImageReader$SharedImageReader",1,96
+"jdk.internal.jimage.ImageReaderFactory$1",1,16
+"jdk.internal.jimage.ImageStringsReader",1,16
+"jdk.internal.jimage.NativeImageBuffer$1",1,16
+"jdk.internal.jimage.decompressor.Decompressor",1,16
+"jdk.internal.loader.ArchivedClassLoaders",1,32
+"jdk.internal.loader.ClassLoaders$AppClassLoader",1,104
+"jdk.internal.loader.ClassLoaders$BootClassLoader",1,104
+"jdk.internal.loader.ClassLoaders$PlatformClassLoader",1,104
+"jdk.internal.logger.BootstrapLogger$LoggingBackend[ ]",1,32
+"jdk.internal.logger.BootstrapLogger$RedirectedLoggers",1,24
+"jdk.internal.logger.LazyLoggers$1",1,16
+"jdk.internal.logger.LazyLoggers$JdkLazyLogger",1,16
+"jdk.internal.logger.LazyLoggers$LazyLoggerAccessor",1,40
+"jdk.internal.logger.LazyLoggers$LazyLoggerFactories",1,16
+"jdk.internal.logger.SurrogateLogger",1,24
+"jdk.internal.math.FloatingDecimal$1",1,16
+"jdk.internal.misc.ScopedMemoryAccess",1,16
+"jdk.internal.misc.TerminatingThreadLocal$1",1,16
+"jdk.internal.misc.Unsafe",1,16
+"jdk.internal.module.ModuleBootstrap$IllegalNativeAccess[ ]",1,32
+"jdk.internal.module.ModuleHashes",1,24
+"jdk.internal.module.ModuleHashes$Builder",1,24
+"jdk.internal.module.ModuleHashes[ ]",1,264
+"jdk.internal.module.ModuleLoaderMap$Mapper",1,16
+"jdk.internal.module.ModulePatcher",1,16
+"jdk.internal.module.ModuleResolution[ ]",1,264
+"jdk.internal.module.ModuleTarget",1,16
+"jdk.internal.module.ModuleTarget[ ]",1,264
+"jdk.internal.module.ServicesCatalog[ ]",1,32
+"jdk.internal.module.SystemModuleFinders$SystemModuleFinder",1,24
+"jdk.internal.module.SystemModules$default",1,16
+"jdk.internal.perf.Perf",1,16
+"jdk.internal.ref.CleanerFactory$1",1,16
+"jdk.internal.ref.CleanerImpl",1,24
+"jdk.internal.ref.CleanerImpl$CleanableList",1,24
+"jdk.internal.ref.CleanerImpl$CleanableList$Node",1,24
+"jdk.internal.ref.CleanerImpl$CleanerCleanable",1,40
+"jdk.internal.ref.PhantomCleanable[ ]",1,16400
+"jdk.internal.reflect.MethodHandleBooleanFieldAccessorImpl",1,32
+"jdk.internal.reflect.MethodHandleLongFieldAccessorImpl",1,32
+"jdk.internal.reflect.ReflectionFactory",1,16
+"jdk.internal.util.Preconditions$1",1,16
+"jdk.internal.util.Preconditions$2",1,16
+"jdk.internal.util.Preconditions$3",1,16
+"jdk.internal.util.SystemProps$Raw",1,16
+"jdk.internal.vm.Continuation$Pinned[ ]",1,32
+"jdk.internal.vm.ContinuationScope",1,16
+"jdk.internal.vm.ThreadContainers$RootContainer$TrackingRootContainer",1,24
+"jdk.management.jfr.internal.FlightRecorderMXBeanProvider",1,16
+"jdk.management.jfr.internal.FlightRecorderMXBeanProvider$SingleMBeanComponent",1,24
+"jdk.proxy1.$Proxy1",1,16
+"jdk.proxy2.$Proxy2",1,16
+"org.junit.internal.RealSystem",1,16
+"org.junit.internal.TextListener",1,16
+"org.junit.internal.Throwables$1",1,24
+"org.junit.internal.Throwables$State$1",1,24
+"org.junit.internal.Throwables$State$2",1,24
+"org.junit.internal.Throwables$State$3",1,24
+"org.junit.internal.Throwables$State$4",1,24
+"org.junit.internal.Throwables$State[ ]",1,32
+"org.junit.internal.runners.ErrorReportingRunner",1,24
+"org.junit.runner.Computer",1,16
+"org.junit.runner.JUnitCommandLineParseResult",1,24
+"org.junit.runner.JUnitCore",1,16
+"org.junit.runner.Request$1",1,16
+"org.junit.runner.Result",1,40
+"org.junit.runner.Result$Listener",1,16
+"org.junit.runner.notification.Failure",1,24
+"org.junit.runner.notification.Failure[ ]",1,24
+"org.junit.runner.notification.RunNotifier",1,24
+"org.junit.runner.notification.RunNotifier$1",1,32
+"org.junit.runner.notification.RunNotifier$2",1,32
+"org.junit.runner.notification.RunNotifier$5",1,32
+"org.junit.runner.notification.RunNotifier$6",1,32
+"org.junit.runner.notification.RunNotifier$9",1,32
+"org.junit.runner.notification.SynchronizedRunListener",1,24
+"org.junit.runners.model.InitializationError",1,40
+"sun.management.VMManagementImpl",1,24
+"sun.net.www.protocol.file.Handler",1,16
+"sun.net.www.protocol.jrt.Handler",1,16
+"sun.nio.ch.ChannelInputStream",1,32
+"sun.nio.ch.FileChannelImpl",1,64
+"sun.nio.ch.FileChannelImpl$Closer",1,16
+"sun.nio.ch.FileDispatcherImpl",1,16
+"sun.nio.ch.NativeThreadSet",1,32
+"sun.nio.ch.Util$1",1,16
+"sun.nio.ch.Util$BufferCache",1,24
+"sun.nio.cs.StandardCharsets",1,24
+"sun.nio.cs.StreamDecoder",1,48
+"sun.nio.cs.ThreadLocalCoders$1",1,24
+"sun.nio.cs.ThreadLocalCoders$2",1,24
+"sun.nio.cs.UTF_8",1,24
+"sun.nio.cs.UTF_8$Decoder",1,40
+"sun.nio.fs.MacOSXFileSystem",1,32
+"sun.nio.fs.MacOSXFileSystemProvider",1,16
+"sun.nio.fs.NativeBuffer",1,32
+"sun.nio.fs.NativeBuffer$Deallocator",1,24
+"sun.nio.fs.NativeBuffer[ ]",1,32
+"sun.nio.fs.NativeBuffers$1",1,16
+"sun.nio.fs.UnixChannelFactory$Flags",1,24
+"sun.security.jca.GetInstance$Instance",1,24
+"sun.security.jca.ProviderList$1",1,104
+"sun.security.provider.NativePRNG",1,16
+"sun.security.provider.NativePRNG$Variant[ ]",1,32
+"sun.security.provider.SHA",1,56
+"sun.security.provider.SecureRandom",1,32
+"sun.security.provider.Sun",1,104
+"sun.security.provider.SunEntries",1,16
+"sun.text.resources.cldr.FormatData",1,40
+"sun.text.resources.cldr.FormatData_en",1,40
+"sun.text.resources.cldr.ext.FormatData_en_CA",1,40
+"sun.util.cldr.CLDRBaseLocaleDataMetaInfo",1,16
+"sun.util.cldr.CLDRLocaleProviderAdapter",1,80
+"sun.util.cldr.CLDRLocaleProviderAdapter$$Lambda.0x000000016713b8b0",1,16
+"sun.util.locale.BaseLocale[ ]",1,96
+"sun.util.locale.InternalLocaleBuilder$CaseInsensitiveChar",1,16
+"sun.util.locale.provider.DecimalFormatSymbolsProviderImpl",1,24
+"sun.util.locale.provider.LocaleProviderAdapter$Type[ ]",1,40
+"sun.util.locale.provider.LocaleResources",1,40
+"sun.util.locale.provider.NumberFormatProviderImpl",1,24
+"sun.util.resources.Bundles$1",1,40
+"sun.util.resources.LocaleData",1,16
+"sun.util.resources.LocaleData$LocaleDataStrategy",1,16
+"sun.util.resources.cldr.provider.CLDRLocaleDataMetaInfo",1,16
+"sun.util.resources.provider.LocaleDataProvider",1,16

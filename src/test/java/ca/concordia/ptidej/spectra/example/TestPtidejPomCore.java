@@ -10,34 +10,37 @@ import org.junit.Test;
 import org.noureddine.joularjx.result.CsvResultWriter;
 import org.noureddine.joularjx.result.ResultWriter;
 
+import static org.junit.Assert.assertTrue;
+
 public class TestPtidejPomCore {
-        @Test
-        public void testOverload() throws IOException {
-                ResultWriter writer = new CsvResultWriter();
-                final Launcher launcher = new Launcher();
+    @Test
+    public void testOverload() throws Exception {
+        ResultWriter writer = new CsvResultWriter();
+        final Launcher launcher = new Launcher();
+//
+        String mavenDeps = new String(Files.readAllBytes(
+                Paths.get("target/classpath.txt")));
 
-                // Step 1: Read Maven dependencies
-                String mavenDeps = new String(Files.readAllBytes(
-                                Paths.get("target/classpath.txt")));
 
-                // Step 2: Add your test classes directory and main classes directory
-                // We use relative paths assuming the test is run from the project root
-                // (SPECTRA)
-                String testClasses = new File("target/test-classes").getCanonicalPath();
-                String mainClasses = new File("target/classes").getCanonicalPath();
+        String testClasses = "../POM/target/test-classes";
+        String mainClasses = "../POM/target/classes";
 
-                // Step 3: Combine them ALL
-                // The classpath.txt from maven-dependency-plugin uses the system path separator
-                String completeClasspath = mavenDeps + File.pathSeparator + testClasses + File.pathSeparator + mainClasses;
+        String completeClasspath = mavenDeps + File.pathSeparator + testClasses + File.pathSeparator + mainClasses + File.pathSeparator + "../../../SPECTRA/src/main/resources/junit-4.13.2.jar"
+                + File.pathSeparator + "../../../SPECTRA/src/main/resources/hamcrest-core-1.3.jar" + File.pathSeparator + "../../../SPECTRA/target/test-classes:../../../SPECTRA/target/classes:../../../SPECTRA/target/Spectra-with-dependencies.jar"
+                + File.pathSeparator + "../POM/target/pom-core-1.0.0-tests.jar" + File.pathSeparator + "../POM/target/pom-core-1.0.0.jar";
 
-                System.out.println("Complete Classpath:" + completeClasspath);
+        System.out.println("Complete Classpath:" + completeClasspath);
 
-                // NOW it works! TestPOM will be found
-                launcher.launch(
-                                writer,
-                                completeClasspath, // ← COMPLETE: Maven deps + test classes!
-                                "org.junit.runner.JUnitCore",
-                                "pom.test.TestPOM");
-        }
+        long fileExists = launcher.launch(
+                writer,
+                completeClasspath,
+                "org.junit.runner.JUnitCore",
+                "pom.test.TestPOM");
+
+
+        assertTrue("Excel files created", fileExists != 0);
+
+    }
+
 
 }
