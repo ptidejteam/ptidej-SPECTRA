@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tree type="Call Tree" threadSelection="All thread groups" threadStatus="Runnable" aggregationLevel="Methods">
+  <node leaf="false" class="ca.concordia.ptidej.spectra.ChildJVM.SpectraMain" methodName="main" methodSignature="([Ljava/lang/String;)V" time="347961" count="1" selfTime="2804" lineNumber="-1" percent="100.0">
+    <node leaf="false" class="java.lang.reflect.Method" methodName="invoke" methodSignature="(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;" time="310037" count="1" selfTime="15741" lineNumber="31" percent="89.1">
+      <node leaf="false" class="org.junit.runner.JUnitCore" methodName="main" methodSignature="([Ljava/lang/String;)V" time="294296" count="1" selfTime="2414" lineNumber="-1" percent="84.5">
+        <node leaf="false" class="org.junit.runner.JUnitCore" methodName="runMain" methodSignature="(Lorg/junit/internal/JUnitSystem;[Ljava/lang/String;)Lorg/junit/runner/Result;" time="280692" count="1" selfTime="11484" lineNumber="36" percent="80.6">
+          <node leaf="false" class="org.junit.runner.JUnitCore" methodName="run" methodSignature="(Lorg/junit/runner/Request;)Lorg/junit/runner/Result;" time="196356" count="1" selfTime="10" lineNumber="77" percent="56.4">
+            <node leaf="false" class="org.junit.runner.JUnitCore" methodName="run" methodSignature="(Lorg/junit/runner/Runner;)Lorg/junit/runner/Result;" time="196345" count="1" selfTime="1709" lineNumber="115" percent="56.4">
+              <node leaf="false" class="org.junit.runner.notification.RunNotifier" methodName="fireTestRunFinished" methodSignature="(Lorg/junit/runner/Result;)V" time="135856" count="1" selfTime="703" lineNumber="138" percent="39.0">
+                <node leaf="false" class="org.junit.runner.notification.RunNotifier$SafeNotifier" methodName="run" methodSignature="()V" time="135120" count="1" selfTime="24" lineNumber="100" percent="38.8">
+                  <node leaf="false" class="org.junit.runner.notification.RunNotifier$2" methodName="notifyListener" methodSignature="(Lorg/junit/runner/notification/RunListener;)V" time="135010" count="2" selfTime="13" lineNumber="72" percent="38.8">
+                    <node leaf="false" class="org.junit.runner.notification.SynchronizedRunListener" methodName="testRunFinished" methodSignature="(Lorg/junit/runner/Result;)V" time="134976" count="1" selfTime="5" lineNumber="103" percent="38.8">
+                      <node leaf="false" class="org.junit.internal.TextListener" methodName="testRunFinished" methodSignature="(Lorg/junit/runner/Result;)V" time="134971" count="1" selfTime="21" lineNumber="42" percent="38.8">
+                        <node leaf="false" class="org.junit.internal.TextListener" methodName="printHeader" methodSignature="(J)V" time="121282" count="1" selfTime="29" lineNumber="26" percent="34.8">
+                          <node leaf="false" class="org.junit.internal.TextListener" methodName="elapsedTimeAsString" methodSignature="(J)Ljava/lang/String;" time="121038" count="1" selfTime="6" lineNumber="56" percent="34.8">
+                            <node leaf="true" class="java.text.NumberFormat" methodName="getInstance" methodSignature="()Ljava/text/NumberFormat;" time="119541" count="1" selfTime="119541" lineNumber="99" percent="34.3"/>
+                            <node leaf="true" class="java.text.NumberFormat" methodName="format" methodSignature="(D)Ljava/lang/String;" time="1491" count="1" selfTime="1491" lineNumber="99" percent="0.4"/>
+                          </node>
+                          <node leaf="true" class="java.io.PrintStream" methodName="println" methodSignature="()V" time="116" count="1" selfTime="116" lineNumber="55" percent="0.0"/>
+                          <node leaf="true" class="java.io.PrintStream" methodName="println" methodSignature="(Ljava/lang/String;)V" time="65" count="1" selfTime="65" lineNumber="56" percent="0.0"/>
+                          <node leaf="true" class="java.lang.StringBuilder" methodName="&lt;init&gt;" methodSignature="()V" time="12" count="1" selfTime="12" lineNumber="56" percent="0.0"/>
+                          <node leaf="true" class="java.lang.StringBuilder" methodName="append" methodSignature="(Ljava/lang/String;)Ljava/lang/StringBuilder;" time="10" count="2" selfTime="10" lineNumber="56" percent="0.0"/>
+                          <node leaf="true" class="java.lang.StringBuilder" methodName="toString" methodSignature="()Ljava/lang/String;" time="9" count="1" selfTime="9" lineNumber="56" percent="0.0"/>
+                          <node leaf="true" class="org.junit.internal.TextListener" methodName="getWriter" methodSignature="()Ljava/io/PrintStream;" time="2" count="1" selfTime="2" lineNumber="56" percent="0.0"/>
+                          <node leaf="true" class="org.junit.internal.TextListener" methodName="getWriter" methodSignature="()Ljava/io/PrintStream;" time="1" count="1" selfTime="1" lineNumber="55" percent="0.0"/>
+                        </node>
+                        <node leaf="false" class="org.junit.internal.TextListener" methodName="printFailures" methodSignature="(Lorg/junit/runner/Result;)V" time="12539" count="1" selfTime="31" lineNumber="27" percent="3.6">
+                          <node leaf="false" class="org.junit.internal.TextListener" methodName="printFailure" methodSignature="(Lorg/junit/runner/notification/Failure;Ljava/lang/String;)V" time="12379" count="1" selfTime="20" lineNumber="71" percent="3.6">
+                            <node leaf="false" class="org.junit.runner.notification.Failure" methodName="getTrimmedTrace" methodSignature="()Ljava/lang/String;" time="12117" count="1" selfTime="2688" lineNumber="77" percent="3.5">
+                              <node leaf="false" class="org.junit.internal.Throwables" methodName="getTrimmedStackTrace" methodSignature="(Ljava/lang/Throwable;)Ljava/lang/String;" time="8643" count="1" selfTime="15" lineNumber="-1" percent="2.5">
+                                <node leaf="false" class="org.junit.internal.Throwables" methodName="getTrimmedStackTraceLines" methodSignature="(Ljava/lang/Throwable;)Ljava/util/List;" time="6466" count="1" selfTime="3243" lineNumber="74" percent="1.9">
+                                  <node leaf="true" class="java.lang.Throwable" methodName="getStackTrace" methodSignature="()[Ljava/lang/StackTraceElement;" time="1189" count="1" selfTime="1189" lineNumber="86" percent="0.3"/>
+                                  <node leaf="false" class="org.junit.internal.Throwables" methodName="asReversedList" methodSignature="(Ljava/util/List;)Ljava/util/List;" time="836" count="1" selfTime="814" lineNumber="90" percent="0.2">
+                                    <node leaf="false" class="org.junit.internal.Throwables$1" methodName="&lt;init&gt;" methodSignature="(Ljava/util/List;)V" time="22" count="1" selfTime="14" lineNumber="171" percent="0.0">
+                                      <node leaf="true" class="java.util.AbstractList" methodName="&lt;init&gt;" methodSignature="()V" time="8" count="1" selfTime="8" lineNumber="171" percent="0.0"/>
+                                    </node>
+                                  </node>
+                                  <node leaf="false" class="org.junit.internal.Throwables$State" methodName="&lt;clinit&gt;" methodSignature="()V" time="608" count="1" selfTime="449" lineNumber="-1" percent="0.2">
+                                    <node leaf="false" class="org.junit.internal.Throwables$State$4" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/String;I)V" time="57" count="1" selfTime="9" lineNumber="215" percent="0.0">
+                                      <node leaf="false" class="org.junit.internal.Throwables$State" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/String;ILorg/junit/internal/Throwables$1;)V" time="48" count="1" selfTime="24" lineNumber="215" percent="0.0">
+                                        <node leaf="false" class="org.junit.internal.Throwables$State" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/String;I)V" time="24" count="1" selfTime="2" lineNumber="185" percent="0.0">
+                                          <node leaf="true" class="java.lang.Enum" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/String;I)V" time="22" count="1" selfTime="22" lineNumber="185" percent="0.0"/>
+                                        </node>
+                                      </node>
+                                    </node>
+                                    <node leaf="false" class="org.junit.internal.Throwables$State$2" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/String;I)V" time="50" count="1" selfTime="33" lineNumber="194" percent="0.0">
+                                      <node leaf="false" class="org.junit.internal.Throwables$State" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/String;ILorg/junit/internal/Throwables$1;)V" time="17" count="1" selfTime="8" lineNumber="194" percent="0.0">
+                                        <node leaf="false" class="org.junit.internal.Throwables$State" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/String;I)V" time="9" count="1" selfTime="2" lineNumber="185" percent="0.0">
+                                          <node leaf="true" class="java.lang.Enum" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/String;I)V" time="7" count="1" selfTime="7" lineNumber="185" percent="0.0"/>
+                                        </node>
+                                      </node>
+                                    </node>
+                                    <node leaf="false" class="org.junit.internal.Throwables$State$1" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/String;I)V" time="37" count="1" selfTime="11" lineNumber="186" percent="0.0">
+                                      <node leaf="false" class="org.junit.internal.Throwables$State" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/String;ILorg/junit/internal/Throwables$1;)V" time="26" count="1" selfTime="5" lineNumber="186" percent="0.0">
+                                        <node leaf="false" class="org.junit.internal.Throwables$State" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/String;I)V" time="21" count="1" selfTime="6" lineNumber="185" percent="0.0">
+                                          <node leaf="true" class="java.lang.Enum" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/String;I)V" time="15" count="1" selfTime="15" lineNumber="185" percent="0.0"/>
+                                        </node>
+                                      </node>
+                                    </node>
+                                    <node leaf="false" class="org.junit.internal.Throwables$State$3" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/String;I)V" time="15" count="1" selfTime="8" lineNumber="204" percent="0.0">
+                                      <node leaf="false" class="org.junit.internal.Throwables$State" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/String;ILorg/junit/internal/Throwables$1;)V" time="7" count="1" selfTime="1" lineNumber="204" percent="0.0">
+                                        <node leaf="false" class="org.junit.internal.Throwables$State" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/String;I)V" time="6" count="1" selfTime="2" lineNumber="185" percent="0.0">
+                                          <node leaf="true" class="java.lang.Enum" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/String;I)V" time="4" count="1" selfTime="4" lineNumber="185" percent="0.0"/>
+                                        </node>
+                                      </node>
+                                    </node>
+                                  </node>
+                                  <node leaf="false" class="org.junit.internal.Throwables$State" methodName="processStackTraceElement" methodSignature="(Ljava/lang/StackTraceElement;)Lorg/junit/internal/Throwables$State;" time="428" count="8" selfTime="104" lineNumber="91" percent="0.1">
+                                    <node leaf="false" class="org.junit.internal.Throwables$State$2" methodName="processLine" methodSignature="(Ljava/lang/String;)Lorg/junit/internal/Throwables$State;" time="90" count="4" selfTime="37" lineNumber="226" percent="0.0">
+                                      <node leaf="false" class="org.junit.internal.Throwables" methodName="isReflectionMethod" methodSignature="(Ljava/lang/String;)Z" time="36" count="4" selfTime="5" lineNumber="196" percent="0.0">
+                                        <node leaf="false" class="org.junit.internal.Throwables" methodName="isMatchingMethod" methodSignature="(Ljava/lang/String;[Ljava/lang/String;)Z" time="31" count="4" selfTime="18" lineNumber="261" percent="0.0">
+                                          <node leaf="true" class="java.lang.String" methodName="startsWith" methodSignature="(Ljava/lang/String;)Z" time="13" count="28" selfTime="13" lineNumber="266" percent="0.0"/>
+                                        </node>
+                                      </node>
+                                      <node leaf="false" class="org.junit.internal.Throwables" methodName="isTestFrameworkMethod" methodSignature="(Ljava/lang/String;)Z" time="17" count="4" selfTime="7" lineNumber="198" percent="0.0">
+                                        <node leaf="false" class="org.junit.internal.Throwables" methodName="isMatchingMethod" methodSignature="(Ljava/lang/String;[Ljava/lang/String;)Z" time="10" count="8" selfTime="6" lineNumber="246" percent="0.0">
+                                          <node leaf="true" class="java.lang.String" methodName="startsWith" methodSignature="(Ljava/lang/String;)Z" time="4" count="8" selfTime="4" lineNumber="266" percent="0.0"/>
+                                        </node>
+                                      </node>
+                                    </node>
+                                    <node leaf="true" class="java.lang.StringBuilder" methodName="&lt;init&gt;" methodSignature="()V" time="89" count="8" selfTime="89" lineNumber="226" percent="0.0"/>
+                                    <node leaf="false" class="org.junit.internal.Throwables$State$1" methodName="processLine" methodSignature="(Ljava/lang/String;)Lorg/junit/internal/Throwables$State;" time="64" count="4" selfTime="16" lineNumber="226" percent="0.0">
+                                      <node leaf="false" class="org.junit.internal.Throwables" methodName="isTestFrameworkMethod" methodSignature="(Ljava/lang/String;)Z" time="48" count="4" selfTime="15" lineNumber="188" percent="0.0">
+                                        <node leaf="false" class="org.junit.internal.Throwables" methodName="isMatchingMethod" methodSignature="(Ljava/lang/String;[Ljava/lang/String;)Z" time="33" count="5" selfTime="16" lineNumber="246" percent="0.0">
+                                          <node leaf="true" class="java.lang.String" methodName="startsWith" methodSignature="(Ljava/lang/String;)Z" time="17" count="26" selfTime="17" lineNumber="266" percent="0.0"/>
+                                        </node>
+                                      </node>
+                                    </node>
+                                    <node leaf="true" class="java.lang.StringBuilder" methodName="append" methodSignature="(Ljava/lang/String;)Ljava/lang/StringBuilder;" time="38" count="32" selfTime="38" lineNumber="226" percent="0.0"/>
+                                    <node leaf="true" class="java.lang.StringBuilder" methodName="toString" methodSignature="()Ljava/lang/String;" time="27" count="8" selfTime="27" lineNumber="226" percent="0.0"/>
+                                    <node leaf="true" class="java.lang.StackTraceElement" methodName="getClassName" methodSignature="()Ljava/lang/String;" time="13" count="8" selfTime="13" lineNumber="226" percent="0.0"/>
+                                    <node leaf="true" class="java.lang.StackTraceElement" methodName="getMethodName" methodSignature="()Ljava/lang/String;" time="3" count="8" selfTime="3" lineNumber="226" percent="0.0"/>
+                                  </node>
+                                  <node leaf="true" class="java.util.Collections" methodName="emptyList" methodSignature="()Ljava/util/List;" time="64" count="1" selfTime="64" lineNumber="105" percent="0.0"/>
+                                  <node leaf="false" class="java.util.Iterator" methodName="hasNext" methodSignature="()Z" time="35" count="9" selfTime="17" lineNumber="90" percent="0.0">
+                                    <node leaf="false" class="org.junit.internal.Throwables$1" methodName="size" methodSignature="()I" time="18" count="9" selfTime="10" lineNumber="-1" percent="0.0">
+                                      <node leaf="true" class="java.util.List" methodName="size" methodSignature="()I" time="8" count="9" selfTime="8" lineNumber="180" percent="0.0"/>
+                                    </node>
+                                  </node>
+                                  <node leaf="false" class="java.util.Iterator" methodName="next" methodSignature="()Ljava/lang/Object;" time="26" count="8" selfTime="9" lineNumber="90" percent="0.0">
+                                    <node leaf="false" class="org.junit.internal.Throwables$1" methodName="get" methodSignature="(I)Ljava/lang/Object;" time="17" count="8" selfTime="7" lineNumber="-1" percent="0.0">
+                                      <node leaf="true" class="java.util.List" methodName="get" methodSignature="(I)Ljava/lang/Object;" time="5" count="8" selfTime="5" lineNumber="175" percent="0.0"/>
+                                      <node leaf="true" class="java.util.List" methodName="size" methodSignature="()I" time="5" count="8" selfTime="5" lineNumber="175" percent="0.0"/>
+                                    </node>
+                                  </node>
+                                  <node leaf="true" class="java.util.List" methodName="iterator" methodSignature="()Ljava/util/Iterator;" time="21" count="1" selfTime="21" lineNumber="90" percent="0.0"/>
+                                  <node leaf="true" class="java.util.Arrays" methodName="asList" methodSignature="([Ljava/lang/Object;)Ljava/util/List;" time="13" count="1" selfTime="13" lineNumber="86" percent="0.0"/>
+                                  <node leaf="true" class="java.util.List" methodName="size" methodSignature="()I" time="3" count="1" selfTime="3" lineNumber="87" percent="0.0"/>
+                                </node>
+                                <node leaf="false" class="org.junit.internal.Throwables" methodName="getFullStackTrace" methodSignature="(Ljava/lang/Throwable;)Ljava/lang/String;" time="2159" count="1" selfTime="334" lineNumber="76" percent="0.6">
+                                  <node leaf="true" class="java.lang.Throwable" methodName="printStackTrace" methodSignature="(Ljava/io/PrintWriter;)V" time="940" count="1" selfTime="940" lineNumber="159" percent="0.3"/>
+                                  <node leaf="true" class="java.io.StringWriter" methodName="&lt;init&gt;" methodSignature="()V" time="847" count="1" selfTime="847" lineNumber="157" percent="0.2"/>
+                                  <node leaf="true" class="java.io.StringWriter" methodName="toString" methodSignature="()Ljava/lang/String;" time="23" count="1" selfTime="23" lineNumber="160" percent="0.0"/>
+                                  <node leaf="true" class="java.io.PrintWriter" methodName="&lt;init&gt;" methodSignature="(Ljava/io/Writer;)V" time="15" count="1" selfTime="15" lineNumber="158" percent="0.0"/>
+                                </node>
+                                <node leaf="true" class="java.util.List" methodName="isEmpty" methodSignature="()Z" time="3" count="1" selfTime="3" lineNumber="75" percent="0.0"/>
+                              </node>
+                              <node leaf="false" class="org.junit.internal.Throwables" methodName="&lt;clinit&gt;" methodSignature="()V" time="785" count="1" selfTime="189" lineNumber="79" percent="0.2">
+                                <node leaf="false" class="org.junit.internal.Throwables" methodName="initGetSuppressed" methodSignature="()Ljava/lang/reflect/Method;" time="596" count="1" selfTime="76" lineNumber="108" percent="0.2">
+                                  <node leaf="true" class="java.lang.Class" methodName="getMethod" methodSignature="(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;" time="520" count="1" selfTime="520" lineNumber="112" percent="0.1"/>
+                                </node>
+                              </node>
+                              <node leaf="true" class="org.junit.runner.notification.Failure" methodName="getException" methodSignature="()Ljava/lang/Throwable;" time="1" count="1" selfTime="1" lineNumber="79" percent="0.0"/>
+                            </node>
+                            <node leaf="true" class="java.io.PrintStream" methodName="print" methodSignature="(Ljava/lang/String;)V" time="161" count="1" selfTime="161" lineNumber="77" percent="0.0"/>
+                            <node leaf="true" class="java.io.PrintStream" methodName="println" methodSignature="(Ljava/lang/String;)V" time="39" count="1" selfTime="39" lineNumber="76" percent="0.0"/>
+                            <node leaf="false" class="org.junit.runner.notification.Failure" methodName="getTestHeader" methodSignature="()Ljava/lang/String;" time="18" count="1" selfTime="16" lineNumber="76" percent="0.0">
+                              <node leaf="true" class="org.junit.runner.Description" methodName="getDisplayName" methodSignature="()Ljava/lang/String;" time="2" count="1" selfTime="2" lineNumber="43" percent="0.0"/>
+                            </node>
+                            <node leaf="true" class="org.junit.internal.TextListener" methodName="getWriter" methodSignature="()Ljava/io/PrintStream;" time="10" count="1" selfTime="10" lineNumber="76" percent="0.0"/>
+                            <node leaf="true" class="java.lang.StringBuilder" methodName="append" methodSignature="(Ljava/lang/String;)Ljava/lang/StringBuilder;" time="6" count="3" selfTime="6" lineNumber="76" percent="0.0"/>
+                            <node leaf="true" class="java.lang.StringBuilder" methodName="&lt;init&gt;" methodSignature="()V" time="4" count="1" selfTime="4" lineNumber="76" percent="0.0"/>
+                            <node leaf="true" class="java.lang.StringBuilder" methodName="toString" methodSignature="()Ljava/lang/String;" time="3" count="1" selfTime="3" lineNumber="76" percent="0.0"/>
+                            <node leaf="true" class="org.junit.internal.TextListener" methodName="getWriter" methodSignature="()Ljava/io/PrintStream;" time="1" count="1" selfTime="1" lineNumber="77" percent="0.0"/>
+                          </node>
+                          <node leaf="true" class="org.junit.runner.Result" methodName="getFailures" methodSignature="()Ljava/util/List;" time="35" count="1" selfTime="35" lineNumber="60" percent="0.0"/>
+                          <node leaf="true" class="java.io.PrintStream" methodName="println" methodSignature="(Ljava/lang/String;)V" time="29" count="1" selfTime="29" lineNumber="65" percent="0.0"/>
+                          <node leaf="true" class="java.util.List" methodName="isEmpty" methodSignature="()Z" time="16" count="1" selfTime="16" lineNumber="61" percent="0.0"/>
+                          <node leaf="true" class="java.util.List" methodName="iterator" methodSignature="()Ljava/util/Iterator;" time="11" count="1" selfTime="11" lineNumber="70" percent="0.0"/>
+                          <node leaf="true" class="java.util.Iterator" methodName="hasNext" methodSignature="()Z" time="6" count="2" selfTime="6" lineNumber="70" percent="0.0"/>
+                          <node leaf="true" class="java.lang.StringBuilder" methodName="append" methodSignature="(I)Ljava/lang/StringBuilder;" time="5" count="1" selfTime="5" lineNumber="65" percent="0.0"/>
+                          <node leaf="true" class="java.lang.StringBuilder" methodName="&lt;init&gt;" methodSignature="()V" time="4" count="1" selfTime="4" lineNumber="65" percent="0.0"/>
+                          <node leaf="true" class="java.lang.StringBuilder" methodName="append" methodSignature="(Ljava/lang/String;)Ljava/lang/StringBuilder;" time="4" count="2" selfTime="4" lineNumber="65" percent="0.0"/>
+                          <node leaf="true" class="java.lang.StringBuilder" methodName="&lt;init&gt;" methodSignature="()V" time="3" count="1" selfTime="3" lineNumber="71" percent="0.0"/>
+                          <node leaf="true" class="java.lang.StringBuilder" methodName="toString" methodSignature="()Ljava/lang/String;" time="3" count="1" selfTime="3" lineNumber="65" percent="0.0"/>
+                          <node leaf="true" class="java.lang.StringBuilder" methodName="toString" methodSignature="()Ljava/lang/String;" time="3" count="1" selfTime="3" lineNumber="71" percent="0.0"/>
+                          <node leaf="true" class="java.util.Iterator" methodName="next" methodSignature="()Ljava/lang/Object;" time="3" count="1" selfTime="3" lineNumber="70" percent="0.0"/>
+                          <node leaf="true" class="org.junit.internal.TextListener" methodName="getWriter" methodSignature="()Ljava/io/PrintStream;" time="3" count="1" selfTime="3" lineNumber="65" percent="0.0"/>
+                          <node leaf="true" class="java.lang.StringBuilder" methodName="append" methodSignature="(I)Ljava/lang/StringBuilder;" time="1" count="1" selfTime="1" lineNumber="71" percent="0.0"/>
+                          <node leaf="true" class="java.lang.StringBuilder" methodName="append" methodSignature="(Ljava/lang/String;)Ljava/lang/StringBuilder;" time="1" count="1" selfTime="1" lineNumber="71" percent="0.0"/>
+                          <node leaf="true" class="java.util.List" methodName="size" methodSignature="()I" time="1" count="1" selfTime="1" lineNumber="64" percent="0.0"/>
+                          <node leaf="true" class="java.util.List" methodName="size" methodSignature="()I" time="1" count="1" selfTime="1" lineNumber="65" percent="0.0"/>
+                        </node>
+                        <node leaf="false" class="org.junit.internal.TextListener" methodName="printFooter" methodSignature="(Lorg/junit/runner/Result;)V" time="1126" count="1" selfTime="39" lineNumber="28" percent="0.3">
+                          <node leaf="true" class="java.io.PrintStream" methodName="println" methodSignature="(Ljava/lang/String;)V" time="863" count="1" selfTime="863" lineNumber="89" percent="0.2"/>
+                          <node leaf="true" class="java.io.PrintStream" methodName="println" methodSignature="()V" time="103" count="1" selfTime="103" lineNumber="91" percent="0.0"/>
+                          <node leaf="true" class="java.io.PrintStream" methodName="println" methodSignature="(Ljava/lang/String;)V" time="38" count="1" selfTime="38" lineNumber="88" percent="0.0"/>
+                          <node leaf="true" class="java.io.PrintStream" methodName="println" methodSignature="()V" time="35" count="1" selfTime="35" lineNumber="87" percent="0.0"/>
+                          <node leaf="true" class="java.lang.StringBuilder" methodName="toString" methodSignature="()Ljava/lang/String;" time="13" count="1" selfTime="13" lineNumber="89" percent="0.0"/>
+                          <node leaf="true" class="java.lang.StringBuilder" methodName="&lt;init&gt;" methodSignature="()V" time="7" count="1" selfTime="7" lineNumber="89" percent="0.0"/>
+                          <node leaf="false" class="org.junit.runner.Result" methodName="wasSuccessful" methodSignature="()Z" time="7" count="1" selfTime="3" lineNumber="81" percent="0.0">
+                            <node leaf="false" class="org.junit.runner.Result" methodName="getFailureCount" methodSignature="()I" time="4" count="1" selfTime="1" lineNumber="110" percent="0.0">
+                              <node leaf="true" class="java.util.concurrent.CopyOnWriteArrayList" methodName="size" methodSignature="()I" time="3" count="1" selfTime="3" lineNumber="68" percent="0.0"/>
+                            </node>
+                          </node>
+                          <node leaf="false" class="org.junit.runner.Result" methodName="getRunCount" methodSignature="()I" time="6" count="1" selfTime="3" lineNumber="89" percent="0.0">
+                            <node leaf="true" class="java.util.concurrent.atomic.AtomicInteger" methodName="get" methodSignature="()I" time="3" count="1" selfTime="3" lineNumber="61" percent="0.0"/>
+                          </node>
+                          <node leaf="true" class="java.lang.StringBuilder" methodName="append" methodSignature="(Ljava/lang/String;)Ljava/lang/StringBuilder;" time="4" count="2" selfTime="4" lineNumber="89" percent="0.0"/>
+                          <node leaf="true" class="java.lang.StringBuilder" methodName="append" methodSignature="(I)Ljava/lang/StringBuilder;" time="3" count="2" selfTime="3" lineNumber="89" percent="0.0"/>
+                          <node leaf="true" class="org.junit.internal.TextListener" methodName="getWriter" methodSignature="()Ljava/io/PrintStream;" time="3" count="1" selfTime="3" lineNumber="91" percent="0.0"/>
+                          <node leaf="false" class="org.junit.runner.Result" methodName="getFailureCount" methodSignature="()I" time="2" count="1" selfTime="1" lineNumber="89" percent="0.0">
+                            <node leaf="true" class="java.util.concurrent.CopyOnWriteArrayList" methodName="size" methodSignature="()I" time="1" count="1" selfTime="1" lineNumber="68" percent="0.0"/>
+                          </node>
+                          <node leaf="true" class="org.junit.internal.TextListener" methodName="getWriter" methodSignature="()Ljava/io/PrintStream;" time="1" count="1" selfTime="1" lineNumber="87" percent="0.0"/>
+                          <node leaf="true" class="org.junit.internal.TextListener" methodName="getWriter" methodSignature="()Ljava/io/PrintStream;" time="1" count="1" selfTime="1" lineNumber="88" percent="0.0"/>
+                          <node leaf="true" class="org.junit.internal.TextListener" methodName="getWriter" methodSignature="()Ljava/io/PrintStream;" time="1" count="1" selfTime="1" lineNumber="89" percent="0.0"/>
+                        </node>
+                        <node leaf="false" class="org.junit.runner.Result" methodName="getRunTime" methodSignature="()J" time="3" count="1" selfTime="1" lineNumber="26" percent="0.0">
+                          <node leaf="true" class="java.util.concurrent.atomic.AtomicLong" methodName="get" methodSignature="()J" time="2" count="1" selfTime="2" lineNumber="75" percent="0.0"/>
+                        </node>
+                      </node>
+                    </node>
+                    <node leaf="false" class="org.junit.runner.Result$Listener" methodName="testRunFinished" methodSignature="(Lorg/junit/runner/Result;)V" time="21" count="1" selfTime="7" lineNumber="103" percent="0.0">
+                      <node leaf="true" class="java.util.concurrent.atomic.AtomicLong" methodName="addAndGet" methodSignature="(J)J" time="7" count="1" selfTime="7" lineNumber="137" percent="0.0"/>
+                      <node leaf="true" class="java.util.concurrent.atomic.AtomicLong" methodName="get" methodSignature="()J" time="5" count="1" selfTime="5" lineNumber="137" percent="0.0"/>
+                      <node leaf="true" class="java.lang.System" methodName="currentTimeMillis" methodSignature="()J" time="2" count="1" selfTime="2" lineNumber="136" percent="0.0"/>
+                    </node>
+                  </node>
+                  <node leaf="true" class="java.util.List" methodName="iterator" methodSignature="()Ljava/util/Iterator;" time="59" count="1" selfTime="59" lineNumber="70" percent="0.0"/>
+                  <node leaf="true" class="java.util.ArrayList" methodName="&lt;init&gt;" methodSignature="(I)V" time="7" count="1" selfTime="7" lineNumber="68" percent="0.0"/>
+                  <node leaf="true" class="java.util.Iterator" methodName="hasNext" methodSignature="()Z" time="6" count="3" selfTime="6" lineNumber="70" percent="0.0"/>
+                  <node leaf="true" class="java.util.List" methodName="add" methodSignature="(Ljava/lang/Object;)Z" time="4" count="2" selfTime="4" lineNumber="73" percent="0.0"/>
+                  <node leaf="true" class="java.util.ArrayList" methodName="&lt;init&gt;" methodSignature="(I)V" time="3" count="1" selfTime="3" lineNumber="69" percent="0.0"/>
+                  <node leaf="false" class="org.junit.runner.notification.RunNotifier" methodName="fireTestFailures" methodSignature="(Ljava/util/List;Ljava/util/List;)V" time="3" count="1" selfTime="2" lineNumber="78" percent="0.0">
+                    <node leaf="true" class="java.util.List" methodName="isEmpty" methodSignature="()Z" time="1" count="1" selfTime="1" lineNumber="172" percent="0.0"/>
+                  </node>
+                  <node leaf="true" class="java.util.Iterator" methodName="next" methodSignature="()Ljava/lang/Object;" time="2" count="2" selfTime="2" lineNumber="70" percent="0.0"/>
+                  <node leaf="true" class="java.util.List" methodName="size" methodSignature="()I" time="2" count="1" selfTime="2" lineNumber="67" percent="0.0"/>
+                </node>
+                <node leaf="false" class="org.junit.runner.notification.RunNotifier$2" methodName="&lt;init&gt;" methodSignature="(Lorg/junit/runner/notification/RunNotifier;Lorg/junit/runner/Result;)V" time="33" count="1" selfTime="20" lineNumber="100" percent="0.0">
+                  <node leaf="false" class="org.junit.runner.notification.RunNotifier$SafeNotifier" methodName="&lt;init&gt;" methodSignature="(Lorg/junit/runner/notification/RunNotifier;)V" time="13" count="1" selfTime="6" lineNumber="100" percent="0.0">
+                    <node leaf="true" class="org.junit.runner.notification.RunNotifier$SafeNotifier" methodName="&lt;init&gt;" methodSignature="(Lorg/junit/runner/notification/RunNotifier;Ljava/util/List;)V" time="7" count="1" selfTime="7" lineNumber="59" percent="0.0"/>
+                  </node>
+                </node>
+              </node>
+              <node leaf="false" class="org.junit.internal.runners.ErrorReportingRunner" methodName="getDescription" methodSignature="()Lorg/junit/runner/Description;" time="21499" count="1" selfTime="2102" lineNumber="136" percent="6.2">
+                <node leaf="false" class="org.junit.runner.Description" methodName="&lt;clinit&gt;" methodSignature="()V" time="14207" count="1" selfTime="102" lineNumber="39" percent="4.1">
+                  <node leaf="true" class="java.util.regex.Pattern" methodName="compile" methodSignature="(Ljava/lang/String;)Ljava/util/regex/Pattern;" time="14026" count="1" selfTime="14026" lineNumber="33" percent="4.0"/>
+                  <node leaf="false" class="org.junit.runner.Description" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/Class;Ljava/lang/String;[Ljava/lang/annotation/Annotation;)V" time="71" count="1" selfTime="6" lineNumber="141" percent="0.0">
+                    <node leaf="false" class="org.junit.runner.Description" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/Class;Ljava/lang/String;Ljava/io/Serializable;[Ljava/lang/annotation/Annotation;)V" time="65" count="1" selfTime="52" lineNumber="162" percent="0.0">
+                      <node leaf="true" class="java.util.concurrent.ConcurrentLinkedQueue" methodName="&lt;init&gt;" methodSignature="()V" time="10" count="1" selfTime="10" lineNumber="155" percent="0.0"/>
+                      <node leaf="true" class="java.lang.String" methodName="length" methodSignature="()I" time="3" count="1" selfTime="3" lineNumber="166" percent="0.0"/>
+                    </node>
+                  </node>
+                  <node leaf="false" class="org.junit.runner.Description" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/Class;Ljava/lang/String;[Ljava/lang/annotation/Annotation;)V" time="8" count="1" selfTime="2" lineNumber="148" percent="0.0">
+                    <node leaf="false" class="org.junit.runner.Description" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/Class;Ljava/lang/String;Ljava/io/Serializable;[Ljava/lang/annotation/Annotation;)V" time="6" count="1" selfTime="2" lineNumber="162" percent="0.0">
+                      <node leaf="true" class="java.lang.String" methodName="length" methodSignature="()I" time="2" count="1" selfTime="2" lineNumber="166" percent="0.0"/>
+                      <node leaf="true" class="java.util.concurrent.ConcurrentLinkedQueue" methodName="&lt;init&gt;" methodSignature="()V" time="2" count="1" selfTime="2" lineNumber="155" percent="0.0"/>
+                    </node>
+                  </node>
+                </node>
+                <node leaf="false" class="org.junit.internal.runners.ErrorReportingRunner" methodName="describeCause" methodSignature="()Lorg/junit/runner/Description;" time="4717" count="1" selfTime="8" lineNumber="41" percent="1.4">
+                  <node leaf="false" class="org.junit.runner.Description" methodName="createTestDescription" methodSignature="(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/annotation/Annotation;)Lorg/junit/runner/Description;" time="4709" count="1" selfTime="4" lineNumber="83" percent="1.4">
+                    <node leaf="false" class="org.junit.runner.Description" methodName="formatDisplayName" methodSignature="(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;" time="4683" count="1" selfTime="7" lineNumber="73" percent="1.3">
+                      <node leaf="true" class="java.lang.String" methodName="format" methodSignature="(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;" time="4676" count="1" selfTime="4676" lineNumber="114" percent="1.3"/>
+                    </node>
+                    <node leaf="false" class="org.junit.runner.Description" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/Class;Ljava/lang/String;[Ljava/lang/annotation/Annotation;)V" time="22" count="1" selfTime="3" lineNumber="73" percent="0.0">
+                      <node leaf="false" class="org.junit.runner.Description" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/Class;Ljava/lang/String;Ljava/io/Serializable;[Ljava/lang/annotation/Annotation;)V" time="19" count="1" selfTime="10" lineNumber="162" percent="0.0">
+                        <node leaf="true" class="java.util.concurrent.ConcurrentLinkedQueue" methodName="&lt;init&gt;" methodSignature="()V" time="8" count="1" selfTime="8" lineNumber="155" percent="0.0"/>
+                        <node leaf="true" class="java.lang.String" methodName="length" methodSignature="()I" time="1" count="1" selfTime="1" lineNumber="166" percent="0.0"/>
+                      </node>
+                    </node>
+                  </node>
+                </node>
+                <node leaf="false" class="org.junit.runner.Description" methodName="addChild" methodSignature="(Lorg/junit/runner/Description;)V" time="431" count="1" selfTime="3" lineNumber="41" percent="0.1">
+                  <node leaf="true" class="java.util.Collection" methodName="add" methodSignature="(Ljava/lang/Object;)Z" time="428" count="1" selfTime="428" lineNumber="193" percent="0.1"/>
+                </node>
+                <node leaf="true" class="java.util.Iterator" methodName="hasNext" methodSignature="()Z" time="27" count="2" selfTime="27" lineNumber="40" percent="0.0"/>
+                <node leaf="false" class="org.junit.runner.Description" methodName="createSuiteDescription" methodSignature="(Ljava/lang/String;[Ljava/lang/annotation/Annotation;)Lorg/junit/runner/Description;" time="7" count="1" selfTime="1" lineNumber="165" percent="0.0">
+                  <node leaf="false" class="org.junit.runner.Description" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/Class;Ljava/lang/String;[Ljava/lang/annotation/Annotation;)V" time="6" count="1" selfTime="1" lineNumber="45" percent="0.0">
+                    <node leaf="false" class="org.junit.runner.Description" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/Class;Ljava/lang/String;Ljava/io/Serializable;[Ljava/lang/annotation/Annotation;)V" time="5" count="1" selfTime="2" lineNumber="162" percent="0.0">
+                      <node leaf="true" class="java.util.concurrent.ConcurrentLinkedQueue" methodName="&lt;init&gt;" methodSignature="()V" time="2" count="1" selfTime="2" lineNumber="155" percent="0.0"/>
+                      <node leaf="true" class="java.lang.String" methodName="length" methodSignature="()I" time="1" count="1" selfTime="1" lineNumber="166" percent="0.0"/>
+                    </node>
+                  </node>
+                </node>
+                <node leaf="true" class="java.util.List" methodName="iterator" methodSignature="()Ljava/util/Iterator;" time="6" count="1" selfTime="6" lineNumber="40" percent="0.0"/>
+                <node leaf="true" class="java.util.Iterator" methodName="next" methodSignature="()Ljava/lang/Object;" time="2" count="1" selfTime="2" lineNumber="40" percent="0.0"/>
+              </node>
+              <node leaf="false" class="org.junit.runner.Result" methodName="&lt;clinit&gt;" methodSignature="()V" time="18867" count="1" selfTime="999" lineNumber="-1" percent="5.4">
+                <node leaf="true" class="java.io.ObjectStreamClass" methodName="lookup" methodSignature="(Ljava/lang/Class;)Ljava/io/ObjectStreamClass;" time="17842" count="1" selfTime="17842" lineNumber="27" percent="5.1"/>
+                <node leaf="true" class="java.io.ObjectStreamClass" methodName="getFields" methodSignature="()[Ljava/io/ObjectStreamField;" time="26" count="1" selfTime="26" lineNumber="27" percent="0.0"/>
+              </node>
+              <node leaf="false" class="org.junit.internal.runners.ErrorReportingRunner" methodName="run" methodSignature="(Lorg/junit/runner/notification/RunNotifier;)V" time="8989" count="1" selfTime="5" lineNumber="137" percent="2.6">
+                <node leaf="false" class="org.junit.internal.runners.ErrorReportingRunner" methodName="runCause" methodSignature="(Ljava/lang/Throwable;Lorg/junit/runner/notification/RunNotifier;)V" time="8970" count="1" selfTime="3243" lineNumber="49" percent="2.6">
+                  <node leaf="false" class="org.junit.runner.notification.RunNotifier" methodName="fireTestFailure" methodSignature="(Lorg/junit/runner/notification/Failure;)V" time="2450" count="1" selfTime="135" lineNumber="89" percent="0.7">
+                    <node leaf="false" class="org.junit.runner.notification.RunNotifier" methodName="fireTestFailures" methodSignature="(Ljava/util/List;Ljava/util/List;)V" time="2183" count="1" selfTime="1239" lineNumber="167" percent="0.6">
+                      <node leaf="false" class="org.junit.runner.notification.RunNotifier$SafeNotifier" methodName="run" methodSignature="()V" time="854" count="1" selfTime="24" lineNumber="173" percent="0.2">
+                        <node leaf="false" class="org.junit.runner.notification.RunNotifier$6" methodName="notifyListener" methodSignature="(Lorg/junit/runner/notification/RunListener;)V" time="781" count="2" selfTime="26" lineNumber="72" percent="0.2">
+                          <node leaf="true" class="java.util.List" methodName="iterator" methodSignature="()Ljava/util/Iterator;" time="498" count="2" selfTime="498" lineNumber="176" percent="0.1"/>
+                          <node leaf="false" class="org.junit.runner.notification.SynchronizedRunListener" methodName="testFailure" methodSignature="(Lorg/junit/runner/notification/Failure;)V" time="216" count="1" selfTime="5" lineNumber="177" percent="0.1">
+                            <node leaf="false" class="org.junit.internal.TextListener" methodName="testFailure" methodSignature="(Lorg/junit/runner/notification/Failure;)V" time="211" count="1" selfTime="3" lineNumber="94" percent="0.1">
+                              <node leaf="true" class="java.io.PrintStream" methodName="append" methodSignature="(C)Ljava/io/PrintStream;" time="208" count="1" selfTime="208" lineNumber="38" percent="0.1"/>
+                            </node>
+                          </node>
+                          <node leaf="false" class="org.junit.runner.Result$Listener" methodName="testFailure" methodSignature="(Lorg/junit/runner/notification/Failure;)V" time="22" count="1" selfTime="6" lineNumber="177" percent="0.0">
+                            <node leaf="true" class="java.util.concurrent.CopyOnWriteArrayList" methodName="add" methodSignature="(Ljava/lang/Object;)Z" time="16" count="1" selfTime="16" lineNumber="147" percent="0.0"/>
+                          </node>
+                          <node leaf="true" class="java.util.Iterator" methodName="hasNext" methodSignature="()Z" time="13" count="4" selfTime="13" lineNumber="176" percent="0.0"/>
+                          <node leaf="true" class="java.util.Iterator" methodName="next" methodSignature="()Ljava/lang/Object;" time="6" count="2" selfTime="6" lineNumber="176" percent="0.0"/>
+                        </node>
+                        <node leaf="true" class="java.util.ArrayList" methodName="&lt;init&gt;" methodSignature="(I)V" time="13" count="1" selfTime="13" lineNumber="68" percent="0.0"/>
+                        <node leaf="true" class="java.util.List" methodName="size" methodSignature="()I" time="12" count="1" selfTime="12" lineNumber="67" percent="0.0"/>
+                        <node leaf="true" class="java.util.List" methodName="iterator" methodSignature="()Ljava/util/Iterator;" time="6" count="1" selfTime="6" lineNumber="70" percent="0.0"/>
+                        <node leaf="true" class="java.util.Iterator" methodName="hasNext" methodSignature="()Z" time="5" count="3" selfTime="5" lineNumber="70" percent="0.0"/>
+                        <node leaf="true" class="java.util.ArrayList" methodName="&lt;init&gt;" methodSignature="(I)V" time="4" count="1" selfTime="4" lineNumber="69" percent="0.0"/>
+                        <node leaf="true" class="java.util.Iterator" methodName="next" methodSignature="()Ljava/lang/Object;" time="3" count="2" selfTime="3" lineNumber="70" percent="0.0"/>
+                        <node leaf="true" class="java.util.List" methodName="add" methodSignature="(Ljava/lang/Object;)Z" time="3" count="2" selfTime="3" lineNumber="73" percent="0.0"/>
+                        <node leaf="false" class="org.junit.runner.notification.RunNotifier" methodName="fireTestFailures" methodSignature="(Ljava/util/List;Ljava/util/List;)V" time="3" count="1" selfTime="1" lineNumber="78" percent="0.0">
+                          <node leaf="true" class="java.util.List" methodName="isEmpty" methodSignature="()Z" time="2" count="1" selfTime="2" lineNumber="172" percent="0.0"/>
+                        </node>
+                      </node>
+                      <node leaf="false" class="org.junit.runner.notification.RunNotifier$6" methodName="&lt;init&gt;" methodSignature="(Lorg/junit/runner/notification/RunNotifier;Ljava/util/List;Ljava/util/List;)V" time="84" count="1" selfTime="48" lineNumber="173" percent="0.0">
+                        <node leaf="true" class="org.junit.runner.notification.RunNotifier$SafeNotifier" methodName="&lt;init&gt;" methodSignature="(Lorg/junit/runner/notification/RunNotifier;Ljava/util/List;)V" time="36" count="1" selfTime="36" lineNumber="173" percent="0.0"/>
+                      </node>
+                      <node leaf="true" class="java.util.List" methodName="isEmpty" methodSignature="()Z" time="6" count="1" selfTime="6" lineNumber="172" percent="0.0"/>
+                    </node>
+                    <node leaf="true" class="java.util.Arrays" methodName="asList" methodSignature="([Ljava/lang/Object;)Ljava/util/List;" time="132" count="1" selfTime="132" lineNumber="167" percent="0.0"/>
+                  </node>
+                  <node leaf="false" class="org.junit.runner.notification.RunNotifier" methodName="fireTestFinished" methodSignature="(Lorg/junit/runner/Description;)V" time="1672" count="1" selfTime="1412" lineNumber="90" percent="0.5">
+                    <node leaf="false" class="org.junit.runner.notification.RunNotifier$SafeNotifier" methodName="run" methodSignature="()V" time="223" count="1" selfTime="93" lineNumber="222" percent="0.1">
+                      <node leaf="true" class="java.util.ArrayList" methodName="&lt;init&gt;" methodSignature="(I)V" time="37" count="1" selfTime="37" lineNumber="68" percent="0.0"/>
+                      <node leaf="false" class="org.junit.runner.notification.RunNotifier$9" methodName="notifyListener" methodSignature="(Lorg/junit/runner/notification/RunListener;)V" time="37" count="2" selfTime="12" lineNumber="72" percent="0.0">
+                        <node leaf="false" class="org.junit.runner.Result$Listener" methodName="testFinished" methodSignature="(Lorg/junit/runner/Description;)V" time="20" count="1" selfTime="5" lineNumber="225" percent="0.0">
+                          <node leaf="true" class="java.util.concurrent.atomic.AtomicInteger" methodName="getAndIncrement" methodSignature="()I" time="15" count="1" selfTime="15" lineNumber="142" percent="0.0"/>
+                        </node>
+                        <node leaf="true" class="org.junit.runner.notification.SynchronizedRunListener" methodName="testFinished" methodSignature="(Lorg/junit/runner/Description;)V" time="5" count="1" selfTime="5" lineNumber="225" percent="0.0"/>
+                      </node>
+                      <node leaf="true" class="java.util.Iterator" methodName="hasNext" methodSignature="()Z" time="27" count="3" selfTime="27" lineNumber="70" percent="0.0"/>
+                      <node leaf="true" class="java.util.ArrayList" methodName="&lt;init&gt;" methodSignature="(I)V" time="8" count="1" selfTime="8" lineNumber="69" percent="0.0"/>
+                      <node leaf="true" class="java.util.List" methodName="iterator" methodSignature="()Ljava/util/Iterator;" time="8" count="1" selfTime="8" lineNumber="70" percent="0.0"/>
+                      <node leaf="true" class="java.util.Iterator" methodName="next" methodSignature="()Ljava/lang/Object;" time="5" count="2" selfTime="5" lineNumber="70" percent="0.0"/>
+                      <node leaf="true" class="java.util.List" methodName="size" methodSignature="()I" time="4" count="1" selfTime="4" lineNumber="67" percent="0.0"/>
+                      <node leaf="true" class="java.util.List" methodName="add" methodSignature="(Ljava/lang/Object;)Z" time="3" count="2" selfTime="3" lineNumber="73" percent="0.0"/>
+                      <node leaf="false" class="org.junit.runner.notification.RunNotifier" methodName="fireTestFailures" methodSignature="(Ljava/util/List;Ljava/util/List;)V" time="1" count="1" selfTime="0" lineNumber="78" percent="0.0">
+                        <node leaf="true" class="java.util.List" methodName="isEmpty" methodSignature="()Z" time="1" count="1" selfTime="1" lineNumber="172" percent="0.0"/>
+                      </node>
+                    </node>
+                    <node leaf="false" class="org.junit.runner.notification.RunNotifier$9" methodName="&lt;init&gt;" methodSignature="(Lorg/junit/runner/notification/RunNotifier;Lorg/junit/runner/Description;)V" time="37" count="1" selfTime="22" lineNumber="222" percent="0.0">
+                      <node leaf="false" class="org.junit.runner.notification.RunNotifier$SafeNotifier" methodName="&lt;init&gt;" methodSignature="(Lorg/junit/runner/notification/RunNotifier;)V" time="15" count="1" selfTime="7" lineNumber="222" percent="0.0">
+                        <node leaf="true" class="org.junit.runner.notification.RunNotifier$SafeNotifier" methodName="&lt;init&gt;" methodSignature="(Lorg/junit/runner/notification/RunNotifier;Ljava/util/List;)V" time="8" count="1" selfTime="8" lineNumber="59" percent="0.0"/>
+                      </node>
+                    </node>
+                  </node>
+                  <node leaf="false" class="org.junit.runner.notification.RunNotifier" methodName="fireTestStarted" methodSignature="(Lorg/junit/runner/Description;)V" time="1298" count="1" selfTime="1059" lineNumber="88" percent="0.4">
+                    <node leaf="false" class="org.junit.runner.notification.RunNotifier$SafeNotifier" methodName="run" methodSignature="()V" time="193" count="1" selfTime="22" lineNumber="153" percent="0.1">
+                      <node leaf="false" class="org.junit.runner.notification.RunNotifier$5" methodName="notifyListener" methodSignature="(Lorg/junit/runner/notification/RunListener;)V" time="137" count="2" selfTime="12" lineNumber="72" percent="0.0">
+                        <node leaf="false" class="org.junit.runner.notification.SynchronizedRunListener" methodName="testStarted" methodSignature="(Lorg/junit/runner/Description;)V" time="124" count="1" selfTime="5" lineNumber="156" percent="0.0">
+                          <node leaf="false" class="org.junit.internal.TextListener" methodName="testStarted" methodSignature="(Lorg/junit/runner/Description;)V" time="119" count="1" selfTime="4" lineNumber="80" percent="0.0">
+                            <node leaf="true" class="java.io.PrintStream" methodName="append" methodSignature="(C)Ljava/io/PrintStream;" time="115" count="1" selfTime="115" lineNumber="33" percent="0.0"/>
+                          </node>
+                        </node>
+                        <node leaf="true" class="org.junit.runner.notification.RunListener" methodName="testStarted" methodSignature="(Lorg/junit/runner/Description;)V" time="1" count="1" selfTime="1" lineNumber="156" percent="0.0"/>
+                      </node>
+                      <node leaf="true" class="java.util.ArrayList" methodName="&lt;init&gt;" methodSignature="(I)V" time="9" count="1" selfTime="9" lineNumber="68" percent="0.0"/>
+                      <node leaf="true" class="java.util.List" methodName="iterator" methodSignature="()Ljava/util/Iterator;" time="5" count="1" selfTime="5" lineNumber="70" percent="0.0"/>
+                      <node leaf="true" class="java.util.ArrayList" methodName="&lt;init&gt;" methodSignature="(I)V" time="4" count="1" selfTime="4" lineNumber="69" percent="0.0"/>
+                      <node leaf="true" class="java.util.Iterator" methodName="hasNext" methodSignature="()Z" time="4" count="3" selfTime="4" lineNumber="70" percent="0.0"/>
+                      <node leaf="true" class="java.util.List" methodName="size" methodSignature="()I" time="4" count="1" selfTime="4" lineNumber="67" percent="0.0"/>
+                      <node leaf="true" class="java.util.List" methodName="add" methodSignature="(Ljava/lang/Object;)Z" time="3" count="2" selfTime="3" lineNumber="73" percent="0.0"/>
+                      <node leaf="false" class="org.junit.runner.notification.RunNotifier" methodName="fireTestFailures" methodSignature="(Ljava/util/List;Ljava/util/List;)V" time="3" count="1" selfTime="1" lineNumber="78" percent="0.0">
+                        <node leaf="true" class="java.util.List" methodName="isEmpty" methodSignature="()Z" time="2" count="1" selfTime="2" lineNumber="172" percent="0.0"/>
+                      </node>
+                      <node leaf="true" class="java.util.Iterator" methodName="next" methodSignature="()Ljava/lang/Object;" time="2" count="2" selfTime="2" lineNumber="70" percent="0.0"/>
+                    </node>
+                    <node leaf="false" class="org.junit.runner.notification.RunNotifier$5" methodName="&lt;init&gt;" methodSignature="(Lorg/junit/runner/notification/RunNotifier;Lorg/junit/runner/Description;)V" time="46" count="1" selfTime="27" lineNumber="153" percent="0.0">
+                      <node leaf="false" class="org.junit.runner.notification.RunNotifier$SafeNotifier" methodName="&lt;init&gt;" methodSignature="(Lorg/junit/runner/notification/RunNotifier;)V" time="19" count="1" selfTime="10" lineNumber="153" percent="0.0">
+                        <node leaf="true" class="org.junit.runner.notification.RunNotifier$SafeNotifier" methodName="&lt;init&gt;" methodSignature="(Lorg/junit/runner/notification/RunNotifier;Ljava/util/List;)V" time="9" count="1" selfTime="9" lineNumber="59" percent="0.0"/>
+                      </node>
+                    </node>
+                  </node>
+                  <node leaf="true" class="org.junit.runner.notification.Failure" methodName="&lt;init&gt;" methodSignature="(Lorg/junit/runner/Description;Ljava/lang/Throwable;)V" time="169" count="1" selfTime="169" lineNumber="89" percent="0.0"/>
+                  <node leaf="false" class="org.junit.internal.runners.ErrorReportingRunner" methodName="describeCause" methodSignature="()Lorg/junit/runner/Description;" time="138" count="1" selfTime="8" lineNumber="87" percent="0.0">
+                    <node leaf="false" class="org.junit.runner.Description" methodName="createTestDescription" methodSignature="(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/annotation/Annotation;)Lorg/junit/runner/Description;" time="130" count="1" selfTime="5" lineNumber="83" percent="0.0">
+                      <node leaf="false" class="org.junit.runner.Description" methodName="formatDisplayName" methodSignature="(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;" time="101" count="1" selfTime="5" lineNumber="73" percent="0.0">
+                        <node leaf="true" class="java.lang.String" methodName="format" methodSignature="(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;" time="96" count="1" selfTime="96" lineNumber="114" percent="0.0"/>
+                      </node>
+                      <node leaf="false" class="org.junit.runner.Description" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/Class;Ljava/lang/String;[Ljava/lang/annotation/Annotation;)V" time="24" count="1" selfTime="1" lineNumber="73" percent="0.0">
+                        <node leaf="false" class="org.junit.runner.Description" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/Class;Ljava/lang/String;Ljava/io/Serializable;[Ljava/lang/annotation/Annotation;)V" time="23" count="1" selfTime="14" lineNumber="162" percent="0.0">
+                          <node leaf="true" class="java.util.concurrent.ConcurrentLinkedQueue" methodName="&lt;init&gt;" methodSignature="()V" time="8" count="1" selfTime="8" lineNumber="155" percent="0.0"/>
+                          <node leaf="true" class="java.lang.String" methodName="length" methodSignature="()I" time="1" count="1" selfTime="1" lineNumber="166" percent="0.0"/>
+                        </node>
+                      </node>
+                    </node>
+                  </node>
+                </node>
+                <node leaf="true" class="java.util.List" methodName="iterator" methodSignature="()Ljava/util/Iterator;" time="9" count="1" selfTime="9" lineNumber="48" percent="0.0"/>
+                <node leaf="true" class="java.util.Iterator" methodName="hasNext" methodSignature="()Z" time="4" count="2" selfTime="4" lineNumber="48" percent="0.0"/>
+                <node leaf="true" class="java.util.Iterator" methodName="next" methodSignature="()Ljava/lang/Object;" time="1" count="1" selfTime="1" lineNumber="48" percent="0.0"/>
+              </node>
+              <node leaf="false" class="org.junit.runner.notification.RunNotifier" methodName="addFirstListener" methodSignature="(Lorg/junit/runner/notification/RunListener;)V" time="6441" count="1" selfTime="16" lineNumber="134" percent="1.9">
+                <node leaf="false" class="org.junit.runner.notification.RunNotifier" methodName="wrapIfNotThreadSafe" methodSignature="(Lorg/junit/runner/notification/RunListener;)Lorg/junit/runner/notification/RunListener;" time="6410" count="1" selfTime="6" lineNumber="247" percent="1.8">
+                  <node leaf="true" class="java.lang.Class" methodName="isAnnotationPresent" methodSignature="(Ljava/lang/Class;)Z" time="6402" count="1" selfTime="6402" lineNumber="50" percent="1.8"/>
+                  <node leaf="true" class="java.lang.Object" methodName="getClass" methodSignature="()Ljava/lang/Class;" time="2" count="1" selfTime="2" lineNumber="50" percent="0.0"/>
+                </node>
+                <node leaf="true" class="java.util.List" methodName="add" methodSignature="(ILjava/lang/Object;)V" time="15" count="1" selfTime="15" lineNumber="247" percent="0.0"/>
+              </node>
+              <node leaf="false" class="org.junit.runner.notification.RunNotifier" methodName="fireTestRunStarted" methodSignature="(Lorg/junit/runner/Description;)V" time="2509" count="1" selfTime="2305" lineNumber="136" percent="0.7">
+                <node leaf="false" class="org.junit.runner.notification.RunNotifier$SafeNotifier" methodName="run" methodSignature="()V" time="147" count="1" selfTime="28" lineNumber="88" percent="0.0">
+                  <node leaf="false" class="org.junit.runner.notification.RunNotifier$1" methodName="notifyListener" methodSignature="(Lorg/junit/runner/notification/RunListener;)V" time="47" count="2" selfTime="11" lineNumber="72" percent="0.0">
+                    <node leaf="false" class="org.junit.runner.Result$Listener" methodName="testRunStarted" methodSignature="(Lorg/junit/runner/Description;)V" time="27" count="1" selfTime="9" lineNumber="91" percent="0.0">
+                      <node leaf="true" class="java.util.concurrent.atomic.AtomicLong" methodName="set" methodSignature="(J)V" time="13" count="1" selfTime="13" lineNumber="131" percent="0.0"/>
+                      <node leaf="true" class="java.lang.System" methodName="currentTimeMillis" methodSignature="()J" time="5" count="1" selfTime="5" lineNumber="131" percent="0.0"/>
+                    </node>
+                    <node leaf="false" class="org.junit.runner.notification.SynchronizedRunListener" methodName="testRunStarted" methodSignature="(Lorg/junit/runner/Description;)V" time="9" count="1" selfTime="8" lineNumber="91" percent="0.0">
+                      <node leaf="true" class="org.junit.runner.notification.RunListener" methodName="testRunStarted" methodSignature="(Lorg/junit/runner/Description;)V" time="1" count="1" selfTime="1" lineNumber="35" percent="0.0"/>
+                    </node>
+                  </node>
+                  <node leaf="true" class="java.util.List" methodName="iterator" methodSignature="()Ljava/util/Iterator;" time="14" count="1" selfTime="14" lineNumber="70" percent="0.0"/>
+                  <node leaf="true" class="java.util.ArrayList" methodName="&lt;init&gt;" methodSignature="(I)V" time="13" count="1" selfTime="13" lineNumber="68" percent="0.0"/>
+                  <node leaf="true" class="java.util.List" methodName="size" methodSignature="()I" time="11" count="1" selfTime="11" lineNumber="67" percent="0.0"/>
+                  <node leaf="true" class="java.util.Iterator" methodName="hasNext" methodSignature="()Z" time="9" count="3" selfTime="9" lineNumber="70" percent="0.0"/>
+                  <node leaf="true" class="java.util.Iterator" methodName="next" methodSignature="()Ljava/lang/Object;" time="7" count="2" selfTime="7" lineNumber="70" percent="0.0"/>
+                  <node leaf="true" class="java.util.List" methodName="add" methodSignature="(Ljava/lang/Object;)Z" time="7" count="2" selfTime="7" lineNumber="73" percent="0.0"/>
+                  <node leaf="false" class="org.junit.runner.notification.RunNotifier" methodName="fireTestFailures" methodSignature="(Ljava/util/List;Ljava/util/List;)V" time="6" count="1" selfTime="2" lineNumber="78" percent="0.0">
+                    <node leaf="true" class="java.util.List" methodName="isEmpty" methodSignature="()Z" time="4" count="1" selfTime="4" lineNumber="172" percent="0.0"/>
+                  </node>
+                  <node leaf="true" class="java.util.ArrayList" methodName="&lt;init&gt;" methodSignature="(I)V" time="5" count="1" selfTime="5" lineNumber="69" percent="0.0"/>
+                </node>
+                <node leaf="false" class="org.junit.runner.notification.RunNotifier$1" methodName="&lt;init&gt;" methodSignature="(Lorg/junit/runner/notification/RunNotifier;Lorg/junit/runner/Description;)V" time="57" count="1" selfTime="26" lineNumber="88" percent="0.0">
+                  <node leaf="false" class="org.junit.runner.notification.RunNotifier$SafeNotifier" methodName="&lt;init&gt;" methodSignature="(Lorg/junit/runner/notification/RunNotifier;)V" time="31" count="1" selfTime="14" lineNumber="88" percent="0.0">
+                    <node leaf="true" class="org.junit.runner.notification.RunNotifier$SafeNotifier" methodName="&lt;init&gt;" methodSignature="(Lorg/junit/runner/notification/RunNotifier;Ljava/util/List;)V" time="17" count="1" selfTime="17" lineNumber="59" percent="0.0"/>
+                  </node>
+                </node>
+              </node>
+              <node leaf="false" class="org.junit.runner.Result" methodName="createListener" methodSignature="()Lorg/junit/runner/notification/RunListener;" time="246" count="1" selfTime="222" lineNumber="133" percent="0.1">
+                <node leaf="false" class="org.junit.runner.Result$Listener" methodName="&lt;init&gt;" methodSignature="(Lorg/junit/runner/Result;Lorg/junit/runner/Result$1;)V" time="24" count="1" selfTime="7" lineNumber="165" percent="0.0">
+                  <node leaf="false" class="org.junit.runner.Result$Listener" methodName="&lt;init&gt;" methodSignature="(Lorg/junit/runner/Result;)V" time="17" count="1" selfTime="6" lineNumber="128" percent="0.0">
+                    <node leaf="true" class="org.junit.runner.notification.RunListener" methodName="&lt;init&gt;" methodSignature="()V" time="11" count="1" selfTime="11" lineNumber="128" percent="0.0"/>
+                  </node>
+                </node>
+              </node>
+              <node leaf="false" class="org.junit.runner.Result" methodName="&lt;init&gt;" methodSignature="()V" time="147" count="1" selfTime="116" lineNumber="132" percent="0.0">
+                <node leaf="true" class="java.util.concurrent.CopyOnWriteArrayList" methodName="&lt;init&gt;" methodSignature="()V" time="10" count="1" selfTime="10" lineNumber="43" percent="0.0"/>
+                <node leaf="true" class="java.util.concurrent.atomic.AtomicLong" methodName="&lt;init&gt;" methodSignature="()V" time="7" count="1" selfTime="7" lineNumber="44" percent="0.0"/>
+                <node leaf="true" class="java.util.concurrent.atomic.AtomicInteger" methodName="&lt;init&gt;" methodSignature="()V" time="6" count="1" selfTime="6" lineNumber="40" percent="0.0"/>
+                <node leaf="true" class="java.util.concurrent.atomic.AtomicInteger" methodName="&lt;init&gt;" methodSignature="()V" time="3" count="1" selfTime="3" lineNumber="41" percent="0.0"/>
+                <node leaf="true" class="java.util.concurrent.atomic.AtomicInteger" methodName="&lt;init&gt;" methodSignature="()V" time="3" count="1" selfTime="3" lineNumber="42" percent="0.0"/>
+                <node leaf="true" class="java.util.concurrent.atomic.AtomicLong" methodName="&lt;init&gt;" methodSignature="()V" time="2" count="1" selfTime="2" lineNumber="45" percent="0.0"/>
+              </node>
+              <node leaf="false" class="org.junit.runner.JUnitCore" methodName="removeListener" methodSignature="(Lorg/junit/runner/notification/RunListener;)V" time="82" count="1" selfTime="6" lineNumber="140" percent="0.0">
+                <node leaf="false" class="org.junit.runner.notification.RunNotifier" methodName="removeListener" methodSignature="(Lorg/junit/runner/notification/RunListener;)V" time="76" count="1" selfTime="2" lineNumber="161" percent="0.0">
+                  <node leaf="true" class="java.util.List" methodName="remove" methodSignature="(Ljava/lang/Object;)Z" time="63" count="1" selfTime="63" lineNumber="42" percent="0.0"/>
+                  <node leaf="false" class="org.junit.runner.notification.RunNotifier" methodName="wrapIfNotThreadSafe" methodSignature="(Lorg/junit/runner/notification/RunListener;)Lorg/junit/runner/notification/RunListener;" time="11" count="1" selfTime="3" lineNumber="42" percent="0.0">
+                    <node leaf="true" class="java.lang.Class" methodName="isAnnotationPresent" methodSignature="(Ljava/lang/Class;)Z" time="7" count="1" selfTime="7" lineNumber="50" percent="0.0"/>
+                    <node leaf="true" class="java.lang.Object" methodName="getClass" methodSignature="()Ljava/lang/Class;" time="1" count="1" selfTime="1" lineNumber="50" percent="0.0"/>
+                  </node>
+                </node>
+              </node>
+            </node>
+            <node leaf="true" class="org.junit.runner.Request$1" methodName="getRunner" methodSignature="()Lorg/junit/runner/Runner;" time="1" count="1" selfTime="1" lineNumber="115" percent="0.0"/>
+          </node>
+          <node leaf="false" class="org.junit.runner.JUnitCommandLineParseResult" methodName="parse" methodSignature="([Ljava/lang/String;)Lorg/junit/runner/JUnitCommandLineParseResult;" time="54263" count="1" selfTime="19" lineNumber="72" percent="15.6">
+            <node leaf="false" class="org.junit.runner.JUnitCommandLineParseResult" methodName="parseArgs" methodSignature="([Ljava/lang/String;)V" time="54065" count="1" selfTime="16" lineNumber="44" percent="15.5">
+              <node leaf="false" class="org.junit.runner.JUnitCommandLineParseResult" methodName="parseParameters" methodSignature="([Ljava/lang/String;)V" time="53032" count="1" selfTime="2318" lineNumber="50" percent="15.2">
+                <node leaf="false" class="org.junit.internal.Classes" methodName="getClass" methodSignature="(Ljava/lang/String;)Ljava/lang/Class;" time="50646" count="1" selfTime="57" lineNumber="98" percent="14.5">
+                  <node leaf="false" class="org.junit.internal.Classes" methodName="getClass" methodSignature="(Ljava/lang/String;Ljava/lang/Class;)Ljava/lang/Class;" time="50589" count="1" selfTime="23" lineNumber="27" percent="14.5">
+                    <node leaf="true" class="java.lang.Class" methodName="forName" methodSignature="(Ljava/lang/String;ZLjava/lang/ClassLoader;)Ljava/lang/Class;" time="50475" count="1" selfTime="50475" lineNumber="42" percent="14.5"/>
+                    <node leaf="true" class="java.lang.Thread" methodName="currentThread" methodSignature="()Ljava/lang/Thread;" time="63" count="1" selfTime="63" lineNumber="41" percent="0.0"/>
+                    <node leaf="true" class="java.lang.Thread" methodName="getContextClassLoader" methodSignature="()Ljava/lang/ClassLoader;" time="28" count="1" selfTime="28" lineNumber="41" percent="0.0"/>
+                  </node>
+                </node>
+                <node leaf="true" class="java.lang.IllegalArgumentException" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/String;Ljava/lang/Throwable;)V" time="21" count="1" selfTime="21" lineNumber="100" percent="0.0"/>
+                <node leaf="true" class="java.lang.StringBuilder" methodName="append" methodSignature="(Ljava/lang/String;)Ljava/lang/StringBuilder;" time="17" count="3" selfTime="17" lineNumber="100" percent="0.0"/>
+                <node leaf="true" class="java.util.List" methodName="add" methodSignature="(Ljava/lang/Object;)Z" time="12" count="1" selfTime="12" lineNumber="100" percent="0.0"/>
+                <node leaf="true" class="java.lang.StringBuilder" methodName="&lt;init&gt;" methodSignature="()V" time="11" count="1" selfTime="11" lineNumber="100" percent="0.0"/>
+                <node leaf="true" class="java.lang.StringBuilder" methodName="toString" methodSignature="()Ljava/lang/String;" time="7" count="1" selfTime="7" lineNumber="100" percent="0.0"/>
+              </node>
+              <node leaf="false" class="org.junit.runner.JUnitCommandLineParseResult" methodName="parseOptions" methodSignature="([Ljava/lang/String;)[Ljava/lang/String;" time="1017" count="1" selfTime="969" lineNumber="50" percent="0.3">
+                <node leaf="true" class="org.junit.runner.JUnitCommandLineParseResult" methodName="copyArray" methodSignature="([Ljava/lang/String;II)[Ljava/lang/String;" time="34" count="1" selfTime="34" lineNumber="80" percent="0.0"/>
+                <node leaf="true" class="java.lang.String" methodName="equals" methodSignature="(Ljava/lang/Object;)Z" time="8" count="1" selfTime="8" lineNumber="57" percent="0.0"/>
+                <node leaf="true" class="java.lang.String" methodName="startsWith" methodSignature="(Ljava/lang/String;)Z" time="6" count="1" selfTime="6" lineNumber="59" percent="0.0"/>
+              </node>
+            </node>
+            <node leaf="false" class="org.junit.runner.JUnitCommandLineParseResult" methodName="&lt;init&gt;" methodSignature="()V" time="179" count="1" selfTime="140" lineNumber="42" percent="0.1">
+              <node leaf="true" class="java.util.ArrayList" methodName="&lt;init&gt;" methodSignature="()V" time="32" count="1" selfTime="32" lineNumber="13" percent="0.0"/>
+              <node leaf="true" class="java.util.ArrayList" methodName="&lt;init&gt;" methodSignature="()V" time="4" count="1" selfTime="4" lineNumber="14" percent="0.0"/>
+              <node leaf="true" class="java.util.ArrayList" methodName="&lt;init&gt;" methodSignature="()V" time="3" count="1" selfTime="3" lineNumber="15" percent="0.0"/>
+            </node>
+          </node>
+          <node leaf="false" class="org.junit.runner.JUnitCommandLineParseResult" methodName="createRequest" methodSignature="(Lorg/junit/runner/Computer;)Lorg/junit/runner/Request;" time="8794" count="1" selfTime="316" lineNumber="77" percent="2.5">
+            <node leaf="false" class="org.junit.runner.JUnitCommandLineParseResult" methodName="errorReport" methodSignature="(Ljava/lang/Throwable;)Lorg/junit/runner/Request;" time="8345" count="1" selfTime="6349" lineNumber="120" percent="2.4">
+              <node leaf="false" class="org.junit.runner.Request" methodName="errorReport" methodSignature="(Ljava/lang/Class;Ljava/lang/Throwable;)Lorg/junit/runner/Request;" time="1996" count="1" selfTime="539" lineNumber="106" percent="0.6">
+                <node leaf="false" class="org.junit.internal.runners.ErrorReportingRunner" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/Class;Ljava/lang/Throwable;)V" time="1304" count="1" selfTime="50" lineNumber="101" percent="0.4">
+                  <node leaf="false" class="org.junit.internal.runners.ErrorReportingRunner" methodName="&lt;init&gt;" methodSignature="(Ljava/lang/Throwable;[Ljava/lang/Class;)V" time="1254" count="1" selfTime="52" lineNumber="21" percent="0.4">
+                    <node leaf="false" class="org.junit.internal.runners.ErrorReportingRunner" methodName="getCauses" methodSignature="(Ljava/lang/Throwable;)Ljava/util/List;" time="1137" count="1" selfTime="1133" lineNumber="34" percent="0.3">
+                      <node leaf="true" class="org.junit.runners.model.InitializationError" methodName="getCauses" methodSignature="()Ljava/util/List;" time="4" count="1" selfTime="4" lineNumber="73" percent="0.0"/>
+                    </node>
+                    <node leaf="false" class="org.junit.internal.runners.ErrorReportingRunner" methodName="getClassNames" methodSignature="([Ljava/lang/Class;)Ljava/lang/String;" time="50" count="1" selfTime="13" lineNumber="33" percent="0.0">
+                      <node leaf="true" class="java.lang.StringBuilder" methodName="&lt;init&gt;" methodSignature="()V" time="10" count="1" selfTime="10" lineNumber="54" percent="0.0"/>
+                      <node leaf="true" class="java.lang.StringBuilder" methodName="append" methodSignature="(Ljava/lang/String;)Ljava/lang/StringBuilder;" time="10" count="1" selfTime="10" lineNumber="59" percent="0.0"/>
+                      <node leaf="true" class="java.lang.Class" methodName="getName" methodSignature="()Ljava/lang/String;" time="7" count="1" selfTime="7" lineNumber="59" percent="0.0"/>
+                      <node leaf="true" class="java.lang.StringBuilder" methodName="toString" methodSignature="()Ljava/lang/String;" time="7" count="1" selfTime="7" lineNumber="61" percent="0.0"/>
+                      <node leaf="true" class="java.lang.StringBuilder" methodName="length" methodSignature="()I" time="3" count="1" selfTime="3" lineNumber="56" percent="0.0"/>
+                    </node>
+                    <node leaf="true" class="org.junit.runner.Runner" methodName="&lt;init&gt;" methodSignature="()V" time="15" count="1" selfTime="15" lineNumber="24" percent="0.0"/>
+                  </node>
+                </node>
+                <node leaf="false" class="org.junit.runner.Request" methodName="runner" methodSignature="(Lorg/junit/runner/Runner;)Lorg/junit/runner/Request;" time="153" count="1" selfTime="130" lineNumber="101" percent="0.0">
+                  <node leaf="false" class="org.junit.runner.Request$1" methodName="&lt;init&gt;" methodSignature="(Lorg/junit/runner/Runner;)V" time="23" count="1" selfTime="12" lineNumber="109" percent="0.0">
+                    <node leaf="true" class="org.junit.runner.Request" methodName="&lt;init&gt;" methodSignature="()V" time="11" count="1" selfTime="11" lineNumber="109" percent="0.0"/>
+                  </node>
+                </node>
+              </node>
+            </node>
+            <node leaf="false" class="org.junit.runners.model.InitializationError" methodName="&lt;init&gt;" methodSignature="(Ljava/util/List;)V" time="122" count="1" selfTime="19" lineNumber="120" percent="0.0">
+              <node leaf="true" class="java.lang.Exception" methodName="&lt;init&gt;" methodSignature="()V" time="103" count="1" selfTime="103" lineNumber="25" percent="0.0"/>
+            </node>
+            <node leaf="true" class="java.util.List" methodName="isEmpty" methodSignature="()Z" time="11" count="1" selfTime="11" lineNumber="115" percent="0.0"/>
+          </node>
+          <node leaf="false" class="org.junit.runner.JUnitCore" methodName="defaultComputer" methodSignature="()Lorg/junit/runner/Computer;" time="8226" count="1" selfTime="8199" lineNumber="77" percent="2.4">
+            <node leaf="true" class="org.junit.runner.Computer" methodName="&lt;init&gt;" methodSignature="()V" time="27" count="1" selfTime="27" lineNumber="165" percent="0.0"/>
+          </node>
+          <node leaf="false" class="org.junit.runner.JUnitCore" methodName="addListener" methodSignature="(Lorg/junit/runner/notification/RunListener;)V" time="1292" count="1" selfTime="7" lineNumber="75" percent="0.4">
+            <node leaf="false" class="org.junit.runner.notification.RunNotifier" methodName="addListener" methodSignature="(Lorg/junit/runner/notification/RunListener;)V" time="1285" count="1" selfTime="9" lineNumber="152" percent="0.4">
+              <node leaf="false" class="org.junit.runner.notification.RunNotifier" methodName="wrapIfNotThreadSafe" methodSignature="(Lorg/junit/runner/notification/RunListener;)Lorg/junit/runner/notification/RunListener;" time="1263" count="1" selfTime="1013" lineNumber="32" percent="0.4">
+                <node leaf="true" class="java.lang.Class" methodName="isAnnotationPresent" methodSignature="(Ljava/lang/Class;)Z" time="224" count="1" selfTime="224" lineNumber="50" percent="0.1"/>
+                <node leaf="false" class="org.junit.runner.notification.SynchronizedRunListener" methodName="&lt;init&gt;" methodSignature="(Lorg/junit/runner/notification/RunListener;Ljava/lang/Object;)V" time="20" count="1" selfTime="11" lineNumber="50" percent="0.0">
+                  <node leaf="true" class="org.junit.runner.notification.RunListener" methodName="&lt;init&gt;" methodSignature="()V" time="9" count="1" selfTime="9" lineNumber="27" percent="0.0"/>
+                </node>
+                <node leaf="true" class="java.lang.Object" methodName="getClass" methodSignature="()Ljava/lang/Class;" time="6" count="1" selfTime="6" lineNumber="50" percent="0.0"/>
+              </node>
+              <node leaf="true" class="java.util.List" methodName="add" methodSignature="(Ljava/lang/Object;)Z" time="13" count="1" selfTime="13" lineNumber="32" percent="0.0"/>
+            </node>
+          </node>
+          <node leaf="true" class="java.io.PrintStream" methodName="println" methodSignature="(Ljava/lang/String;)V" time="156" count="1" selfTime="156" lineNumber="70" percent="0.0"/>
+          <node leaf="false" class="org.junit.internal.TextListener" methodName="&lt;init&gt;" methodSignature="(Lorg/junit/internal/JUnitSystem;)V" time="47" count="1" selfTime="25" lineNumber="74" percent="0.0">
+            <node leaf="false" class="org.junit.internal.TextListener" methodName="&lt;init&gt;" methodSignature="(Ljava/io/PrintStream;)V" time="20" count="1" selfTime="6" lineNumber="17" percent="0.0">
+              <node leaf="true" class="org.junit.runner.notification.RunListener" methodName="&lt;init&gt;" methodSignature="()V" time="14" count="1" selfTime="14" lineNumber="20" percent="0.0"/>
+            </node>
+            <node leaf="true" class="org.junit.internal.RealSystem" methodName="out" methodSignature="()Ljava/io/PrintStream;" time="2" count="1" selfTime="2" lineNumber="17" percent="0.0"/>
+          </node>
+          <node leaf="true" class="java.lang.StringBuilder" methodName="append" methodSignature="(Ljava/lang/String;)Ljava/lang/StringBuilder;" time="19" count="2" selfTime="19" lineNumber="70" percent="0.0"/>
+          <node leaf="true" class="java.lang.StringBuilder" methodName="toString" methodSignature="()Ljava/lang/String;" time="16" count="1" selfTime="16" lineNumber="70" percent="0.0"/>
+          <node leaf="true" class="junit.runner.Version" methodName="id" methodSignature="()Ljava/lang/String;" time="16" count="1" selfTime="16" lineNumber="70" percent="0.0"/>
+          <node leaf="true" class="java.lang.StringBuilder" methodName="&lt;init&gt;" methodSignature="()V" time="12" count="1" selfTime="12" lineNumber="70" percent="0.0"/>
+          <node leaf="true" class="org.junit.internal.RealSystem" methodName="out" methodSignature="()Ljava/io/PrintStream;" time="11" count="1" selfTime="11" lineNumber="70" percent="0.0"/>
+        </node>
+        <node leaf="false" class="org.junit.runner.JUnitCore" methodName="&lt;init&gt;" methodSignature="()V" time="11155" count="1" selfTime="11031" lineNumber="36" percent="3.2">
+          <node leaf="false" class="org.junit.runner.notification.RunNotifier" methodName="&lt;init&gt;" methodSignature="()V" time="124" count="1" selfTime="111" lineNumber="25" percent="0.0">
+            <node leaf="true" class="java.util.concurrent.CopyOnWriteArrayList" methodName="&lt;init&gt;" methodSignature="()V" time="13" count="1" selfTime="13" lineNumber="22" percent="0.0"/>
+          </node>
+        </node>
+        <node leaf="true" class="org.junit.internal.RealSystem" methodName="&lt;init&gt;" methodSignature="()V" time="31" count="1" selfTime="31" lineNumber="36" percent="0.0"/>
+        <node leaf="false" class="org.junit.runner.Result" methodName="wasSuccessful" methodSignature="()Z" time="4" count="1" selfTime="2" lineNumber="37" percent="0.0">
+          <node leaf="false" class="org.junit.runner.Result" methodName="getFailureCount" methodSignature="()I" time="2" count="1" selfTime="1" lineNumber="110" percent="0.0">
+            <node leaf="true" class="java.util.concurrent.CopyOnWriteArrayList" methodName="size" methodSignature="()I" time="1" count="1" selfTime="1" lineNumber="68" percent="0.0"/>
+          </node>
+        </node>
+      </node>
+    </node>
+    <node leaf="true" class="java.lang.Class" methodName="forName" methodSignature="(Ljava/lang/String;)Ljava/lang/Class;" time="23984" count="1" selfTime="23984" lineNumber="30" percent="6.9"/>
+    <node leaf="true" class="java.lang.Class" methodName="getMethod" methodSignature="(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;" time="8503" count="1" selfTime="8503" lineNumber="31" percent="2.4"/>
+    <node leaf="true" class="java.lang.Runtime" methodName="addShutdownHook" methodSignature="(Ljava/lang/Thread;)V" time="1617" count="1" selfTime="1617" lineNumber="17" percent="0.5"/>
+    <node leaf="false" class="ca.concordia.ptidej.spectra.ChildJVM.SpectraShutdownJVMThread" methodName="&lt;init&gt;" methodSignature="()V" time="493" count="1" selfTime="26" lineNumber="17" percent="0.1">
+      <node leaf="true" class="java.lang.Thread" methodName="&lt;init&gt;" methodSignature="()V" time="467" count="1" selfTime="467" lineNumber="13" percent="0.1"/>
+    </node>
+    <node leaf="true" class="java.io.PrintStream" methodName="println" methodSignature="(Ljava/lang/String;)V" time="197" count="1" selfTime="197" lineNumber="15" percent="0.1"/>
+    <node leaf="true" class="java.io.PrintStream" methodName="println" methodSignature="(Ljava/lang/String;)V" time="104" count="1" selfTime="104" lineNumber="18" percent="0.0"/>
+    <node leaf="true" class="java.lang.Runtime" methodName="getRuntime" methodSignature="()Ljava/lang/Runtime;" time="102" count="1" selfTime="102" lineNumber="17" percent="0.0"/>
+    <node leaf="true" class="java.io.PrintStream" methodName="println" methodSignature="(Ljava/lang/String;)V" time="94" count="1" selfTime="94" lineNumber="28" percent="0.0"/>
+    <node leaf="true" class="java.lang.System" methodName="getProperty" methodSignature="(Ljava/lang/String;)Ljava/lang/String;" time="18" count="1" selfTime="18" lineNumber="21" percent="0.0"/>
+    <node leaf="true" class="java.lang.String" methodName="isEmpty" methodSignature="()Z" time="8" count="1" selfTime="8" lineNumber="22" percent="0.0"/>
+  </node>
+  <node leaf="false" class="ca.concordia.ptidej.spectra.ChildJVM.SpectraShutdownJVMThread" methodName="run" methodSignature="()V" time="131" count="1" selfTime="21" lineNumber="-1" percent="0.0">
+    <node leaf="true" class="java.io.PrintStream" methodName="println" methodSignature="(Ljava/lang/String;)V" time="85" count="1" selfTime="85" lineNumber="17" percent="0.0"/>
+    <node leaf="true" class="java.io.PrintStream" methodName="println" methodSignature="(Ljava/lang/String;)V" time="25" count="1" selfTime="25" lineNumber="18" percent="0.0"/>
+  </node>
+</tree>

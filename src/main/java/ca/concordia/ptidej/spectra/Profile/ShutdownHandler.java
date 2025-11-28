@@ -15,7 +15,7 @@ import static ca.concordia.ptidej.spectra.Profile.Constants.PROJECT_ROOT;
 
 
 /**
- * The ShutdownHandler is meant to be called at the end of the agent and is responsible for displaying and writing all the consumption data in dedicated files.
+ * The ShutdownHandler is meant to be called at wthe end of the agent and is responsible for displaying and writing all the consumption data in dedicated files.
  * It also performs resource closing operations.
  */
 public class ShutdownHandler extends org.noureddine.joularjx.monitor.ShutdownHandler implements Runnable {

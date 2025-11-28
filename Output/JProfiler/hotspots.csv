@@ -1,0 +1,101 @@
+"Hot Spot","Self Time (microseconds)","Average Time (microseconds)","Invocations"
+"java.text.NumberFormat.getInstance()",119541,119541,1
+"java.lang.Class.forName(java.lang.String, boolean, java.lang.ClassLoader)",50475,50475,1
+"java.lang.Class.forName(java.lang.String)",23984,23984,1
+"java.io.ObjectStreamClass.lookup(java.lang.Class)",17842,17842,1
+"java.lang.reflect.Method.invoke(java.lang.Object, java.lang.Object[ ])",15741,15741,1
+"java.util.regex.Pattern.compile(java.lang.String)",14026,14026,1
+"org.junit.runner.JUnitCore.runMain(org.junit.internal.JUnitSystem, java.lang.String[ ])",11484,11484,1
+"org.junit.runner.JUnitCore.<init>()",11031,11031,1
+"java.lang.Class.getMethod(java.lang.String, java.lang.Class[ ])",9023,4511,2
+"org.junit.runner.JUnitCore.defaultComputer()",8199,8199,1
+"java.lang.Class.isAnnotationPresent(java.lang.Class)",6633,2211,3
+"org.junit.runner.JUnitCommandLineParseResult.errorReport(java.lang.Throwable)",6349,6349,1
+"java.lang.String.format(java.lang.String, java.lang.Object[ ])",4772,2386,2
+"org.junit.internal.Throwables.getTrimmedStackTraceLines(java.lang.Throwable)",3243,3243,1
+"org.junit.internal.runners.ErrorReportingRunner.runCause(java.lang.Throwable, org.junit.runner.notification.RunNotifier)",3243,3243,1
+"ca.concordia.ptidej.spectra.ChildJVM.SpectraMain.main(java.lang.String[ ])",2804,2804,1
+"org.junit.runner.notification.Failure.getTrimmedTrace()",2688,2688,1
+"org.junit.runner.JUnitCore.main(java.lang.String[ ])",2414,2414,1
+"org.junit.runner.JUnitCommandLineParseResult.parseParameters(java.lang.String[ ])",2318,2318,1
+"org.junit.runner.notification.RunNotifier.fireTestRunStarted(org.junit.runner.Description)",2305,2305,1
+"org.junit.internal.runners.ErrorReportingRunner.getDescription()",2102,2102,1
+"org.junit.runner.JUnitCore.run(org.junit.runner.Runner)",1709,1709,1
+"java.io.PrintStream.println(java.lang.String)",1695,154,11
+"java.lang.Runtime.addShutdownHook(java.lang.Thread)",1617,1617,1
+"java.text.NumberFormat.format(double)",1491,1491,1
+"org.junit.runner.notification.RunNotifier.fireTestFinished(org.junit.runner.Description)",1412,1412,1
+"org.junit.runner.notification.RunNotifier.fireTestFailures(java.util.List, java.util.List)",1245,207,6
+"java.lang.Throwable.getStackTrace()",1189,1189,1
+"org.junit.internal.runners.ErrorReportingRunner.getCauses(java.lang.Throwable)",1133,1133,1
+"org.junit.runner.notification.RunNotifier.fireTestStarted(org.junit.runner.Description)",1059,1059,1
+"org.junit.runner.notification.RunNotifier.wrapIfNotThreadSafe(org.junit.runner.notification.RunListener)",1022,340,3
+"org.junit.runner.Result.<clinit>()",999,999,1
+"org.junit.runner.JUnitCommandLineParseResult.parseOptions(java.lang.String[ ])",969,969,1
+"java.lang.Throwable.printStackTrace(java.io.PrintWriter)",940,940,1
+"java.io.StringWriter.<init>()",847,847,1
+"org.junit.internal.Throwables.asReversedList(java.util.List)",814,814,1
+"org.junit.runner.notification.RunNotifier.fireTestRunFinished(org.junit.runner.Result)",703,703,1
+"java.util.List.iterator()",637,57,11
+"org.junit.runner.Request.errorReport(java.lang.Class, java.lang.Throwable)",539,539,1
+"java.lang.Thread.<init>()",467,467,1
+"org.junit.internal.Throwables$State.<clinit>()",449,449,1
+"java.util.Collection.add(java.lang.Object)",428,428,1
+"org.junit.internal.Throwables.getFullStackTrace(java.lang.Throwable)",334,334,1
+"java.io.PrintStream.append(char)",323,161,2
+"org.junit.runner.JUnitCommandLineParseResult.createRequest(org.junit.runner.Computer)",316,316,1
+"java.io.PrintStream.println()",254,84,3
+"org.junit.runner.Result.createListener()",222,222,1
+"org.junit.runner.notification.RunNotifier$SafeNotifier.run()",191,38,5
+"org.junit.internal.Throwables.<clinit>()",189,189,1
+"org.junit.runner.notification.Failure.<init>(org.junit.runner.Description, java.lang.Throwable)",169,169,1
+"java.io.PrintStream.print(java.lang.String)",161,161,1
+"java.lang.StringBuilder.<init>()",152,9,16
+"java.util.Arrays.asList(java.lang.Object[ ])",145,72,2
+"org.junit.runner.JUnitCommandLineParseResult.<init>()",140,140,1
+"org.junit.runner.notification.RunNotifier.fireTestFailure(org.junit.runner.notification.Failure)",135,135,1
+"org.junit.runner.Request.runner(org.junit.runner.Runner)",130,130,1
+"java.util.Iterator.hasNext()",118,3,34
+"org.junit.runner.Result.<init>()",116,116,1
+"org.junit.runner.notification.RunNotifier.<init>()",111,111,1
+"java.lang.StringBuilder.append(java.lang.String)",109,2,48
+"org.junit.internal.Throwables$State.processStackTraceElement(java.lang.StackTraceElement)",104,13,8
+"java.lang.Exception.<init>()",103,103,1
+"java.util.ArrayList.<init>(int)",103,10,10
+"java.lang.Runtime.getRuntime()",102,102,1
+"org.junit.runner.Description.<clinit>()",102,102,1
+"java.lang.StringBuilder.toString()",88,5,16
+"org.junit.runner.Description.<init>(java.lang.Class, java.lang.String, java.io.Serializable, java.lang.annotation.Annotation[ ])",80,16,5
+"org.junit.runner.notification.RunNotifier$SafeNotifier.<init>(org.junit.runner.notification.RunNotifier, java.util.List)",77,15,5
+"org.junit.internal.Throwables.initGetSuppressed()",76,76,1
+"java.util.Collections.emptyList()",64,64,1
+"java.lang.Thread.currentThread()",63,63,1
+"java.util.List.remove(java.lang.Object)",63,63,1
+"org.junit.internal.Classes.getClass(java.lang.String)",57,57,1
+"org.junit.internal.runners.ErrorReportingRunner.<init>(java.lang.Throwable, java.lang.Class[ ])",52,52,1
+"java.util.List.size()",51,2,25
+"org.junit.internal.runners.ErrorReportingRunner.<init>(java.lang.Class, java.lang.Throwable)",50,50,1
+"java.lang.Enum.<init>(java.lang.String, int)",48,12,4
+"org.junit.runner.notification.RunNotifier$6.<init>(org.junit.runner.notification.RunNotifier, java.util.List, java.util.List)",48,48,1
+"java.util.List.isEmpty()",46,5,9
+"java.util.List.add(java.lang.Object)",45,3,12
+"java.lang.String.startsWith(java.lang.String)",40,0,63
+"java.util.Iterator.next()",40,1,23
+"org.junit.internal.Throwables.isMatchingMethod(java.lang.String, java.lang.String[ ])",40,2,17
+"java.util.ArrayList.<init>()",39,13,3
+"org.junit.internal.TextListener.printFooter(org.junit.runner.Result)",39,39,1
+"org.junit.internal.Throwables$State.<init>(java.lang.String, int, org.junit.internal.Throwables$1)",38,9,4
+"org.junit.internal.Throwables$State$2.processLine(java.lang.String)",37,9,4
+"org.junit.runner.notification.RunNotifier$SafeNotifier.<init>(org.junit.runner.notification.RunNotifier)",37,9,4
+"org.junit.runner.Result.getFailures()",35,35,1
+"org.junit.runner.JUnitCommandLineParseResult.copyArray(java.lang.String[ ], int, int)",34,34,1
+"org.junit.runner.notification.RunListener.<init>()",34,11,3
+"org.junit.internal.Throwables$State$2.<init>(java.lang.String, int)",33,33,1
+"org.junit.internal.RealSystem.<init>()",31,31,1
+"org.junit.internal.TextListener.printFailures(org.junit.runner.Result)",31,31,1
+"java.util.concurrent.ConcurrentLinkedQueue.<init>()",30,6,5
+"org.junit.internal.TextListener.printHeader(long)",29,29,1
+"java.lang.Thread.getContextClassLoader()",28,28,1
+"org.junit.runner.Computer.<init>()",27,27,1
+"org.junit.runner.notification.RunNotifier$5.<init>(org.junit.runner.notification.RunNotifier, org.junit.runner.Description)",27,27,1
+"ca.concordia.ptidej.spectra.ChildJVM.SpectraShutdownJVMThread.<init>()",26,26,1

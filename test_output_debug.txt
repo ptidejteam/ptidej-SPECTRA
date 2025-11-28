@@ -1,0 +1,153 @@
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.fusesource.jansi.internal.JansiLoader in an unnamed module (file:/Users/mac/downloads/apache-maven-3.9.9/lib/jansi-2.4.1.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper (file:/Users/mac/downloads/apache-maven-3.9.9/lib/guava-33.2.1-jre.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for com.concordia.ptidej.spectra:Spectra:jar:0.0.1-SNAPSHOT
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ line 134, column 21
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO] 
+[INFO] ----------------< com.concordia.ptidej.spectra:Spectra >----------------
+[INFO] Building Spectra 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- install:3.0.1:install-file (install-joularjx) @ Spectra ---
+[INFO] Installing /Users/mac/Documents/RA/SPECTRA/src/main/resources/joularjx-3.0.1.jar to /Users/mac/.m2/repository/org/noureddine/joularjx/3.0.1/joularjx-3.0.1.jar
+[INFO] Installing /var/folders/vr/ml8fqlxd4wd74c6kt6xg9jcr0000gn/T/mvninstall16897248890566622498.pom to /Users/mac/.m2/repository/org/noureddine/joularjx/3.0.1/joularjx-3.0.1.pom
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ Spectra ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] Copying 5 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ Spectra ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- dependency:3.2.0:build-classpath (build-classpath) @ Spectra ---
+[INFO] Skipped writing classpath file '/Users/mac/Documents/RA/SPECTRA/target/classpath.txt'.  No changes found.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ Spectra ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] Copying 1 resource from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ Spectra ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ Spectra ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junit4.JUnit4Provider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running ca.concordia.ptidej.spectra.example.TestPtidejPomCore
+Complete Classpath:/Users/mac/.m2/repository/org/noureddine/joularjx/3.0.1/joularjx-3.0.1.jar:/Users/mac/.m2/repository/org/apache/commons/commons-csv/1.14.0/commons-csv-1.14.0.jar:/Users/mac/.m2/repository/commons-io/commons-io/2.18.0/commons-io-2.18.0.jar:/Users/mac/.m2/repository/commons-codec/commons-codec/1.18.0/commons-codec-1.18.0.jar:/Users/mac/.m2/repository/org/apache/poi/poi/5.2.3/poi-5.2.3.jar:/Users/mac/.m2/repository/org/apache/commons/commons-collections4/4.4/commons-collections4-4.4.jar:/Users/mac/.m2/repository/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar:/Users/mac/.m2/repository/com/zaxxer/SparseBitSet/1.2/SparseBitSet-1.2.jar:/Users/mac/.m2/repository/org/apache/logging/log4j/log4j-api/2.18.0/log4j-api-2.18.0.jar:/Users/mac/.m2/repository/org/apache/poi/poi-ooxml/5.2.3/poi-ooxml-5.2.3.jar:/Users/mac/.m2/repository/org/apache/poi/poi-ooxml-lite/5.2.3/poi-ooxml-lite-5.2.3.jar:/Users/mac/.m2/repository/com/github/virtuald/curvesapi/1.07/curvesapi-1.07.jar:/Users/mac/.m2/repository/org/apache/xmlbeans/xmlbeans/5.2.0/xmlbeans-5.2.0.jar:/Users/mac/.m2/repository/org/apache/commons/commons-compress/1.21/commons-compress-1.21.jar:/Users/mac/.m2/repository/org/apache/poi/poi-ooxml-schemas/4.1.2/poi-ooxml-schemas-4.1.2.jar:/Users/mac/.m2/repository/org/apache/bcel/bcel/6.10.0/bcel-6.10.0.jar:/Users/mac/.m2/repository/org/apache/commons/commons-lang3/3.14.0/commons-lang3-3.14.0.jar:/Users/mac/.m2/repository/org/aspectj/aspectjtools/1.6.2/aspectjtools-1.6.2.jar:/Users/mac/.m2/repository/com/github/javaparser/javaparser-core/3.25.0/javaparser-core-3.25.0.jar:/Users/mac/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/Users/mac/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/mac/.m2/repository/com/jprofiler/jprofiler-controller/14.0/jprofiler-controller-14.0.jar:/Users/mac/.m2/repository/com/jprofiler/jprofiler-mbean/14.0/jprofiler-mbean-14.0.jar:/Users/mac/.m2/repository/net/ptidej/pom/pom-core/1.0.0/pom-core-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/cpl/cpl-core/1.0.0/cpl-core-1.0.0.jar:/Users/mac/.m2/repository/org/apache/logging/log4j/log4j-core/2.19.0/log4j-core-2.19.0.jar:/Users/mac/.m2/repository/com/ibm/toad/cfparse/1.0/cfparse-1.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-core/1.0.0/padl-core-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-statements/1.0.0/padl-statements-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-generator/1.0.0/padl-generator-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-analyses/1.0.0/padl-analyses-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-design-motifs/1.0.0/padl-design-motifs-1.0.0.jar:/Users/mac/.m2/repository/net/sourceforget/plantUML/plantUML/1.0/plantUML-1.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-classfile/1.0.0/padl-creator-classfile-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-cpp-antlr/1.0.0/padl-creator-cpp-antlr-1.0.0.jar:/Users/mac/.m2/repository/net/java/dev/javacc/javacc/7.0.12/javacc-7.0.12.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-aol/1.0.0/padl-creator-aol-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-csharp-v1/1.0.0/padl-creator-csharp-v1-1.0.0.jar:/Users/mac/.m2/repository/org/antlr/antlr-runtime/3.5.3/antlr-runtime-3.5.3.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-csharp-v2/1.0.0/padl-creator-csharp-v2-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-javafile-eclipse/1.0.0/padl-creator-javafile-eclipse-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-javafile-eclipse-parser/1.0.0/padl-creator-javafile-eclipse-parser-1.0.0.jar:/Users/mac/.m2/repository/org/eclipse/jdt/org.eclipse.jdt.core/3.34.0/org.eclipse.jdt.core-3.34.0.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.core.filesystem/1.10.0/org.eclipse.core.filesystem-1.10.0.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.text/3.13.0/org.eclipse.text-3.13.0.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.core.commands/3.11.0/org.eclipse.core.commands-3.11.0.jar:/Users/mac/.m2/repository/org/eclipse/jdt/ecj/3.34.0/ecj-3.34.0.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.core.runtime/3.27.0/org.eclipse.core.runtime-3.27.0.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.equinox.common/3.18.0/org.eclipse.equinox.common-3.18.0.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.core.jobs/3.14.0/org.eclipse.core.jobs-3.14.0.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.equinox.registry/3.11.200/org.eclipse.equinox.registry-3.11.200.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.equinox.preferences/3.10.200/org.eclipse.equinox.preferences-3.10.200.jar:/Users/mac/.m2/repository/org/osgi/org.osgi.service.prefs/1.1.2/org.osgi.service.prefs-1.1.2.jar:/Users/mac/.m2/repository/org/osgi/osgi.annotation/8.0.1/osgi.annotation-8.0.1.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.core.contenttype/3.9.0/org.eclipse.core.contenttype-3.9.0.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.equinox.app/1.6.200/org.eclipse.equinox.app-1.6.200.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.core.resources/3.19.0/org.eclipse.core.resources-3.19.0.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.core.expressions/3.9.0/org.eclipse.core.expressions-3.9.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-javafile-javac/1.0.0/padl-creator-javafile-javac-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-javafile-javac-parser/1.0.0/padl-creator-javafile-javac-parser-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-mse/1.0.0/padl-creator-mse-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-statements-creator-aol/1.0.0/padl-statements-creator-aol-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-statements-creator-classfile/1.0.0/padl-statements-creator-classfile-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-aspectj/1.0.0/padl-creator-aspectj-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/pom/pom-core/1.0.0/pom-core-1.0.0-tests.jar:/Users/mac/Documents/RA/SPECTRA/target/test-classes:/Users/mac/Documents/RA/SPECTRA/target/classes
+=== PHASE 1: JProfiler Profiling ===
+Step 1: Launching JVM in suspended mode with JProfiler...
+Command: [/Users/mac/Library/Java/JavaVirtualMachines/openjdk-25/Contents/Home/bin/java, -agentpath:/Applications/JProfiler.app/Contents/Resources/app/bin/macos/libjprofilerti.jnilib=port=8849,config=/Users/mac/Documents/RA/SPECTRA/src/main/resources/jprofiler_config.xml, -cp, /Users/mac/.m2/repository/org/noureddine/joularjx/3.0.1/joularjx-3.0.1.jar:/Users/mac/.m2/repository/org/apache/commons/commons-csv/1.14.0/commons-csv-1.14.0.jar:/Users/mac/.m2/repository/commons-io/commons-io/2.18.0/commons-io-2.18.0.jar:/Users/mac/.m2/repository/commons-codec/commons-codec/1.18.0/commons-codec-1.18.0.jar:/Users/mac/.m2/repository/org/apache/poi/poi/5.2.3/poi-5.2.3.jar:/Users/mac/.m2/repository/org/apache/commons/commons-collections4/4.4/commons-collections4-4.4.jar:/Users/mac/.m2/repository/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar:/Users/mac/.m2/repository/com/zaxxer/SparseBitSet/1.2/SparseBitSet-1.2.jar:/Users/mac/.m2/repository/org/apache/logging/log4j/log4j-api/2.18.0/log4j-api-2.18.0.jar:/Users/mac/.m2/repository/org/apache/poi/poi-ooxml/5.2.3/poi-ooxml-5.2.3.jar:/Users/mac/.m2/repository/org/apache/poi/poi-ooxml-lite/5.2.3/poi-ooxml-lite-5.2.3.jar:/Users/mac/.m2/repository/com/github/virtuald/curvesapi/1.07/curvesapi-1.07.jar:/Users/mac/.m2/repository/org/apache/xmlbeans/xmlbeans/5.2.0/xmlbeans-5.2.0.jar:/Users/mac/.m2/repository/org/apache/commons/commons-compress/1.21/commons-compress-1.21.jar:/Users/mac/.m2/repository/org/apache/poi/poi-ooxml-schemas/4.1.2/poi-ooxml-schemas-4.1.2.jar:/Users/mac/.m2/repository/org/apache/bcel/bcel/6.10.0/bcel-6.10.0.jar:/Users/mac/.m2/repository/org/apache/commons/commons-lang3/3.14.0/commons-lang3-3.14.0.jar:/Users/mac/.m2/repository/org/aspectj/aspectjtools/1.6.2/aspectjtools-1.6.2.jar:/Users/mac/.m2/repository/com/github/javaparser/javaparser-core/3.25.0/javaparser-core-3.25.0.jar:/Users/mac/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/Users/mac/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/mac/.m2/repository/com/jprofiler/jprofiler-controller/14.0/jprofiler-controller-14.0.jar:/Users/mac/.m2/repository/com/jprofiler/jprofiler-mbean/14.0/jprofiler-mbean-14.0.jar:/Users/mac/.m2/repository/net/ptidej/pom/pom-core/1.0.0/pom-core-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/cpl/cpl-core/1.0.0/cpl-core-1.0.0.jar:/Users/mac/.m2/repository/org/apache/logging/log4j/log4j-core/2.19.0/log4j-core-2.19.0.jar:/Users/mac/.m2/repository/com/ibm/toad/cfparse/1.0/cfparse-1.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-core/1.0.0/padl-core-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-statements/1.0.0/padl-statements-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-generator/1.0.0/padl-generator-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-analyses/1.0.0/padl-analyses-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-design-motifs/1.0.0/padl-design-motifs-1.0.0.jar:/Users/mac/.m2/repository/net/sourceforget/plantUML/plantUML/1.0/plantUML-1.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-classfile/1.0.0/padl-creator-classfile-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-cpp-antlr/1.0.0/padl-creator-cpp-antlr-1.0.0.jar:/Users/mac/.m2/repository/net/java/dev/javacc/javacc/7.0.12/javacc-7.0.12.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-aol/1.0.0/padl-creator-aol-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-csharp-v1/1.0.0/padl-creator-csharp-v1-1.0.0.jar:/Users/mac/.m2/repository/org/antlr/antlr-runtime/3.5.3/antlr-runtime-3.5.3.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-csharp-v2/1.0.0/padl-creator-csharp-v2-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-javafile-eclipse/1.0.0/padl-creator-javafile-eclipse-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-javafile-eclipse-parser/1.0.0/padl-creator-javafile-eclipse-parser-1.0.0.jar:/Users/mac/.m2/repository/org/eclipse/jdt/org.eclipse.jdt.core/3.34.0/org.eclipse.jdt.core-3.34.0.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.core.filesystem/1.10.0/org.eclipse.core.filesystem-1.10.0.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.text/3.13.0/org.eclipse.text-3.13.0.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.core.commands/3.11.0/org.eclipse.core.commands-3.11.0.jar:/Users/mac/.m2/repository/org/eclipse/jdt/ecj/3.34.0/ecj-3.34.0.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.core.runtime/3.27.0/org.eclipse.core.runtime-3.27.0.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.equinox.common/3.18.0/org.eclipse.equinox.common-3.18.0.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.core.jobs/3.14.0/org.eclipse.core.jobs-3.14.0.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.equinox.registry/3.11.200/org.eclipse.equinox.registry-3.11.200.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.equinox.preferences/3.10.200/org.eclipse.equinox.preferences-3.10.200.jar:/Users/mac/.m2/repository/org/osgi/org.osgi.service.prefs/1.1.2/org.osgi.service.prefs-1.1.2.jar:/Users/mac/.m2/repository/org/osgi/osgi.annotation/8.0.1/osgi.annotation-8.0.1.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.core.contenttype/3.9.0/org.eclipse.core.contenttype-3.9.0.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.equinox.app/1.6.200/org.eclipse.equinox.app-1.6.200.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.core.resources/3.19.0/org.eclipse.core.resources-3.19.0.jar:/Users/mac/.m2/repository/org/eclipse/platform/org.eclipse.core.expressions/3.9.0/org.eclipse.core.expressions-3.9.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-javafile-javac/1.0.0/padl-creator-javafile-javac-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-javafile-javac-parser/1.0.0/padl-creator-javafile-javac-parser-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-mse/1.0.0/padl-creator-mse-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-statements-creator-aol/1.0.0/padl-statements-creator-aol-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-statements-creator-classfile/1.0.0/padl-statements-creator-classfile-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/padl/padl-creator-aspectj/1.0.0/padl-creator-aspectj-1.0.0.jar:/Users/mac/.m2/repository/net/ptidej/pom/pom-core/1.0.0/pom-core-1.0.0-tests.jar:/Users/mac/Documents/RA/SPECTRA/target/test-classes:/Users/mac/Documents/RA/SPECTRA/target/classes, -Djdk.attach.allowAttachSelf=true, -agentlib:jdwp=transport=dt_socket,server=y,address=*:5005,suspend=y, org.junit.runner.JUnitCore, pom.test.TestPOM]
+Launched JVM in suspended mode with PID: 68030 at directory:../Ptidej/ptidej-Ptidej/POM
+[PROCESS OUT] JProfiler> Protocol version 66
+[PROCESS OUT] JProfiler> Java 25 detected.
+[PROCESS OUT] JProfiler> Don't wait for frontend to connect.
+[PROCESS OUT] JProfiler> 64-bit library
+[PROCESS OUT] JProfiler> Using config file /Users/mac/Documents/RA/SPECTRA/src/main/resources/jprofiler_config.xml
+Step 2: Checking if JProfiler port is available...
+[PROCESS OUT] JProfiler> Listening locally on port: 8849.
+[PROCESS OUT] JProfiler> Enabling native methods instrumentation.
+[PROCESS OUT] JProfiler> Can retransform classes.
+[PROCESS OUT] JProfiler> Can retransform any class.
+[PROCESS OUT] JProfiler> Native library initialized
+[PROCESS OUT] JProfiler> VM initialized
+[PROCESS OUT] JProfiler> Retransforming 10 base class files.
+[PROCESS OUT] JProfiler> Base classes instrumented.
+[PROCESS OUT] JProfiler> Using instrumentation
+[PROCESS OUT] JProfiler> Time measurement: elapsed time
+[PROCESS OUT] JProfiler> CPU profiling enabled
+Port 8849 is now available
+JProfiler port 8849 is available
+Step 4: Attaching JPController and starting profiling...
+[PROCESS OUT] JProfiler> Listening locally on port: 8849.
+Attempting to attach to JDWP at localhost:5005 using connector: com.sun.jdi.SocketAttach
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 2.526 s <<< FAILURE! -- in ca.concordia.ptidej.spectra.example.TestPtidejPomCore
+[ERROR] ca.concordia.ptidej.spectra.example.TestPtidejPomCore.testOverload -- Time elapsed: 2.361 s <<< ERROR!
+java.lang.RuntimeException: Failed to attach JPController: Failed to attach to target VM on localhost:5005 - Connection refused
+	at ca.concordia.ptidej.spectra.Profile.Launcher.launchJProfilerPhase(Launcher.java:189)
+	at ca.concordia.ptidej.spectra.Profile.Launcher.launch(Launcher.java:111)
+	at ca.concordia.ptidej.spectra.example.TestPtidejPomCore.testOverload(TestPtidejPomCore.java:36)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:316)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeWithRerun(JUnit4Provider.java:240)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:214)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:155)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385)
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162)
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
+Caused by: java.io.IOException: Failed to attach to target VM on localhost:5005 - Connection refused
+	at ca.concordia.ptidej.spectra.Profile.Launcher.attachDebuggerAndResume(Launcher.java:497)
+	at ca.concordia.ptidej.spectra.Profile.Launcher.launchJProfilerPhase(Launcher.java:185)
+	... 28 more
+Caused by: java.net.ConnectException: Connection refused
+	at java.base/sun.nio.ch.Net.connect0(Native Method)
+	at java.base/sun.nio.ch.Net.connect(Net.java:546)
+	at java.base/sun.nio.ch.Net.connect(Net.java:535)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:585)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:284)
+	at java.base/java.net.Socket.connect(Socket.java:659)
+	at jdk.jdi/com.sun.tools.jdi.SocketTransportService.attach(SocketTransportService.java:263)
+	at jdk.jdi/com.sun.tools.jdi.GenericAttachingConnector.attach(GenericAttachingConnector.java:119)
+	at jdk.jdi/com.sun.tools.jdi.SocketAttachingConnector.attach(SocketAttachingConnector.java:83)
+	at ca.concordia.ptidej.spectra.Profile.Launcher.attachDebuggerAndResume(Launcher.java:495)
+	... 29 more
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Errors: 
+[ERROR]   TestPtidejPomCore.testOverload:36 » Runtime Failed to attach JPController: Failed to attach to target VM on localhost:5005 - Connection refused
+[INFO] 
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  10.063 s
+[INFO] Finished at: 2025-11-21T00:08:16-05:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.2.5:test (default-test) on project Spectra: 
+[ERROR] 
+[ERROR] Please refer to /Users/mac/Documents/RA/SPECTRA/target/surefire-reports for the individual test results.
+[ERROR] Please refer to dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
