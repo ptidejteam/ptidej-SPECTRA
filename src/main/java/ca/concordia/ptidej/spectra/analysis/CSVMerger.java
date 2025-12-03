@@ -157,88 +157,89 @@ public class CSVMerger {
 
     private static String convertJVMDescriptor(String jvmSignature) {
         final int start = jvmSignature.indexOf('(');
-        int end = jvmSignature.indexOf(')');
-        if (start < 0 || end < 0)
+        final int end = jvmSignature.indexOf(')');
+        if (start < 0 || end < 0 || end <= start + 1) {
             return "()";
+        }
 
         String params = jvmSignature.substring(start + 1, end);
         StringBuilder result = new StringBuilder("(");
 
         int i = 0;
+        boolean first = true;
         while (i < params.length()) {
-            char c = params.charAt(i);
-            switch (c) {
-                case 'B':
-                    result.append("byte");
-                    i++;
-                    break;
-                case 'C':
-                    result.append("char");
-                    i++;
-                    break;
-                case 'D':
-                    result.append("double");
-                    i++;
-                    break;
-                case 'F':
-                    result.append("float");
-                    i++;
-                    break;
-                case 'I':
-                    result.append("int");
-                    i++;
-                    break;
-                case 'J':
-                    result.append("long");
-                    i++;
-                    break;
-                case 'S':
-                    result.append("short");
-                    i++;
-                    break;
-                case 'Z':
-                    result.append("boolean");
-                    i++;
-                case 'O':
-                    result.append("object");
-                    i++;
-                    break;
-                case 'L':
-                    int semicolon = params.indexOf(';', i);
-                    String className = params.substring(i + 1, semicolon)
-                            .replace('/', '.');
-                    result.append(className);
-                    i = semicolon + 1;
-                    break;
-                case '[':
-                    // Handle arrays
-                    int arrayDepth = 0;
-                    while (params.charAt(i) == '[') {
-                        arrayDepth++;
-                        i++;
-                    }
-                    String arrayType = convertJVMDescriptor(
-                            params.substring(i, i + 1));
-                    result.append(arrayType);
-                    for (int d = 0; d < arrayDepth; d++)
-                        result.append("[]");
-                    i++;
-                    break;
-                default:
-                    i++; // skip unknown
+            TypeParse tp = parseType(params, i);
+            if (tp == null) {
+                // skip unknown / malformed sequences
+                i++;
+                continue;
             }
-            if (i < params.length())
+            if (!first) {
                 result.append(", ");
+            }
+            first = false;
+            result.append(tp.javaType);
+            i = tp.nextIndex;
         }
 
-        // Remove trailing comma
-        if (result.length() > 1 && result.charAt(result.length() - 2) == ',') {
-            result.setLength(result.length() - 2);
-        }
         result.append(")");
         return result.toString();
     }
 
+    private static class TypeParse {
+        final String javaType;
+        final int nextIndex;
+        TypeParse(String javaType, int nextIndex) {
+            this.javaType = javaType;
+            this.nextIndex = nextIndex;
+        }
+    }
+
+    private static TypeParse parseType(String desc, int start) {
+        if (start >= desc.length()) return null;
+        int i = start;
+        int arrayDepth = 0;
+
+        // Count array dimensions: one '[' per dimension
+        while (i < desc.length() && desc.charAt(i) == '[') {
+            arrayDepth++;
+            i++;
+        }
+        if (i >= desc.length()) return null;
+
+        char c = desc.charAt(i);
+        String baseType;
+
+        switch (c) {
+            case 'B': baseType = "byte";    i++; break;
+            case 'C': baseType = "char";    i++; break;
+            case 'D': baseType = "double";  i++; break;
+            case 'F': baseType = "float";   i++; break;
+            case 'I': baseType = "int";     i++; break;
+            case 'J': baseType = "long";    i++; break;
+            case 'S': baseType = "short";   i++; break;
+            case 'Z': baseType = "boolean"; i++; break;
+            case 'V': baseType = "void";    i++; break;
+            case 'L': {
+                int semicolon = desc.indexOf(';', i);
+                if (semicolon < 0) return null;
+                String className = desc.substring(i + 1, semicolon)
+                        .replace('/', '.');
+                baseType = className;
+                i = semicolon + 1;
+                break;
+            }
+            default:
+                // Unknown type code – give up on this position
+                return null;
+        }
+
+        StringBuilder fullType = new StringBuilder(baseType);
+        for (int d = 0; d < arrayDepth; d++) {
+            fullType.append("[]");
+        }
+        return new TypeParse(fullType.toString(), i);
+    }
     public static Map<String, MethodData> mergeAndFilterEnergyData(
             Map<String, MethodData> methodDataMap, String energyCsvPath,
             boolean isXML) throws IOException {
@@ -606,14 +607,15 @@ public class CSVMerger {
         // Normalize $$Lambda classes
         raw = raw.replaceAll("\\$\\$Lambda.*", ".lambda");
 
+
         // Normalize <init> constructors
         raw = raw.replace("<init>", "constructor");
-
-        // Normalize arrays
-        raw = raw.replaceAll("\\[\\s*\\]", "[]");
-
-        // Remove extra spaces
-        raw = raw.replaceAll(",\\s+", ",");
+//
+//        // Normalize arrays
+//        raw = raw.replaceAll("\\[\\s*\\]", "[]");
+//
+//        // Remove extra spaces
+//        raw = raw.replaceAll(",\\s+", ",");
 
         return raw.trim();
     }

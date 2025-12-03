@@ -4,7 +4,14 @@
     <session id="110" name="spectra filter" type="launch" jvmConfigurationId="100" methodCallRecordingType="instrumentation" lineNumbers="true" samplingFrequency="1" recordArrayAlloc="false"
              allocationFrequency="0" autoUpdatePeriodLong="4" utilConcurrentHandling="false" autoTuneMaxAverage="10"
              vmExitHandling="keepAlive" recordingProfileId="10">
+        <allocation recordArrayAlloc="true" recordNewArrays="true" />
 
+        <monitor recordContention="true" />
+
+        <threadProfiling recordDeadlocks="true" />
+
+        <offline startCPUImmediately="true" startAllocImmediately="true"
+                 startMonitorImmediately="true" />
     </session>
   </sessions>
 </config>
