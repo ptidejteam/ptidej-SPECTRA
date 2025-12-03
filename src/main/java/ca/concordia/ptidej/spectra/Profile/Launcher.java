@@ -79,7 +79,10 @@ public class Launcher {
 
         // 3. Merge CSV results
         if (programArgs.length > 0 || joularProcessId > 0) {
-            CSVMerger.runCSVMerger(Arrays.toString(programArgs) + " " + aFQN);
+            String mergeArg = (programArgs != null && programArgs.length > 0)
+                    ? Arrays.toString(programArgs)
+                    : aFQN;
+            CSVMerger.runCSVMerger(mergeArg);
         }
         return joularProcessId;
 
@@ -170,7 +173,8 @@ public class Launcher {
                 + "=port=" + JPROFILER_PORT
                 + ",nowait"
                 + ",config=" + Constants.PROJECT_ROOT
-                + "/src/main/resources/jprofiler_config.xml");
+                + "/src/main/resources/jprofiler_config.xml"
+        + ",session=spectra filter");
 
         command.add("-cp");
         command.add(classpath);
