@@ -1,11 +1,6 @@
 package ca.concordia.ptidej.spectra.analysis;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -53,12 +48,16 @@ public class CSVMerger {
             // Merge with Energy data and output XML-Energy "intersection"
             final Map<String, MethodData> xmlEnergyIntersectionData = mergeAndFilterEnergyData(
                     methodDataMap, energyCsvPath, true);
-            writeToExcel(xmlEnergyIntersectionData, xmlEnergyIntersectionOutputPath);
+            //writeToExcel(xmlEnergyIntersectionData, xmlEnergyIntersectionOutputPath);
+            writeToCsv(xmlEnergyIntersectionData, xmlEnergyIntersectionOutputPath);
+
 
             // Merge with Energy data and output XML-Energy "union"
             final Map<String, MethodData> xmlEnergyUnionData = mergeUnionEnergyData(
                     methodDataMap, energyCsvPath);
-            writeToExcel(xmlEnergyUnionData, xmlEnergyUnionOutputPath);
+           // writeToExcel(xmlEnergyUnionData, xmlEnergyUnionOutputPath);
+            writeToCsv(xmlEnergyUnionData, xmlEnergyUnionOutputPath);
+
 
 
             // Merge with AllObjects data and output AllObjects-Energy
@@ -88,6 +87,7 @@ public class CSVMerger {
         String methodSignature;
         long invocations = 0;
         long executionTime = 0;
+        long selfTime = 0;
         long instanceCount = 0;
         long sizeBytes = 0;
         double energyConsumption = 0.0;
@@ -105,15 +105,18 @@ public class CSVMerger {
             this.energyConsumption = energyConsumption;
         }
 
-        public void combineXMLData(long invocations, long executionTime) {
-            this.invocations = invocations;
-            this.executionTime = executionTime;
+        public void combineXMLData(long invocations, long executionTime, long selfTime) {
+            this.invocations += invocations;
+            this.executionTime += executionTime;
+            this.selfTime += selfTime;
         }
     }
 
     public static Map<String, MethodData> parseXMLData(String xmlFilePath)
             throws Exception {
         Map<String, MethodData> methodDataMap = new HashMap<>();
+
+        System.setProperty("jdk.xml.maxElementDepth", "1000");
 
         final File xmlFile = new File(xmlFilePath);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -142,13 +145,14 @@ public class CSVMerger {
                 methodSignature = normalizeSignature(methodSignature);
 
 
-                long time = Long.parseLong(element.getAttribute("selfTime"));
+                long time = Long.parseLong(element.getAttribute("time"));
+                long selfTime = Long.parseLong(element.getAttribute("selfTime"));
                 long count = Long.parseLong(element.getAttribute("count"));
 
 
                 MethodData methodData = methodDataMap
                         .computeIfAbsent(methodSignature, MethodData::new);
-                methodData.combineXMLData(count, time);
+                methodData.combineXMLData(count, time, selfTime);
             }
         }
 
@@ -189,6 +193,7 @@ public class CSVMerger {
     private static class TypeParse {
         final String javaType;
         final int nextIndex;
+
         TypeParse(String javaType, int nextIndex) {
             this.javaType = javaType;
             this.nextIndex = nextIndex;
@@ -211,15 +216,42 @@ public class CSVMerger {
         String baseType;
 
         switch (c) {
-            case 'B': baseType = "byte";    i++; break;
-            case 'C': baseType = "char";    i++; break;
-            case 'D': baseType = "double";  i++; break;
-            case 'F': baseType = "float";   i++; break;
-            case 'I': baseType = "int";     i++; break;
-            case 'J': baseType = "long";    i++; break;
-            case 'S': baseType = "short";   i++; break;
-            case 'Z': baseType = "boolean"; i++; break;
-            case 'V': baseType = "void";    i++; break;
+            case 'B':
+                baseType = "byte";
+                i++;
+                break;
+            case 'C':
+                baseType = "char";
+                i++;
+                break;
+            case 'D':
+                baseType = "double";
+                i++;
+                break;
+            case 'F':
+                baseType = "float";
+                i++;
+                break;
+            case 'I':
+                baseType = "int";
+                i++;
+                break;
+            case 'J':
+                baseType = "long";
+                i++;
+                break;
+            case 'S':
+                baseType = "short";
+                i++;
+                break;
+            case 'Z':
+                baseType = "boolean";
+                i++;
+                break;
+            case 'V':
+                baseType = "void";
+                i++;
+                break;
             case 'L': {
                 int semicolon = desc.indexOf(';', i);
                 if (semicolon < 0) return null;
@@ -240,6 +272,7 @@ public class CSVMerger {
         }
         return new TypeParse(fullType.toString(), i);
     }
+
     public static Map<String, MethodData> mergeAndFilterEnergyData(
             Map<String, MethodData> methodDataMap, String energyCsvPath,
             boolean isXML) throws IOException {
@@ -279,7 +312,7 @@ public class CSVMerger {
                         MethodData newData = mergedData
                                 .computeIfAbsent(signature, MethodData::new);
                         newData.combineXMLData(methodData.invocations,
-                                methodData.executionTime);
+                                methodData.executionTime, methodData.selfTime);
                         newData.combineEnergyData(energyConsumption);
                     }
                 });
@@ -288,6 +321,7 @@ public class CSVMerger {
 
         return mergedData;
     }
+
     public static Map<String, MethodData> mergeUnionEnergyData(
             Map<String, MethodData> profilerData, String energyCsvPath) throws IOException {
 
@@ -310,7 +344,8 @@ public class CSVMerger {
                 try {
                     double energy = Double.parseDouble(energyStr);
                     energyMap.put(method, energy);
-                } catch (NumberFormatException ignored) {}
+                } catch (NumberFormatException ignored) {
+                }
             }
         }
 
@@ -328,10 +363,11 @@ public class CSVMerger {
 
             MethodData profilerEntry = profilerData.get(method);
             if (profilerEntry != null) {
-                unionEntry.combineXMLData(profilerEntry.invocations, profilerEntry.executionTime);
+                unionEntry.combineXMLData(profilerEntry.invocations, profilerEntry.executionTime, profilerEntry.selfTime);
             } else {
                 unionEntry.invocations = -1;
                 unionEntry.executionTime = -1;
+                unionEntry.selfTime = -1;
             }
 
             Double energy = energyMap.get(method);
@@ -513,6 +549,47 @@ public class CSVMerger {
                 : methodName;
     }
 
+    private static void writeToCsv(Map<String, MethodData> methodDataMap,
+                                   String filePath) throws IOException {
+        boolean isAllObjects = filePath.contains("allObjects");
+
+        try (PrintWriter out = new PrintWriter(new FileOutputStream(filePath))) {
+            if (isAllObjects) {
+                out.println("Class Name,Energy (J),Instance Count,Size (bytes)");
+                for (MethodData methodData : methodDataMap.values()) {
+                    out.printf("%s,%.4f,%d,%d%n",
+                            csvEscape(methodData.methodSignature),
+                            methodData.energyConsumption,
+                            methodData.instanceCount,
+                            methodData.sizeBytes);
+                }
+            } else {
+                out.println("Method Signature,Invocations,Total Times (ms),Self Time (ms),Energy (J)");
+                for (MethodData methodData : methodDataMap.values()) {
+                    String inv  = methodData.invocations   == -1 ? "-" : String.valueOf(methodData.invocations);
+                    String time = methodData.executionTime == -1 ? "-" : String.valueOf(methodData.executionTime);
+                    String self = methodData.selfTime      == -1 ? "-" : String.valueOf(methodData.selfTime);
+                    String en   = methodData.energyConsumption == -1 ? "-" : String.valueOf(methodData.energyConsumption);
+
+                    out.printf("%s,%s,%s,%s,%s%n",
+                            csvEscape(methodData.methodSignature),
+                            inv, time, self, en);
+                }
+            }
+        }
+    }
+
+    private static String csvEscape(String value) {
+        if (value == null) return "";
+        boolean mustQuote =
+                value.contains(",") ||
+                        value.contains("\"") ||
+                        value.contains("\n") ||
+                        value.contains("\r");
+        String escaped = value.replace("\"", "\"\""); // escape inner quotes
+        return mustQuote ? "\"" + escaped + "\"" : escaped;
+    }
+
 
     private static void writeToExcel(Map<String, MethodData> methodDataMap,
                                      String filePath) throws IOException {
@@ -526,7 +603,7 @@ public class CSVMerger {
                     ? new String[]{"Class Name", "Energy (J)",
                     "Instance Count", "Size " + "(bytes)"}
                     : new String[]{"Method Signature", "Invocations",
-                    "Execution Time", "Energy (J)"};
+                    "Execution Time", "Self Time", "Energy (J)"};
 
             createHeaderRow(headerRow, headers, workbook);
             int rowNum = 1;
@@ -541,9 +618,10 @@ public class CSVMerger {
                 } else {
                     Row row = sheet.createRow(rowNum++);
                     row.createCell(0).setCellValue(methodData.methodSignature);
-                    row.createCell(1).setCellValue(methodData.invocations ==-1 ? "-" : String.valueOf(methodData.invocations));
-                    row.createCell(2).setCellValue(methodData.executionTime ==-1 ? "-" : String.valueOf(methodData.executionTime));
-                    row.createCell(3).setCellValue(methodData.energyConsumption ==-1 ? "-" : String.valueOf(methodData.energyConsumption));
+                    row.createCell(1).setCellValue(methodData.invocations == -1 ? "-" : String.valueOf(methodData.invocations));
+                    row.createCell(2).setCellValue(methodData.executionTime == -1 ? "-" : String.valueOf(methodData.executionTime));
+                    row.createCell(3).setCellValue(methodData.selfTime == -1 ? "-" : String.valueOf(methodData.selfTime));
+                    row.createCell(4).setCellValue(methodData.energyConsumption == -1 ? "-" : String.valueOf(methodData.energyConsumption));
 
                 }
 
@@ -574,7 +652,7 @@ public class CSVMerger {
     }
 
     public final class Constants {
-        public static final String XML_FILE_PATH =  PROJECT_ROOT + "/Output/JProfiler/calltree.csv.xml";
+        public static final String XML_FILE_PATH = PROJECT_ROOT + "/Output/JProfiler/calltree.csv.xml";
         public static final String ALL_OBJECTS_CSV_PATH = PROJECT_ROOT + "/Output/Jprofiler/allobjects.csv";
         public static final String HOTSPOTS_CSV_PATH = PROJECT_ROOT + "/Output/Jprofiler/hotspots.csv";
         public static final String ENERGY_CSV_PATH = PROJECT_ROOT + "/Output/Joularjx/data/joularJX-123-all-methods-energy.csv";
@@ -583,17 +661,18 @@ public class CSVMerger {
         }
 
         public static String getXmlEnergyOutputPath(String fileName, String type) {
-            return String.format(PROJECT_ROOT + "/Results/%s.%s.%s.spectra.xlsx", fileName, type, timestamp);
+            return String.format(PROJECT_ROOT + "/Results/%s.%s.%s.spectra.csv", fileName, type, timestamp);
 
         }
 
-        public static String getAllObjectsEnergyOutputPath(String fileName, String type ) {
-            return String.format(PROJECT_ROOT + "/Results/%s.%s.%s.spectra.xlsx", fileName, type, timestamp);
+        public static String getAllObjectsEnergyOutputPath(String fileName, String type) {
+            return String.format(PROJECT_ROOT + "/Results/%s.%s.%s.spectra.csv", fileName, type, timestamp);
         }
 
         public static String getHotSpotEnergyOutputPath(String fileName, String type) {
-            return String.format(PROJECT_ROOT + "/Results/%s.%s.%s.spectra.xlsx", fileName, type, timestamp);
+            return String.format(PROJECT_ROOT + "/Results/%s.%s.%s.spectra.csv", fileName, type, timestamp);
         }
+
         static String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(
                 "yyMMdd'H'HHmm"));
     }
@@ -606,10 +685,6 @@ public class CSVMerger {
 
         // Normalize $$Lambda classes
         raw = raw.replaceAll("\\$\\$Lambda.*", ".lambda");
-
-
-        // Normalize <init> constructors
-        raw = raw.replace("<init>", "constructor");
 //
 //        // Normalize arrays
 //        raw = raw.replaceAll("\\[\\s*\\]", "[]");

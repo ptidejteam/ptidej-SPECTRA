@@ -25,6 +25,8 @@ bcel-6.10.0.jar
 .settings
 .springBeans
 .sts4-cache
+jprofiler_config.xml
+Output/*
 
 ### IntelliJ IDEA ###
 .idea
