@@ -179,8 +179,10 @@ public class Launcher {
 		processBuilder.redirectErrorStream(true);
 
 		// // Change Current Working Directory
-		File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/POM/");
-		processBuilder.directory(newCurrentWorkingDirectory);
+		//File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/POM/");
+        File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/CPL/");
+
+        processBuilder.directory(newCurrentWorkingDirectory);
 		// Start the process
 		final Process process = processBuilder.start();
 
@@ -571,8 +573,10 @@ public class Launcher {
 		processBuilder.redirectErrorStream(true);
 
 		// Change Current Working Directory
-		File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/POM/");
-		processBuilder.directory(newCurrentWorkingDirectory);
+		//File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/POM/");
+        File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/CPL/");
+
+        processBuilder.directory(newCurrentWorkingDirectory);
 		final Process process = processBuilder.start();
 
 		// Enter sudo password
