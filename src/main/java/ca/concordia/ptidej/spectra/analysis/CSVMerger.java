@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -24,7 +26,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import static ca.concordia.ptidej.spectra.Profile.Constants.PROJECT_ROOT;
+import static ca.concordia.ptidej.spectra.Profile.Constants.SPECTRA_ROOT;
+import static java.util.stream.Collectors.toList;
 
 public class CSVMerger {
     public static boolean runCSVMerger(String fileName) {
@@ -44,6 +47,8 @@ public class CSVMerger {
         try {
             // Parse XML and extract method data
             final Map<String, MethodData> methodDataMap = parseXMLData(xmlFilePath);
+
+            writeToCsv(methodDataMap, xmlEnergyIntersectionOutputPath + "-test");
 
             // Merge with Energy data and output XML-Energy "intersection"
             final Map<String, MethodData> xmlEnergyIntersectionData = mergeAndFilterEnergyData(
@@ -83,7 +88,7 @@ public class CSVMerger {
         return true;
     }
 
-    private static class MethodData {
+    private static class MethodData implements Comparable<MethodData> {
         String methodSignature;
         long invocations = 0;
         long executionTime = 0;
@@ -91,6 +96,7 @@ public class CSVMerger {
         long instanceCount = 0;
         long sizeBytes = 0;
         double energyConsumption = 0.0;
+        int callOrder = 0;
 
         public MethodData(String methodSignature) {
             this.methodSignature = methodSignature;
@@ -110,6 +116,15 @@ public class CSVMerger {
             this.executionTime += executionTime;
             this.selfTime += selfTime;
         }
+
+        public void setCallOrder(int order) {
+            this.callOrder = order;
+        }
+
+        @Override
+        public int compareTo(MethodData o) {
+            return this.callOrder - o.callOrder;
+        }
     }
 
     public static Map<String, MethodData> parseXMLData(String xmlFilePath)
@@ -128,6 +143,7 @@ public class CSVMerger {
 
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
+
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
                 String className = element.getAttribute("class");
@@ -149,10 +165,10 @@ public class CSVMerger {
                 long selfTime = Long.parseLong(element.getAttribute("selfTime"));
                 long count = Long.parseLong(element.getAttribute("count"));
 
-
                 MethodData methodData = methodDataMap
                         .computeIfAbsent(methodSignature, MethodData::new);
                 methodData.combineXMLData(count, time, selfTime);
+                methodData.setCallOrder(i);
             }
         }
 
@@ -565,7 +581,7 @@ public class CSVMerger {
                 }
             } else {
                 out.println("Method Signature,Invocations,Total Times (ms),Self Time (ms),Energy (J)");
-                for (MethodData methodData : methodDataMap.values()) {
+                for (MethodData methodData : methodDataMap.values().stream().sorted(MethodData::compareTo).toList()) {
                     String inv  = methodData.invocations   == -1 ? "-" : String.valueOf(methodData.invocations);
                     String time = methodData.executionTime == -1 ? "-" : String.valueOf(methodData.executionTime);
                     String self = methodData.selfTime      == -1 ? "-" : String.valueOf(methodData.selfTime);
@@ -652,25 +668,25 @@ public class CSVMerger {
     }
 
     public final class Constants {
-        public static final String XML_FILE_PATH = PROJECT_ROOT + "/Output/JProfiler/calltree.csv.xml";
-        public static final String ALL_OBJECTS_CSV_PATH = PROJECT_ROOT + "/Output/Jprofiler/allobjects.csv";
-        public static final String HOTSPOTS_CSV_PATH = PROJECT_ROOT + "/Output/Jprofiler/hotspots.csv";
-        public static final String ENERGY_CSV_PATH = PROJECT_ROOT + "/Output/Joularjx/data/joularJX-123-all-methods-energy.csv";
+        public static final String XML_FILE_PATH = SPECTRA_ROOT + "/Output/JProfiler/calltree.xml";
+        public static final String ALL_OBJECTS_CSV_PATH = SPECTRA_ROOT + "/Output/Jprofiler/allobjects.csv";
+        public static final String HOTSPOTS_CSV_PATH = SPECTRA_ROOT + "/Output/Jprofiler/hotspots.csv";
+        public static final String ENERGY_CSV_PATH = SPECTRA_ROOT + "/Output/Joularjx/data/joularJX-123-all-methods-energy.csv";
 
         private Constants() {
         }
 
         public static String getXmlEnergyOutputPath(String fileName, String type) {
-            return String.format(PROJECT_ROOT + "/Results/%s.%s.%s.spectra.csv", fileName, type, timestamp);
+            return String.format(SPECTRA_ROOT + "/Results/%s.%s.%s.spectra.csv", fileName, type, timestamp);
 
         }
 
         public static String getAllObjectsEnergyOutputPath(String fileName, String type) {
-            return String.format(PROJECT_ROOT + "/Results/%s.%s.%s.spectra.csv", fileName, type, timestamp);
+            return String.format(SPECTRA_ROOT + "/Results/%s.%s.%s.spectra.csv", fileName, type, timestamp);
         }
 
         public static String getHotSpotEnergyOutputPath(String fileName, String type) {
-            return String.format(PROJECT_ROOT + "/Results/%s.%s.%s.spectra.csv", fileName, type, timestamp);
+            return String.format(SPECTRA_ROOT + "/Results/%s.%s.%s.spectra.csv", fileName, type, timestamp);
         }
 
         static String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(

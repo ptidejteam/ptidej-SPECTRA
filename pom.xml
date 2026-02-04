@@ -12,6 +12,15 @@
     <name>Spectra</name>
     <description>Spectra to find tradeoffs between energy consumption and code efficiency</description>
 
+    <repositories>
+        <repository>
+            <id>ej-technologies</id>
+            <name>EJ Technologies Maven Repository</name>
+            <url>https://maven.ej-technologies.com/repository/</url>
+        </repository>
+    </repositories>
+
+
     <properties>
         <java.version>25</java.version>
         <maven.compiler.source>25</maven.compiler.source>
@@ -101,32 +110,6 @@
             <artifactId>jprofiler-mbean</artifactId>
             <version>14.0</version>
         </dependency>
-
-        <dependency>
-            <groupId>net.ptidej.pom</groupId>
-            <artifactId>pom-core</artifactId>
-            <version>1.0.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.platform</groupId>
-                    <artifactId>org.eclipse.osgi</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>net.ptidej.pom</groupId>
-            <artifactId>pom-core</artifactId>
-            <version>1.0.0</version>
-            <type>test-jar</type>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.platform</groupId>
-                    <artifactId>org.eclipse.osgi</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
     </dependencies>
 
     <build>
@@ -176,6 +159,39 @@
                                         implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                             </transformers>
                             <finalName>${project.artifactId}-with-dependencies</finalName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>shade-jar-jprofiler-agent</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>ca/concordia/ptidej/spectra/example/**</exclude>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <manifestEntries>
+                                        <Premain-Class>ca.concordia.ptidej.spectra.Profile.JProfilerAgent</Premain-Class>
+                                    </manifestEntries>
+
+                                </transformer>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                            </transformers>
+                            <finalName>spectra-jprofiler-agent</finalName>
                         </configuration>
                     </execution>
                 </executions>

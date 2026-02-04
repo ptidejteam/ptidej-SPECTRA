@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.jprofiler.api.controller.Controller;
 import com.sun.jdi.event.*;
 import com.sun.jdi.request.EventRequest;
 import com.sun.jdi.request.EventRequestManager;
@@ -44,8 +45,8 @@ public class Launcher {
 	private static final int JDWP_PORT = 5005;
 	private static final int PORT_CHECK_TIMEOUT_MS = 30000; // 30 seconds
 	private static final int PORT_CHECK_INTERVAL_MS = 500; // Check every 500ms
-	private static final String JPROFILER_OUTPUT_DIR = "Output/JProfiler/";
-	private static final String SNAPSHOT_FILE = "snapshot.jps";
+	public static final String JPROFILER_OUTPUT_DIR = "Output/JProfiler/";
+	public static final String SNAPSHOT_FILE = "snapshot.jps";
 
 	private final AtomicBoolean cleanupRun = new AtomicBoolean(false);
 
@@ -96,49 +97,65 @@ public class Launcher {
 		final long jvmPid = jvmProcess.pid();
 		System.out.println("JVM Process ID: " + jvmPid);
 
-		System.out.println("Step 2: Checking if JProfiler port is available...");
-		// Step 2: Wait for JProfiler port to be available
-		boolean portAvailable = waitForPortAvailable(JPROFILER_PORT, PORT_CHECK_TIMEOUT_MS);
-		if (!portAvailable) {
-			jvmProcess.destroyForcibly();
-			throw new RuntimeException("JProfiler port " + JPROFILER_PORT + " did not become available within "
-					+ PORT_CHECK_TIMEOUT_MS + "ms");
-		}
-		System.out.println("JProfiler port " + JPROFILER_PORT + " is available");
+//		boolean jmxReady = waitForPortAvailable(JMX_PORT, PORT_CHECK_TIMEOUT_MS);
+//		if (!jmxReady) {
+//			jvmProcess.destroyForcibly();
+//			throw new RuntimeException("JDWP port " + JMX_PORT + " not available");
+//		}
+//
+//		System.out.println("Step 2: Checking if JProfiler port is available...");
+//		// Step 2: Wait for JProfiler port to be available
+//		boolean portAvailable = waitForPortAvailable(JPROFILER_PORT, PORT_CHECK_TIMEOUT_MS);
+//		if (!portAvailable) {
+//			jvmProcess.destroyForcibly();
+//			throw new RuntimeException("JProfiler port " + JPROFILER_PORT + " did not become available within "
+//					+ PORT_CHECK_TIMEOUT_MS + "ms");
+//		}
+//		System.out.println("JProfiler port " + JPROFILER_PORT + " is available");
 
-		System.out.println("Step 3: Attaching JPController ");
+		//System.out.println("Step 3: Attaching JPController ");
 		// Step 3: Attach via JDI and listen for child VM termination, do not dispose vm
 		// so events are delivered
-		VirtualMachine vm = null;
-		// Wait for JDWP port to be ready before attaching debugger
-		boolean jdwpReady = waitForPortAvailable(JDWP_PORT, PORT_CHECK_TIMEOUT_MS);
-		if (!jdwpReady) {
-			jvmProcess.destroyForcibly();
-			throw new RuntimeException("JDWP port " + JDWP_PORT + " not available");
-		}
-		try {
-			vm = attachDebugger("localhost", JDWP_PORT);
-			System.out.println("Attached and listening for VMDeath events");
-		} catch (Exception e) {
-			jvmProcess.destroyForcibly();
-			throw new RuntimeException("Failed to attach JPController: " + e.getMessage(), e);
-		}
-		System.out.println("Step 4: Now start profiling *before* letting JVM run...");
+//		VirtualMachine vm = null;
+//		// Wait for JDWP port to be ready before attaching debugger
+//		boolean jdwpReady = waitForPortAvailable(JDWP_PORT, PORT_CHECK_TIMEOUT_MS);
+//		if (!jdwpReady) {
+//			jvmProcess.destroyForcibly();
+//			throw new RuntimeException("JDWP port " + JDWP_PORT + " not available");
+//		}
+//		try {
+//			vm = attachDebugger("localhost", JDWP_PORT);
+//			System.out.println("Attached and listening for VMDeath events");
+//		} catch (Exception e) {
+//			jvmProcess.destroyForcibly();
+//			throw new RuntimeException("Failed to attach JPController: " + e.getMessage(), e);
+//		}
+//		//System.out.println("Step 4: Now start profiling *before* letting JVM run...");
+//		vm.resume();
 
-		System.out.println("Step 5: Attaching Shutdown Listener for profiling cleanup...");
+		// System.out.println("[Spectra] Starting JProfiler recordings...");
+//		Controller.startCPURecording(true);      // true = reset existing data
+//		Controller.startAllocRecording(true);
+//		Controller.startMonitorRecording();
+//		Controller.startThreadProfiling();
+		// System.out.println("[Spectra] All recordings started");
+		//System.out.println("(All recordings started)");
+
+		// System.out.println("Step 5: Attaching Shutdown Listener for profiling cleanup...");
 
 		// Resume target VM now that recordings are configured
-		System.out.println("Step 6: Resuming target VM now...");
-		vm.resume();
+		//System.out.println("Step 6: Resuming target VM now...");
+
+
 
 		// Wait for natural termination; JDI event thread will handle cleanup on
 		// VMDeath.
 		System.out.println("Waiting for profiled JVM to terminate naturally...");
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+//		try {
+//			Thread.sleep(10000);
+//		} catch (InterruptedException e) {
+//			throw new RuntimeException(e);
+//		}
 
 		int exitCode = 0;
 		try {
@@ -159,13 +176,13 @@ public class Launcher {
 
 		// JProfiler agent with suspended mode and specific port
 		command.add("-agentpath:" + jprofilerAgent + "=port=" + JPROFILER_PORT + ",nowait" + ",config="
-				+ Constants.PROJECT_ROOT + "/src/main/resources/jprofiler_config.xml" + ",session=spectra filter");
-
+				+ Constants.SPECTRA_ROOT + "/src/main/resources/jprofiler_config.xml" + ",id=115");
+		command.add("-javaagent:" + Constants.MY_JPROFILER_AGENT_PATH);
 		command.add("-cp");
 		command.add(classpath);
 		command.add("-Dspectra.realMain=" + mainClass);
 		command.add("-Djdk.attach.allowAttachSelf=true");
-		command.add("-agentlib:jdwp=transport=dt_socket,server=y,address=5005,suspend=y");
+		command.add("-agentlib:jdwp=transport=dt_socket,server=y,address=5005,suspend=n");
 		command.add("ca.concordia.ptidej.spectra.ChildJVM.SpectraMain");
 
 		if (programArgs != null) {
@@ -179,15 +196,15 @@ public class Launcher {
 		processBuilder.redirectErrorStream(true);
 
 		// // Change Current Working Directory
-		//File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/POM/");
-        File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/CPL/");
+        File newCurrentWorkingDirectory = new File(Constants.PROJECT_ROOT);
 
         processBuilder.directory(newCurrentWorkingDirectory);
 		// Start the process
 		final Process process = processBuilder.start();
 
+
 		// Provide the sudo password
-		enterPassword(process);
+		//enterPassword(process);
 		System.out.println("Launched JVM in suspended mode with PID: " + process.pid() + " at directory:"
 				+ newCurrentWorkingDirectory.getPath());
 
@@ -198,7 +215,7 @@ public class Launcher {
 	}
 
 	// Step 2: Wait for JProfiler port to become available
-	private boolean waitForPortAvailable(final int port, final long timeoutMs) {
+	public static boolean waitForPortAvailable(final int port, final long timeoutMs) {
 		final long startTime = System.currentTimeMillis();
 
 		while (System.currentTimeMillis() - startTime < timeoutMs) {
@@ -218,37 +235,6 @@ public class Launcher {
 
 		System.err.println("Timeout waiting for port " + port + " to become available");
 		return false;
-	}
-
-	private void registerShutdownHook(final Process jvmProcess) {
-		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-			System.out.println("=== SHUTDOWN HOOK: Profiling Cleanup ===");
-
-			try {
-				// Step 6: Stop all recordings
-				System.out.println("Step 6: Stopping profiling recordings...");
-				stopProfiling(jvmProcess.pid());
-
-				// Step 7: Save snapshot
-				System.out.println("Step 7: Saving profiling snapshot...");
-				saveProfilerSnapshot();
-
-				// Step 8: Export snapshot to CSVs
-				System.out.println("Step 8: Exporting snapshot to CSVs...");
-				exportProfilerSnapshot();
-
-				System.out.println("=== Profiling cleanup completed ===");
-			} catch (Exception e) {
-				System.err.println("Error during profiling cleanup: " + e.getMessage());
-				e.printStackTrace();
-			}
-
-			// Final cleanup
-			if (jvmProcess.isAlive()) {
-				System.out.println("Terminating JVM process...");
-				jvmProcess.destroyForcibly();
-			}
-		}));
 	}
 
 	// Programmatically attach debugger (JDWP) and resume the suspended JVM using
@@ -303,104 +289,6 @@ public class Launcher {
 		}
 	}
 
-	private void attachShutdownListener(final VirtualMachine vm, final String mainClass, long jvmPid) {
-		Thread eventThread = new Thread(() -> {
-			try {
-				EventRequestManager erm = vm.eventRequestManager();
-
-				// Fire on main() exit
-				MethodExitRequest mer = erm.createMethodExitRequest();
-				mer.addClassFilter(mainClass);
-				mer.setSuspendPolicy(EventRequest.SUSPEND_EVENT_THREAD); // suspend only main thread
-				mer.enable();
-
-				// Fallback: VMDeath
-				VMDeathRequest vdr = erm.createVMDeathRequest();
-				vdr.setSuspendPolicy(EventRequest.SUSPEND_NONE);
-				vdr.enable();
-
-				EventQueue queue = vm.eventQueue();
-
-				boolean done = false;
-				while (!done) {
-					EventSet eventSet = queue.remove(); // blocking
-					for (Event event : eventSet) {
-
-						if (event instanceof MethodExitEvent mee) {
-							if ("main".equals(mee.method().name())
-									&& mainClass.equals(mee.method().declaringType().name())) {
-
-								System.out.println("main() exited — PAUSING JVM for snapshot...");
-
-								runProfilerCleanupAPI(jvmPid);
-
-								done = true;
-							}
-						}
-
-						if (event instanceof VMDeathEvent || event instanceof VMDisconnectEvent) {
-							System.out.println("VMDeath fallback");
-							runProfilerCleanupAPI(jvmPid);
-							done = true;
-						}
-					}
-
-					// Resume suspended threads (if main was suspended)
-					eventSet.resume();
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					vm.dispose();
-				} catch (Throwable ignored) {
-				}
-			}
-		});
-
-		eventThread.setDaemon(true);
-		eventThread.start();
-	}
-
-	private void runProfilerCleanupAPI(long jvmPid) {
-		try {
-			System.out.println("Stopping profiling via jpcontroller CLI...");
-
-			String outputDir = Constants.PROJECT_ROOT + "/" + JPROFILER_OUTPUT_DIR;
-			Files.createDirectories(Paths.get(outputDir));
-			String snapshotPath = Paths.get(outputDir, SNAPSHOT_FILE).toString();
-
-			System.out.println("Stop recordings...");
-			executeJpcontrollerCommand("stopCPURecording", "", jvmPid);
-			executeJpcontrollerCommand("stopAllocRecording", "", jvmPid);
-			executeJpcontrollerCommand("stopMonitorRecording", "", jvmPid);
-
-			System.out.println("Saving snapshot to: " + snapshotPath);
-			executeJpcontrollerCommand("saveSnapshot", snapshotPath, jvmPid);
-
-			// Verify snapshot was created
-			File snapshotFile = new File(snapshotPath);
-			if (snapshotFile.exists()) {
-				System.out.println("Snapshot file created successfully: " + snapshotPath + " ( " + snapshotFile.length()
-						+ " bytes)");
-			} else {
-				System.err.println("WARNING: Snapshot file was NOT created: " + snapshotPath);
-			}
-
-			int exitCode = exportProfilerSnapshot();
-
-			if (exitCode != 0) {
-				System.err.println("Exporting profiler snapshot failed with exit code: " + exitCode);
-			}
-
-			System.out.println("Profiling cleanup/export completed.");
-		} catch (Exception e) {
-			System.err.println("Profiler cleanup failed: " + e.getMessage());
-			e.printStackTrace();
-		}
-	}
-
 	// Execute JPController command via CLI using explicit JMX port
 	public static void executeJpcontrollerCommand(final String command, final String parameter, long jvmPid)
 			throws Exception {
@@ -444,7 +332,7 @@ public class Launcher {
 
 	private void stopProfiling(long jvmPid) throws Exception {
 		System.out.println("Stopping all profiling recordings...");
-		String outputDir = Constants.PROJECT_ROOT + "/" + JPROFILER_OUTPUT_DIR;
+		String outputDir = Constants.SPECTRA_ROOT + "/" + JPROFILER_OUTPUT_DIR;
 		String snapshotPath = outputDir + SNAPSHOT_FILE;
 
 		try {
@@ -467,7 +355,7 @@ public class Launcher {
 		Files.write(cmdFile, commands.getBytes());
 
 		ProcessBuilder pb = new ProcessBuilder(Constants.JPCONTROLLER_PATH, "-n", "-f",
-				Constants.PROJECT_ROOT + "/Output/JProfiler/command.txt");
+				Constants.SPECTRA_ROOT + "/Output/JProfiler/command.txt");
 
 		Process p = pb.inheritIO().start();
 
@@ -487,7 +375,7 @@ public class Launcher {
 	// Step 7: Save profiler snapshot
 
 	private void saveProfilerSnapshot() throws Exception {
-		String outputDir = Constants.PROJECT_ROOT + File.separator + JPROFILER_OUTPUT_DIR;
+		String outputDir = Constants.SPECTRA_ROOT + File.separator + JPROFILER_OUTPUT_DIR;
 		String snapshotPath = outputDir + SNAPSHOT_FILE;
 
 		// Create output directory if it doesn't exist
@@ -516,25 +404,7 @@ public class Launcher {
 
 	// Step 8: Export profiler snapshot to CSVs
 
-	public static int exportProfilerSnapshot() throws Exception {
-		String outputDir = Constants.PROJECT_ROOT + "/" + JPROFILER_OUTPUT_DIR;
-		String snapshotPath = outputDir + SNAPSHOT_FILE;
 
-		try {
-			final List<String> command = new ArrayList<>(Constants.JPEXPORT_COMMAND);
-
-			System.out.println("Exporting snapshot to CSVs in: " + outputDir);
-			Process process = new ProcessBuilder(command).inheritIO().start();
-			int exitCode = process.waitFor();
-			if (exitCode != 0) {
-				System.err.println("JPController command '" + command + "' returned exit code: " + exitCode);
-			}
-			return exitCode;
-		} catch (Exception e) {
-			System.err.println("Error exporting snapshot to CSVs: " + e.getMessage());
-			throw e;
-		}
-	}
 
 	// Phase 2: Joularjx profiling (similar pattern)
 
@@ -549,18 +419,14 @@ public class Launcher {
 		command.add("sudo");
 		command.add("-S");
 		command.add(javaPath + File.separator + "bin" + File.separator + "java");
-		command.add("-Djoularjx.config=" + Constants.PROJECT_ROOT + "/src/test/resources/config.properties");
 		command.add("-javaagent:" + spectraAgentPath);
+		command.add("-Djoularjx.config=" + Constants.SPECTRA_ROOT + "/src/test/resources/config.properties");
 		command.add("-cp");
 		// Include both main classes and test classes for JUnit execution
-		String testClasses = "/Users/mac/Documents/RA/SPECTRA/target/test-classes";
-		// Add JUnit and Hamcrest to classpath
-		String junitJar = System.getProperty("user.home") + "/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar";
-		String hamcrestJar = System.getProperty("user.home")
-				+ "/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar";
-		command.add(aClasspath + File.pathSeparator + testClasses + File.pathSeparator + junitJar + File.pathSeparator
-				+ hamcrestJar);
-		command.add(aFQN);
+		String testClasses = Constants.SPECTRA_ROOT + "/target/test-classes";
+		command.add(aClasspath + File.pathSeparator + testClasses);
+		command.add("-Dspectra.realMain=" + aFQN);
+		command.add("ca.concordia.ptidej.spectra.ChildJVM.SpectraMain");
 
 		if (programArgs != null) {
 			for (String arg : programArgs) {
@@ -573,8 +439,7 @@ public class Launcher {
 		processBuilder.redirectErrorStream(true);
 
 		// Change Current Working Directory
-		//File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/POM/");
-        File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/CPL/");
+        File newCurrentWorkingDirectory = new File(Constants.PROJECT_ROOT);
 
         processBuilder.directory(newCurrentWorkingDirectory);
 		final Process process = processBuilder.start();
@@ -636,7 +501,7 @@ public class Launcher {
 	private void enterPassword(final Process process) throws IOException {
 		try (OutputStream os = process.getOutputStream()) {
 			// Replace with your actual password handling mechanism
-			os.write("1234\n".getBytes());
+			os.write("0705\n".getBytes());
 			os.flush();
 		}
 	}
@@ -694,6 +559,7 @@ public class Launcher {
 			System.out.println("Attached and listening for VMDeath events");
 
 			attachShutdownListener(vm, aFQN, controller);
+
 			vm.resume();
 
 			// Step 5: Stop profiling recordings BEFORE saving snapshot
@@ -718,7 +584,7 @@ public class Launcher {
 
 //            // Step 6: Save snapshot WHILE JVM IS STILL ALIVE
 			System.out.println("\nStep 6: Saving snapshot...");
-			String outputDir = Constants.PROJECT_ROOT + File.separator + JPROFILER_OUTPUT_DIR;
+			String outputDir = Constants.SPECTRA_ROOT + File.separator + JPROFILER_OUTPUT_DIR;
 			String snapshotPath = outputDir + SNAPSHOT_FILE;
 //            controller.saveSnapshot(snapshotPath);
 
@@ -731,7 +597,7 @@ public class Launcher {
 
 			// Step 7: Export to CSV
 			System.out.println("\nStep 7: Exporting profiling data to CSV...");
-			// controller.exportToCSV(snapshotPath, outputDir);
+			controller.exportToCSV(snapshotPath, outputDir);
 
 			System.out.println("\n===   SUCCESS ===");
 			System.out.println("Profiling data saved to: " + outputDir);
@@ -761,7 +627,6 @@ public class Launcher {
 		Thread eventThread = new Thread(() -> {
 			try {
 				EventRequestManager erm = vm.eventRequestManager();
-
 				// Fire on main() exit
 				MethodExitRequest mer = erm.createMethodExitRequest();
 				mer.addClassFilter(mainClass);
@@ -793,7 +658,7 @@ public class Launcher {
 
 								// Step 6: Save snapshot WHILE JVM IS STILL ALIVE
 								System.out.println("\nStep 6: Saving snapshot...");
-								String outputDir = Constants.PROJECT_ROOT + File.separator + JPROFILER_OUTPUT_DIR;
+								String outputDir = Constants.SPECTRA_ROOT + File.separator + JPROFILER_OUTPUT_DIR;
 								String snapshotPath = outputDir + SNAPSHOT_FILE;
 								controller.saveSnapshot(snapshotPath);
 								controller.exportToCSV(snapshotPath, outputDir);
@@ -809,7 +674,7 @@ public class Launcher {
 
 							// Step 6: Save snapshot WHILE JVM IS STILL ALIVE
 							System.out.println("\nStep 6: Saving snapshot...");
-							String outputDir = Constants.PROJECT_ROOT + File.separator + JPROFILER_OUTPUT_DIR;
+							String outputDir = Constants.SPECTRA_ROOT + File.separator + JPROFILER_OUTPUT_DIR;
 							String snapshotPath = outputDir + SNAPSHOT_FILE;
 							controller.saveSnapshot(snapshotPath);
 							controller.exportToCSV(snapshotPath, outputDir);

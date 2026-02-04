@@ -11,7 +11,7 @@ import org.noureddine.joularjx.result.ResultWriter;
 import org.noureddine.joularjx.utils.AgentProperties;
 import org.noureddine.joularjx.utils.JoularJXLogging;
 
-import static ca.concordia.ptidej.spectra.Profile.Constants.PROJECT_ROOT;
+import static ca.concordia.ptidej.spectra.Profile.Constants.SPECTRA_ROOT;
 
 
 /**
@@ -62,8 +62,8 @@ public class ShutdownHandler extends org.noureddine.joularjx.monitor.ShutdownHan
 
         try {
             //Writing methods and filtered methods energy consumption
-            this.saveResults(status.getMethodsConsumedEnergy(), PROJECT_ROOT + "/Output/Joularjx/data"+String.format("/joularJX-%d-all-methods-energy", appPid));
-            this.saveResults(status.getFilteredMethodsConsumedEnergy(), PROJECT_ROOT + "/Output/Joularjx/data"+String.format("/joularJX-%d-filtered-methods-energy", appPid));
+            this.saveResults(status.getMethodsConsumedEnergy(), SPECTRA_ROOT + "/Output/Joularjx/data"+String.format("/joularJX-%d-all-methods-energy", appPid));
+            this.saveResults(status.getFilteredMethodsConsumedEnergy(), SPECTRA_ROOT + "/Output/Joularjx/data"+String.format("/joularJX-%d-filtered-methods-energy", appPid));
 
             //Writing consumption evolution files only if the option is enabled
             if (this.properties.trackConsumptionEvolution()) {
@@ -99,7 +99,7 @@ public class ShutdownHandler extends org.noureddine.joularjx.monitor.ShutdownHan
      */
     public <K> void saveResults(Map<K, Double> consumedEnergyMap, String filePath) throws IOException {
         //String fileName = String.format("joularJX-%d-%s-%s", appPid, nodeType, dataType);
-        resultWriter.setTarget(filePath, true);
+        resultWriter.setTarget(filePath, false);
 
         for (var entry : consumedEnergyMap.entrySet()) {
             resultWriter.write(entry.getKey().toString(), entry.getValue());

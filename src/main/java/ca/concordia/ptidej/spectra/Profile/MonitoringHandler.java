@@ -45,7 +45,7 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
     private final OperatingSystemMXBean osBean;
     private final ThreadMXBean threadBean;
     private final ResultTreeManager resultTreeManager;
-    private final long sampleTimeMilliseconds = 1000;
+    private final long sampleTimeMilliseconds = 1;
     private final long sampleRateMilliseconds;
     private final int sampleIterations;
 
@@ -89,7 +89,12 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
 
                 final Map<Thread, List<StackTraceElement[]>> samples = sample();
                 var methodsStats = extractStats(samples, methodName -> true);
-                var methodsStatsFiltered = extractStats(samples, properties::filtersMethod);
+                //var methodsStatsFiltered = extractStats(samples, properties::filtersMethod);
+
+                for (Entry<Thread, Map<String, Integer>> e: methodsStats.entrySet())
+                    for (Entry<String, Integer> entry: e.getValue().entrySet())
+                        logger.log(Level.INFO,String.format("id:%s %s, %d",e.getKey().getName(), entry.getKey(), entry.getValue()));
+
 
                 //Collecting call trees stats only if the option is enabled
                 Map<Thread, Map<CallTree, Integer>> callTreesStats = null;
@@ -134,7 +139,7 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
                 var threadCpuTimePercentages = getThreadsCpuTimePercentage(methodsStats, threadsCpuTime, processEnergy);
 
                 updateMethodsConsumedEnergy(methodsStats, threadCpuTimePercentages, status::addMethodConsumedEnergy, Scope.ALL);
-                updateMethodsConsumedEnergy(methodsStatsFiltered, threadCpuTimePercentages, status::addFilteredMethodConsumedEnergy, Scope.FILTERED);
+                //updateMethodsConsumedEnergy(methodsStatsFiltered, threadCpuTimePercentages, status::addFilteredMethodConsumedEnergy, Scope.FILTERED);
 
                 //Updating call trees consumption if option is enabled
                 if (this.properties.callTreesConsumption()) {
@@ -157,11 +162,11 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
                 if (this.properties.savesRuntimeData()) {
                     if (this.properties.overwritesRuntimeData()) {
                         this.saveResults(methodsStats, threadCpuTimePercentages, this.resultTreeManager.getAllRuntimeMethodsPath() + String.format("/joularJX--all-methods-power", appPid));
-                        this.saveResults(methodsStatsFiltered, threadCpuTimePercentages, this.resultTreeManager.getFilteredRuntimeMethodsPath() + String.format("/joularJX--filtered-methods-power", appPid));
+                        //this.saveResults(methodsStatsFiltered, threadCpuTimePercentages, this.resultTreeManager.getFilteredRuntimeMethodsPath() + String.format("/joularJX--filtered-methods-power", appPid));
                     } else {
                         this.saveResults(methodsStats, threadCpuTimePercentages,
                                 this.resultTreeManager.getAllRuntimeMethodsPath() + String.format("/joularJX-%d-all-methods-power", appPid));
-                        this.saveResults(methodsStatsFiltered, threadCpuTimePercentages, this.resultTreeManager.getFilteredRuntimeMethodsPath() + String.format("/joularJX-%d-filtered-methods-power", appPid  ));
+                        //this.saveResults(methodsStatsFiltered, threadCpuTimePercentages, this.resultTreeManager.getFilteredRuntimeMethodsPath() + String.format("/joularJX-%d-filtered-methods-power", appPid  ));
                     }
                 }
 
@@ -183,8 +188,8 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
      */
     private Map<Thread, List<StackTraceElement[]>> sample() {
         Map<Thread, List<StackTraceElement[]>> result = new HashMap<>();
-        try {
-            for (int duration = 0; duration < sampleTimeMilliseconds; duration += sampleRateMilliseconds) {
+        //try {
+            //for (int duration = 0; duration < sampleTimeMilliseconds; duration += sampleRateMilliseconds) {
                 for (var entry : Thread.getAllStackTraces().entrySet()) {
                     String threadName = entry.getKey().getName();
                     //Ignoring agent related threads, if option is enabled
@@ -200,11 +205,11 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
                     }
                 }
 
-                Thread.sleep(sampleRateMilliseconds);
-            }
-        } catch (InterruptedException exception) {
-            Thread.currentThread().interrupt();
-        }
+               // Thread.sleep(sampleRateMilliseconds);
+            //}
+//        } catch (InterruptedException exception) {
+//            Thread.currentThread().interrupt();
+//        }
 
         return result;
     }
@@ -232,8 +237,9 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
                         int lineNumber = stackTraceElement.getLineNumber();
 
                         // Use the resolve method to get the full method name
-                        String fullMethodName = resolve(Class.forName(className), methodName,
-                                lineNumber);
+                        String fullMethodName = className.contains("LambdaForm$") || className.contains("String$") ? className : resolve(Class.forName(className), methodName,lineNumber);
+
+                                //resolve(Class.forName(className), methodName,lineNumber);
                         if (fullMethodName != null && covers.test(fullMethodName)) {
                             target.merge(fullMethodName, 1, Integer::sum);
                             break;

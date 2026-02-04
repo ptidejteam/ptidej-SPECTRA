@@ -1,101 +1,101 @@
 "Hot Spot","Self Time (microseconds)","Average Time (microseconds)","Invocations"
-"com.ibm.toad.cfparse.utils.CPUtils.descriptor2java(java.lang.String, int, java.lang.StringBuffer)",19912867,15,1249769
-"java.lang.String.charAt(int)",12448673,0,39704938
-"java.lang.StringBuffer.append(char)",5988619,0,12570585
-"java.lang.StringBuffer.toString()",5008585,4,1193618
-"java.lang.String.length()",4723825,0,14980479
-"java.lang.String.substring(int, int)",4625254,4,927853
-"com.ibm.toad.cfparse.utils.CPUtils.method2java(java.lang.String)",4464794,9,491251
-"java.lang.StringBuffer.<init>()",3989183,6,617441
-"java.lang.Class.getDeclaredMethods()",3647235,46,78255
-"java.util.HashMap.put(java.lang.Object, java.lang.Object)",2876105,4,646329
-"com.ibm.toad.cfparse.MethodInfo.getParams()",2743104,8,331262
-"java.lang.String.substring(int)",2447769,5,417846
-"java.lang.StringBuffer.append(java.lang.String)",2371751,0,2852643
-"java.lang.StringBuffer.<init>(java.lang.String)",2365532,4,493140
-"com.ibm.toad.cfparse.ConstantPool.getAsString(int)",2263459,1,1755696
-"com.ibm.toad.cfparse.ConstantPool$Utf8Entry.rewrite(java.lang.String)",2252424,30,73589
-"util.io.NamedInputStream.<init>(java.lang.String, java.io.InputStream)",2017276,9888,204
-"padl.kernel.impl.AbstractGenericContainerOfConstituents.getConstituentFromID(char[ ])",1901029,27,69490
-"java.util.Vector.<init>()",1883760,5,342454
-"java.lang.String.toCharArray()",1855435,2,809940
-"com.ibm.toad.cfparse.instruction.ImmutableCodeSegment.readCode(byte[ ])",1470771,99,14757
-"java.lang.String.trim()",1447418,2,715113
-"padl.kernel.impl.AbstractGenericContainerOfConstituents.updatePathUponAddition(padl.kernel.INavigable, padl.kernel.IConstituent)",1401092,21,65930
-"java.lang.Integer.valueOf(int)",1368310,1,1294819
-"java.util.Iterator.hasNext()",1280460,0,1896324
-"java.lang.String.equals(java.lang.Object)",1274878,0,2723321
-"padl.kernel.impl.AbstractGenericContainerOfConstituents$GenericObservable.fireModelChange(java.lang.String, padl.event.IEvent)",1160467,13,83747
-"java.util.List.add(java.lang.Object)",1152588,2,571245
-"padl.creator.classfile.util.ExtendedMethodInfo.<init>(com.ibm.toad.cfparse.ClassFile, com.ibm.toad.cfparse.MethodInfo)",1145461,14,81525
-"java.lang.reflect.Method.invoke(java.lang.Object, java.lang.Object[ ])",1075392,14,73488
-"com.ibm.toad.cfparse.ConstantPool.get(int)",1036283,0,2842831
-"java.util.Iterator.next()",1032462,0,1714232
-"com.ibm.toad.cfparse.ConstantPool$NameAndTypeEntry.getAsString()",921955,9,97698
-"util.lang.CFParseBCELConvertorAdhoc.searchFor(com.ibm.toad.cfparse.ConstantPool, java.lang.String, java.lang.Class)",909851,172,5277
-"padl.creator.classfile.AbstractClassFileCreator.createElements(padl.kernel.ICodeLevelModel, java.util.List, padl.kernel.impl.ConstituentsRepository, com.ibm.toad.cfparse.ClassFile[ ])",879288,54955,16
-"java.lang.String.replace(char, char)",807515,2,313310
-"java.lang.String.valueOf(char[ ])",752080,4,165271
-"java.util.ArrayList.<init>()",737278,4,168666
-"padl.creator.classfile.relationship.DeepMethodInvocationAnalyzer.createCouplesForInvocations(padl.creator.classfile.util.ExtendedMethodInfo, java.util.List, java.util.List, byte[ ], java.util.List, int)",733840,6,109813
-"com.ibm.toad.cfparse.ConstantPool.find(int, java.lang.String)",723526,5,124170
-"java.lang.String.indexOf(int)",685192,2,228509
-"padl.kernel.impl.Constituent.getID()",682819,0,2236249
-"padl.creator.classfile.relationship.DeepMethodInvocationAnalyzer.processOperator(padl.creator.classfile.util.ExtendedMethodInfo, byte[ ], java.util.List, java.util.List, java.util.List, int, int, int, int)",675149,17,37869
-"padl.creator.classfile.relationship.RelationshipAnalyzer.analyseDeepMethodInvocations(padl.kernel.IFirstClassEntity, padl.creator.classfile.util.ExtendedMethodInfo)",653958,120,5435
-"java.util.Arrays.equals(char[ ], char[ ])",647037,0,1882460
-"padl.util.CharArrayComparator.compare(java.lang.Object, java.lang.Object)",646157,0,1704523
-"java.util.Map.get(java.lang.Object)",637127,5,120700
-"java.lang.Integer.parseInt(java.lang.String)",610652,149,4081
-"util.lang.CFParseBCELConvertorAdhoc.addMethods(com.ibm.toad.cfparse.ClassFile, org.apache.bcel.classfile.JavaClass)",604482,2158,280
-"padl.kernel.impl.MethodInvocation$NonConcurrentIterator.<init>(padl.kernel.impl.MethodInvocation)",589568,13,45324
-"java.util.Map.put(java.lang.Object, java.lang.Object)",576140,6,95224
-"java.lang.String.indexOf(java.lang.String)",527977,0,1039845
-"java.io.DataInputStream.readUTF()",504556,12,41480
-"com.ibm.toad.cfparse.ConstantPool$Utf8Entry.getAsString()",502089,0,1808493
-"com.ibm.toad.cfparse.ConstantPool$ClassEntry.getAsJava()",476361,1,274306
-"java.io.PrintWriter.println(java.lang.String)",463443,273,1695
-"padl.kernel.impl.AbstractGenericContainerOfConstituents.addUniqueIDToEnclosedConstituent(padl.kernel.IConstituent)",441896,8,50199
-"com.ibm.toad.cfparse.ConstantPool.getAsJava(int)",432230,1,357571
-"padl.creator.classfile.AbstractClassFileCreator.recognizeMethod(java.util.List, padl.kernel.ICodeLevelModel)",431589,711,607
-"padl.creator.classfile.relationship.LightMethodInvocationAnalyzer.handleInvokeVirtual(padl.creator.classfile.relationship.Context, int)",420930,40,10460
-"padl.kernel.impl.AbstractGenericContainerOfConstituents.doesContainConstituentWithID(char[ ])",409372,12,33146
-"padl.kernel.impl.AbstractGenericContainerOfConstituents$NonConcurrentIterator.next()",397231,0,1417249
-"padl.kernel.impl.AbstractGenericContainerOfConstituents$NonConcurrentIterator.hasNext()",396031,0,1443999
-"com.ibm.toad.cfparse.ConstantPool.read(java.io.DataInputStream)",380713,477,797
-"java.util.List.iterator()",370101,3,106227
-"java.util.List.get(int)",346884,0,901344
-"com.ibm.toad.cfparse.ConstantPoolEntry.<init>()",342255,2,114796
-"padl.creator.classfile.relationship.DeepMethodInvocationAnalyzer.popOperands(padl.creator.classfile.util.ExtendedMethodInfo, int, int, java.util.List, java.util.List, byte[ ])",339668,8,40642
-"padl.creator.classfile.relationship.LightMethodInvocationAnalyzer.handleRequest(int)",339652,2,143306
-"java.lang.Thread.getStackTrace()",334136,226,1475
-"java.lang.StringBuffer.<init>(int)",332676,4,73590
-"util.lang.CFParseBCELConvertorAdhoc.addConstants(com.ibm.toad.cfparse.ClassFile, org.apache.bcel.classfile.JavaClass)",327016,1167,280
-"padl.kernel.impl.Constituent.<init>(char[ ])",326142,5,63132
-"java.lang.System.arraycopy(java.lang.Object, int, java.lang.Object, int, int)",322819,0,461368
-"java.util.HashMap.get(java.lang.Object)",321364,1,190738
-"com.ibm.toad.cfparse.ConstantPool$FieldrefEntry.getAsString()",319644,89,3557
-"padl.kernel.impl.AbstractGenericContainerOfConstituents$NonConcurrentIterator.<init>(padl.kernel.impl.AbstractGenericContainerOfConstituents)",310046,3,91571
-"org.apache.commons.lang3.ArrayUtils.subarray(char[ ], int, int)",309618,3,95936
-"padl.creator.classfile.relationship.DeepMethodInvocationAnalyzer.getInfosAt2Bytes(int, byte[ ], com.ibm.toad.cfparse.ConstantPool)",301604,5,58089
-"java.util.Set.iterator()",298504,4,65058
-"padl.util.Util.isCollection(char[ ])",297862,6,46893
-"padl.creator.classfile.relationship.DeepMethodInvocationAnalyzer.createCouples(padl.creator.classfile.util.ExtendedMethodInfo, java.util.List, java.util.List, byte[ ], java.util.List)",296664,24,12117
-"padl.kernel.impl.AbstractGenericContainerOfConstituents.directlyAddConstituent(padl.kernel.IConstituent)",295888,4,60438
-"java.util.stream.Stream.toArray(java.util.function.IntFunction)",290110,160,1803
-"com.ibm.toad.cfparse.ConstantPool$MethodrefEntry.getIndices()",286920,3,78529
-"com.ibm.toad.cfparse.ConstantPool.addNewElement(com.ibm.toad.cfparse.ConstantPoolEntry)",271905,7,37497
-"padl.creator.classfile.relationship.RelationshipAnalyzer.analyseLightMethodInvocations(padl.kernel.IFirstClassEntity, padl.creator.classfile.util.ExtendedMethodInfo)",266473,49,5435
-"com.ibm.toad.cfparse.ConstantPool$NameAndTypeEntry.getAsJava()",264915,3,86110
-"pom.metrics.MetricsRepository.<init>()",259334,259334,1
-"org.apache.bcel.classfile.ConstantPool.getConstant(int, java.lang.Class)",258683,3,69955
-"java.lang.String.startsWith(java.lang.String)",258294,0,567746
-"java.lang.Object.getClass()",256471,0,595917
-"com.ibm.toad.cfparse.utils.CPUtils.internal2java(java.lang.String)",240442,1,130653
-"java.lang.Object.equals(java.lang.Object)",238127,0,478914
-"padl.util.Util.isPrimtiveType(char[ ])",236196,6,34637
-"java.lang.Integer.intValue()",234895,0,734126
-"java.lang.String.valueOf(int)",234749,4,50905
-"java.lang.StringBuffer.append(char[ ])",234338,3,75498
-"padl.kernel.impl.MethodInvocation.<init>(int, int, int, padl.kernel.IFirstClassEntity, padl.kernel.IFirstClassEntity)",230991,5,45124
-"com.ibm.toad.cfparse.ConstantPool$Utf8Entry.<init>(java.lang.String)",230692,3,70950
+"java.lang.String.<init>(byte[ ], byte)",482183,"n/a","n/a"
+"java.lang.ClassLoader.defineClass0",389464,"n/a","n/a"
+"java.lang.String.<init>(java.nio.charset.Charset, byte[ ], int, int)",153215,"n/a","n/a"
+"java.util.Arrays.copyOfRange",151012,"n/a","n/a"
+"java.lang.AbstractStringBuilder.<init>(int)",139762,"n/a","n/a"
+"java.io.FileInputStream.readBytes",98221,"n/a","n/a"
+"java.lang.ClassLoader.defineClass1",91261,"n/a","n/a"
+"java.lang.String.<init>(java.lang.AbstractStringBuilder, java.lang.Void)",78249,"n/a","n/a"
+"java.util.Arrays.copyOf(byte[ ], int)",68412,"n/a","n/a"
+"java.util.HashMap$Node.<init>",67232,"n/a","n/a"
+"java.io.FileInputStream.read0",39885,"n/a","n/a"
+"com.ibm.toad.cfparse.ConstantPoolEntry.<init>",38199,"n/a","n/a"
+"java.util.HashMap.hash",32686,"n/a","n/a"
+"java.util.regex.Pattern.next",30432,"n/a","n/a"
+"java.io.DataInputStream.readUTF",30074,"n/a","n/a"
+"java.lang.AbstractStringBuilder.<init>(java.lang.String)",29721,"n/a","n/a"
+"org.apache.bcel.classfile.Constant.<init>",24911,"n/a","n/a"
+"java.io.FileInputStream.open0",23784,"n/a","n/a"
+"java.lang.Number.<init>",20790,"n/a","n/a"
+"com.ibm.toad.cfparse.attributes.AttrInfo.<init>",19399,"n/a","n/a"
+"com.ibm.toad.cfparse.attributes.AttrInfoList.read",19172,"n/a","n/a"
+"java.util.stream.PipelineHelper.<init>",17497,"n/a","n/a"
+"com.ibm.toad.cfparse.ConstantPool$Utf8Entry.rewrite",16824,"n/a","n/a"
+"java.io.DataInputStream.readFully",16046,"n/a","n/a"
+"java.lang.Class.getDeclaredConstructors0",15247,"n/a","n/a"
+"jdk.internal.reflect.MethodHandleAccessorFactory.makeSpecializedTarget",15018,"n/a","n/a"
+"java.lang.Record.<init>",14608,"n/a","n/a"
+"java.util.StringJoiner.<init>",14395,"n/a","n/a"
+"java.lang.ClassLoader.findBootstrapClass",14034,"n/a","n/a"
+"jdk.internal.reflect.MethodHandleAccessorFactory.getDirectMethod",13573,"n/a","n/a"
+"java.lang.StringConcatHelper.newArray",12634,"n/a","n/a"
+"sun.nio.fs.UnixFileSystemProvider.newDirectoryStream",11994,"n/a","n/a"
+"java.util.AbstractCollection.<init>",11850,"n/a","n/a"
+"java.lang.reflect.Array.newArray",11740,"n/a","n/a"
+"java.io.InputStream.<init>",11443,"n/a","n/a"
+"java.util.zip.Inflater.inflateBytesBytes",11246,"n/a","n/a"
+"java.util.zip.ZipFile$Source.initCEN",11015,"n/a","n/a"
+"java.util.stream.ReduceOps$Box.<init>",10816,"n/a","n/a"
+"java.io.OutputStream.<init>",9209,"n/a","n/a"
+"org.apache.bcel.classfile.Attribute.readAttribute",8406,"n/a","n/a"
+"jdk.internal.classfile.impl.DirectCodeBuilder.build",8343,"n/a","n/a"
+"java.util.StringJoiner.add",8315,"n/a","n/a"
+"jdk.internal.misc.Unsafe.allocateInstance",8181,"n/a","n/a"
+"com.ibm.toad.cfparse.ConstantPool.toString",8166,"n/a","n/a"
+"org.apache.bcel.classfile.Code.<init>",7997,"n/a","n/a"
+"org.apache.bcel.classfile.Attribute.<init>",7880,"n/a","n/a"
+"java.util.Formatter.parse",7867,"n/a","n/a"
+"java.util.HashMap.resize",7362,"n/a","n/a"
+"java.util.stream.Sink$ChainedReference.<init>",7354,"n/a","n/a"
+"com.ibm.toad.cfparse.utils.CPUtils.descriptor2java",7037,"n/a","n/a"
+"com.ibm.toad.cfparse.attributes.CodeAttrInfo.read",6956,"n/a","n/a"
+"java.io.RandomAccessFile.open0",6778,"n/a","n/a"
+"util.lang.CFParseBCELConvertorAdhoc.addMethods",6772,"n/a","n/a"
+"java.lang.Integer.toUnsignedString0",6672,"n/a","n/a"
+"java.lang.Class.getDeclaredMethods0",6657,"n/a","n/a"
+"java.io.UnixFileSystem.getBooleanAttributes0",6404,"n/a","n/a"
+"util.lang.CFParseBCELConvertorAdhoc.addConstants",5917,"n/a","n/a"
+"org.apache.bcel.classfile.LineNumber.<init>",5916,"n/a","n/a"
+"java.lang.String.<init>(java.lang.String)",5835,"n/a","n/a"
+"org.apache.bcel.classfile.FieldOrMethod.<init>",5780,"n/a","n/a"
+"java.util.Spliterators$ArraySpliterator.<init>",5750,"n/a","n/a"
+"java.util.regex.CharPredicates.forUnicodeBlock",5745,"n/a","n/a"
+"com.ibm.toad.cfparse.ConstantPool.read",5740,"n/a","n/a"
+"java.util.regex.Matcher.<init>",4759,"n/a","n/a"
+"com.ibm.toad.cfparse.MethodInfo.<init>",4613,"n/a","n/a"
+"java.util.regex.Pattern.compile",4596,"n/a","n/a"
+"java.lang.String.length",4589,"n/a","n/a"
+"com.ibm.toad.cfparse.ConstantPool.resize",4520,"n/a","n/a"
+"com.ibm.toad.cfparse.attributes.CodeAttrInfo.<init>",4517,"n/a","n/a"
+"org.apache.bcel.classfile.AnnotationEntry.lambda$createAnnotationEntries$1",4506,"n/a","n/a"
+"com.ibm.toad.cfparse.attributes.AttrInfoList.<init>",4475,"n/a","n/a"
+"com.ibm.toad.cfparse.ConstantPool.addNewElement",4448,"n/a","n/a"
+"sun.util.locale.provider.NumberFormatProviderImpl.getInstance",4400,"n/a","n/a"
+"java.util.stream.Collectors.joining",3801,"n/a","n/a"
+"java.lang.Class.forName0",3712,"n/a","n/a"
+"java.lang.String.join",3673,"n/a","n/a"
+"org.apache.bcel.classfile.LocalVariableTable.<init>",3542,"n/a","n/a"
+"jdk.internal.util.DecimalDigits.uncheckedGetCharsLatin1",3541,"n/a","n/a"
+"java.util.stream.ReferencePipeline$7$1FlatMap.<init>",3516,"n/a","n/a"
+"jdk.internal.reflect.DirectMethodHandleAccessor.invokeImpl",3514,"n/a","n/a"
+"java.lang.String.replace",3510,"n/a","n/a"
+"com.ibm.toad.cfparse.utils.Access.getFromString",3503,"n/a","n/a"
+"java.lang.StringConcatHelper.stringSize",3495,"n/a","n/a"
+"java.util.ArrayList$Itr.<init>",3493,"n/a","n/a"
+"java.lang.reflect.AccessibleObject.<init>",3471,"n/a","n/a"
+"java.io.DataOutputStream.<init>",3464,"n/a","n/a"
+"java.lang.StringConcatHelper.newArrayWithSuffix",3460,"n/a","n/a"
+"java.util.stream.ReduceOps$ReduceOp.<init>",3453,"n/a","n/a"
+"org.apache.bcel.classfile.AnnotationEntry.createAnnotationEntries",3438,"n/a","n/a"
+"java.lang.StringLatin1.indexOf",3424,"n/a","n/a"
+"java.util.Arrays.copyOf(java.lang.Object[ ], int, java.lang.Class)",3419,"n/a","n/a"
+"java.lang.ref.Reference.<init>",3393,"n/a","n/a"
+"java.lang.StringConcatHelper.stringOf",3383,"n/a","n/a"
+"com.ibm.toad.cfparse.ConstantPool$FieldrefEntry.getAsJava",3372,"n/a","n/a"
+"org.apache.bcel.classfile.LocalVariable.<init>",3357,"n/a","n/a"
+"java.util.HashMap.getNode",3334,"n/a","n/a"
+"java.io.RandomAccessFile.seek0",3315,"n/a","n/a"
+"com.ibm.toad.cfparse.attributes.LineNumberAttrInfo.read",3312,"n/a","n/a"
+"jdk.internal.loader.BuiltinClassLoader.loadClass",2742,"n/a","n/a"
+"java.util.zip.ZipFile$Source.getEntryPos",2710,"n/a","n/a"
