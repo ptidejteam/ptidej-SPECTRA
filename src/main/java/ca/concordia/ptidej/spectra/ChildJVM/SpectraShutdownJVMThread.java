@@ -49,11 +49,8 @@ public class SpectraShutdownJVMThread extends Thread {
             }
     }
 
-    public static int exportProfilerSnapshot() throws Exception {
-        String outputDir = Constants.SPECTRA_ROOT + "/" + JPROFILER_OUTPUT_DIR;
-        String snapshotPath = outputDir + SNAPSHOT_FILE;
-
-
+    private static void exportProfilerSnapshot() throws Exception {
+        String outputDir = Constants.SPECTRA_ROOT + Constants.JPROFILER_OUTPUT_DIR;
         try {
             final List<String> command = new ArrayList<>(Constants.JPEXPORT_COMMAND);
 
@@ -63,7 +60,6 @@ public class SpectraShutdownJVMThread extends Thread {
             if (exitCode != 0) {
                 System.err.println("JPController command '" + command + "' returned exit code: " + exitCode);
             }
-            return exitCode;
         } catch (Exception e) {
             System.err.println("Error exporting snapshot to CSVs: " + e.getMessage());
             throw e;

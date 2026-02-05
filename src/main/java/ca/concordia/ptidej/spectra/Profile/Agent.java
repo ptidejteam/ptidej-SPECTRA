@@ -56,25 +56,6 @@ public class Agent {
         OperatingSystemMXBean osBean = createOperatingSystemBean(cpu);
         MonitoringStatus status = new MonitoringStatus();
 
-//		final ResultWriter writer = new ResultWriter() {
-//			@Override
-//			public void write(final String methodName, final double methodPower) {
-//				System.out.println(methodName + " : " + methodPower);
-//			}
-//
-//			@Override
-//			public void setTarget(String name, boolean overwrite) throws IOException {
-//				// throw new RuntimeException("Boom!");
-//				//Thread.dumpStack();
-//
-//			}
-//
-//			@Override
-//			public void closeTarget() throws IOException {
-//				//Thread.dumpStack();
-//			}
-//		};
-
         ResultWriter writer = new CsvResultWriter();
         MonitoringHandler monitoringHandler = new MonitoringHandler(appPid, properties, writer, cpu, status, osBean,
                 threadBean, resultTreeManager);
