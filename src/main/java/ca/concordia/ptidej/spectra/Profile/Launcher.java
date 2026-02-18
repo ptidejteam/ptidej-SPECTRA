@@ -159,7 +159,7 @@ public class Launcher {
 
 		// JProfiler agent with suspended mode and specific port
 		command.add("-agentpath:" + jprofilerAgent + "=port=" + JPROFILER_PORT + ",nowait" + ",config="
-				+ Constants.PROJECT_ROOT + "/src/main/resources/jprofiler_config.xml" + ",session=spectra filter");
+				+ Constants.PROJECT_ROOT + "/src/main/resources/jprofiler_config.xml");
 
 		command.add("-cp");
 		command.add(classpath);
