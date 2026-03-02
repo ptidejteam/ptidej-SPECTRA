@@ -1,17 +1,9 @@
 package ca.concordia.ptidej.spectra.Profile;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.nio.file.*;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -36,6 +28,10 @@ import com.sun.jdi.connect.IllegalConnectorArgumentsException;
 import com.sun.jdi.event.VMDeathEvent;
 
 import ca.concordia.ptidej.spectra.analysis.CSVMerger;
+import ca.concordia.ptidej.spectra.analysis.CSVMerger.MethodData;
+
+import static ca.concordia.ptidej.spectra.analysis.CSVMerger.csvEscape;
+import static ca.concordia.ptidej.spectra.analysis.CSVMerger.normalizeSignature;
 
 public class Launcher {
 
@@ -46,39 +42,96 @@ public class Launcher {
 	private static final int PORT_CHECK_INTERVAL_MS = 500; // Check every 500ms
 	private static final String JPROFILER_OUTPUT_DIR = "Output/JProfiler/";
 	private static final String SNAPSHOT_FILE = "snapshot.jps";
+    private static final int NUM_JOULARJX_RUNS = 5;
+    private static final int NUM_JPROFILER_RUNS = 5;
 
-	private final AtomicBoolean cleanupRun = new AtomicBoolean(false);
+    private final AtomicBoolean cleanupRun = new AtomicBoolean(false);
 
 	public long launch(final ResultWriter aWriter, final String aClasspath, final String aFQN,
 			final String... programArgs) throws IOException {
 
 		// 1. Launch JProfiler
-		final long jprofilerPid = this.launchJProfilerPhase(aClasspath, aFQN, programArgs);
+        prepareJProfilerDataDirectory();
+        Path dataDir = Paths.get("Output", "JProfiler");
+        Files.createDirectories(dataDir);
+        List<Path> jprofilerXmls = new ArrayList<>();
 
-		if (jprofilerPid > 0) {
-			System.out.println("Finished Executing JProfiler with PID: " + jprofilerPid);
+        for (int run = 1; run <= NUM_JPROFILER_RUNS; run++) {
+            System.out.println("\n--- JProfiler run " + run + " / " + NUM_JPROFILER_RUNS + " ---");
 
-		} else {
-			throw new RuntimeException("Failed to launch JProfiler.");
-		}
+            // Launch one profiling session; expects export into Output/JProfiler after cleanup
+            long pid = launchJProfilerPhase(aClasspath, aFQN, programArgs);
+            if (pid <= 0) {
+                System.err.println("Warning: JProfiler run " + run + " returned non-positive PID");
+            }
 
-		// 2. Launch JVM with Joularjx and Spectra agent
-		System.out.println("Launching Joularjx with Spectra agent...");
-		long joularProcessId = launchJoularjxPhase(aClasspath, aFQN, programArgs);
 
-		if (joularProcessId > 0) {
-			System.out.println("Finished Executing Joular with PID: " + joularProcessId);
-			System.out.println("Launched all JVMs and tools successfully.");
-		} else {
-			throw new RuntimeException("Failed to launch Joular.");
-		}
+            else {
+                try {
+                    Path xmlPath = copyExportedCalltreeXML(run);
+                    jprofilerXmls.add(xmlPath);
+                } catch (IOException e) {
+                    System.err.println("Warning: failed to copy calltree for run " + run + ": " + e.getMessage());
+                }
+            }
+        }
 
-		// 3. Merge CSV results
-		if (programArgs.length > 0 || joularProcessId > 0) {
+        // Average per-run CSVs into single averaged CSV
+        try {
+            averageCalltreeXMLs(jprofilerXmls );
+            System.out.println("JProfiler calltree averaging completed.");
+        } catch (IOException e) {
+            System.err.println("Error averaging calltree CSVs: " + e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+//        // 2. Launch JoularJX multiple times and collect PIDs
+        System.out.println("\n=== Running JoularJX " + NUM_JOULARJX_RUNS + " times ===");
+        List<Long> joularProcessIds = new ArrayList<>();
+
+        for (int run = 1; run <= NUM_JOULARJX_RUNS; run++) {
+            System.out.println("\n--- JoularJX Run " + run + "/" + NUM_JOULARJX_RUNS + " ---");
+            long joularProcessId = launchJoularjxPhase(aClasspath, aFQN, programArgs);
+
+            if (joularProcessId > 0) {
+                joularProcessIds.add(joularProcessId);
+                System.out.println("Finished JoularJX Run " + run + " with PID: " + joularProcessId);
+
+              //  preserveJoularJXOutput(joularProcessId, run);
+            } else {
+                System.err.println("Warning: JoularJX Run " + run + " failed");
+            }
+        }
+
+        if (joularProcessIds.isEmpty()) {
+            throw new RuntimeException("All JoularJX runs failed");
+        }
+
+        System.out.println("\n=== All JoularJX runs completed successfully ===");
+        System.out.println("Process IDs: " + joularProcessIds);
+
+        // 3. Average JoularJX results from all runs
+        System.out.println("\n=== Averaging JoularJX Energy Data ===");
+        try {
+            averageJoularJXResults(joularProcessIds);
+            System.out.println("Energy data averaged successfully");
+        } catch (Exception e) {
+            System.err.println("Error averaging JoularJX results: " + e.getMessage());
+            e.printStackTrace();
+            throw new IOException("Failed to average JoularJX results", e);
+        }
+        // 4. Update energy CSV path to use averaged file
+        updateEnergyCSVPath();
+
+
+		// 5. Merge CSV results
+		if (programArgs.length > 0 || !joularProcessIds.isEmpty()) {
 			String mergeArg = (programArgs != null && programArgs.length > 0) ? Arrays.toString(programArgs) : aFQN;
 			CSVMerger.runCSVMerger(mergeArg);
 		}
-		return joularProcessId;
+        return joularProcessIds.get(0);
 
 	}
 
@@ -159,7 +212,7 @@ public class Launcher {
 
 		// JProfiler agent with suspended mode and specific port
 		command.add("-agentpath:" + jprofilerAgent + "=port=" + JPROFILER_PORT + ",nowait" + ",config="
-				+ Constants.PROJECT_ROOT + "/src/main/resources/jprofiler_config.xml" + ",session=spectra filter");
+				+ Constants.PROJECT_ROOT + "/src/main/resources/jprofiler_config.xml");
 
 		command.add("-cp");
 		command.add(classpath);
@@ -179,8 +232,8 @@ public class Launcher {
 		processBuilder.redirectErrorStream(true);
 
 		// // Change Current Working Directory
-		//File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/POM/");
-        File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/CPL/");
+		File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/POM/");
+        //File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/CPL/");
 
         processBuilder.directory(newCurrentWorkingDirectory);
 		// Start the process
@@ -573,8 +626,8 @@ public class Launcher {
 		processBuilder.redirectErrorStream(true);
 
 		// Change Current Working Directory
-		//File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/POM/");
-        File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/CPL/");
+		File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/POM/");
+        //File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/CPL/");
 
         processBuilder.directory(newCurrentWorkingDirectory);
 		final Process process = processBuilder.start();
@@ -639,7 +692,173 @@ public class Launcher {
 			os.write("1234\n".getBytes());
 			os.flush();
 		}
-	}
+	} /**
+     * Average JoularJX energy results from multiple runs
+     */
+    private void averageJoularJXResults(List<Long> processIds) throws IOException {
+
+        Path dataDir = Paths.get("Output", "Joularjx", "data"); // keep capitalization consistent
+        Files.createDirectories(dataDir);
+        if (!Files.isWritable(dataDir)) {
+            System.err.println("Permission denied: cannot write to directory: " + dataDir);
+            try {
+                System.err.println("Owner: " + Files.getOwner(dataDir));
+            } catch (Exception ignored) {}
+            throw new IOException("Directory not writable: " + dataDir);
+        }
+        Map<String, EnergyData> energyMap = new HashMap<>();
+
+        // Read all energy CSV files
+        for (int run = 0; run <= processIds.size()-1; run++) {
+            Long pid = processIds.get(run);
+            String energyFilePath = "Output/joularjx/data/joularJX-" + pid + "-all-methods-energy.csv";
+            File energyFile = new File(energyFilePath);
+
+            if (!energyFile.exists()) {
+                System.err.println("Warning: Energy file not found: " + energyFilePath);
+                continue;
+            }
+
+            System.out.println("Reading energy data from: " + energyFilePath);
+            try (BufferedReader br = new BufferedReader(new FileReader(energyFile))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    line = line.trim();
+                    if (line.isEmpty()) continue;
+
+                    int lastCommaIndex = line.lastIndexOf(',');
+                    if (lastCommaIndex < 0) continue;
+
+                    String methodSignature = line.substring(0, lastCommaIndex).trim();
+                    String energyStr = line.substring(lastCommaIndex + 1).trim();
+
+                    try {
+                        double energy = Double.parseDouble(energyStr);
+                        energyMap.computeIfAbsent(methodSignature, k -> new EnergyData())
+                                .addValue(energy);
+                    } catch (NumberFormatException e) {
+                        // Skip invalid lines
+                    }
+                }
+            }
+        }
+
+        // Write averaged results
+        Path outputFile = dataDir.resolve("joularJX-averaged-all-methods-energy.csv");
+
+        System.out.println("Writing averaged energy data to: " + outputFile);
+
+        try (BufferedWriter writer = Files.newBufferedWriter(outputFile, java.nio.charset.StandardCharsets.UTF_8,
+                java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.TRUNCATE_EXISTING)) {
+            for (Map.Entry<String, EnergyData> entry : energyMap.entrySet()) {
+                writer.write(entry.getKey() + "," + entry.getValue().getAverage());
+                writer.newLine();
+            }
+        }
+
+        System.out.println("Averaged " + energyMap.size() + " method signatures across "
+                + processIds.size() + " runs");
+    }
+
+
+    /**
+     * Copy averaged energy file to standard location expected by CSVMerger
+     */
+    private void updateEnergyCSVPath() throws IOException {
+        String averagedFile = Constants.JOULARJX_AVG_CSV;
+        String targetFile = Constants.PROJECT_ROOT + "/Output/Joularjx/data/joularJX-123-all-methods-energy.csv";
+
+        Files.copy(Paths.get(averagedFile), Paths.get(targetFile),
+                java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Copied averaged file to: " + targetFile);
+    }
+
+    /**
+     * Helper class to accumulate energy values and compute average
+     */
+    private static class EnergyData {
+        private double sum = 0.0;
+        private int count = 0;
+
+        public void addValue(double value) {
+            sum += value;
+            count++;
+        }
+
+        public double getAverage() {
+            return count > 0 ? sum / count : 0.0;
+        }
+    }
+
+
+    private void averageCalltreeXMLs(List<Path> xmlPaths) throws Exception {
+        if (xmlPaths.isEmpty()) throw new IOException("No XMLs");
+
+        Map<String, double[]> stats = new HashMap<>();  // method -> [sum_count, sum_time, sum_self, runs]
+
+        for (Path xml : xmlPaths) {
+            // Use YOUR existing parser!
+            Map<String, MethodData> runData = CSVMerger.parseXMLData(xml.toString());
+
+            for (Map.Entry<String, MethodData> entry : runData.entrySet()) {
+                String methodKey = entry.getKey();
+                MethodData data = entry.getValue();
+
+                double[] vals = stats.computeIfAbsent(methodKey, k -> new double[4]);
+                vals[0] += data.invocations;  // From your XML: count="1"
+                vals[1] += data.executionTime; // From your XML: time="170883894"
+                vals[2] += data.selfTime;      // From your XML: selfTime="4862"
+                vals[3] += 1;                  // Number of runs
+            }
+        }
+
+        // Write averaged CSV for CSVMerger
+        Path avgCsv = Paths.get(Constants.PROJECT_ROOT, "Output", "JProfiler", "calltree-averaged.csv");
+        try (PrintWriter out = new PrintWriter(avgCsv.toFile())) {
+            out.println("method_key,avg_invocations,avg_executionTime,avg_selfTime");
+            for (Map.Entry<String, double[]> e : stats.entrySet()) {
+                double[] v = e.getValue();
+                out.printf("%s,%.1f,%.0f,%.1f%n", e.getKey(),
+                        v[0]/v[3], v[1]/v[3], v[2]/v[3]);
+            }
+        }
+        System.out.println("XML averaged " + stats.size() + " methods from " + xmlPaths.size() + " runs");
+    }
+
+
+
+    private void prepareJProfilerDataDirectory() throws IOException {
+        Path dataDir = Paths.get("Output", "JProfiler");
+        Files.createDirectories(dataDir);
+
+        // Delete previous per-run files so a new batch overwrites old data
+        try (DirectoryStream<Path> ds = Files.newDirectoryStream(dataDir, "calltree-run*.csv")) {
+            for (Path p : ds) {
+                Files.deleteIfExists(p);
+            }
+        } catch (IOException ignored) {
+            // nothing to delete
+        }
+
+        // Remove previous averaged file
+        Files.deleteIfExists(dataDir.resolve("calltree-averaged.csv"));
+    }
+
+    private Path copyExportedCalltreeXML(final int run) throws IOException {
+        Path jprofOut = Paths.get(Constants.PROJECT_ROOT, "Output", "JProfiler");
+        Path dataDir = Paths.get(Constants.PROJECT_ROOT, "Output", "JProfiler");
+        Files.createDirectories(dataDir);
+
+        Path src = jprofOut.resolve("calltree.csv.xml");  // Your existing XML
+        if (!Files.exists(src)) {
+            throw new IOException("calltree.csv.xml not found: " + src);
+        }
+
+        Path target = dataDir.resolve("calltree-run-" + run + ".xml");
+        Files.copy(src, target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Copied XML " + src.getFileName() + " -> " + target);
+        return target;
+    }
 
 	/**
 	 *
