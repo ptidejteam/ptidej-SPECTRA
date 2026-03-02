@@ -41,10 +41,10 @@ public class Agent {
         ThreadMXBean threadBean = createThreadBean();
 
         // Get Process ID of current application
-        long appPid = ProcessHandle.current().pid();
+        long appPid = ProcessHandle.current().pid()-1;
 
         // Creating the required folders to store the result files generated later on
-        ResultTreeManager resultTreeManager = new ResultTreeManager(properties, 123,
+        ResultTreeManager resultTreeManager = new ResultTreeManager(properties, appPid,
                 123456789);
         if (!resultTreeManager.create()) {
             logger.log(Level.WARNING,
@@ -55,25 +55,6 @@ public class Agent {
 
         OperatingSystemMXBean osBean = createOperatingSystemBean(cpu);
         MonitoringStatus status = new MonitoringStatus();
-
-//		final ResultWriter writer = new ResultWriter() {
-//			@Override
-//			public void write(final String methodName, final double methodPower) {
-//				System.out.println(methodName + " : " + methodPower);
-//			}
-//
-//			@Override
-//			public void setTarget(String name, boolean overwrite) throws IOException {
-//				// throw new RuntimeException("Boom!");
-//				//Thread.dumpStack();
-//
-//			}
-//
-//			@Override
-//			public void closeTarget() throws IOException {
-//				//Thread.dumpStack();
-//			}
-//		};
 
         ResultWriter writer = new CsvResultWriter();
         MonitoringHandler monitoringHandler = new MonitoringHandler(appPid, properties, writer, cpu, status, osBean,

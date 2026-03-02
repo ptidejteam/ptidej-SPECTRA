@@ -40,7 +40,7 @@ public class ShutdownHandler extends org.noureddine.joularjx.monitor.ShutdownHan
      */
     public ShutdownHandler(long appPid, ResultWriter resultWriter, Cpu cpu, MonitoringStatus status, AgentProperties properties, ResultTreeManager resultTreeManager) {
         super(appPid, resultWriter, cpu, status, properties, resultTreeManager);
-        this.appPid = 123;
+        this.appPid = appPid;
         this.resultWriter = resultWriter;
         this.cpu = cpu;
         this.status = status;

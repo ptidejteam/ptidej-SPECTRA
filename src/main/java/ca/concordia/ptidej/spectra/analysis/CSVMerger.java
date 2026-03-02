@@ -83,11 +83,11 @@ public class CSVMerger {
         return true;
     }
 
-    private static class MethodData {
-        String methodSignature;
-        long invocations = 0;
-        long executionTime = 0;
-        long selfTime = 0;
+    public static class MethodData {
+        public String methodSignature;
+        public long invocations = 0;
+        public long executionTime = 0;
+        public long selfTime = 0;
         long instanceCount = 0;
         long sizeBytes = 0;
         double energyConsumption = 0.0;
@@ -579,7 +579,7 @@ public class CSVMerger {
         }
     }
 
-    private static String csvEscape(String value) {
+    public static String csvEscape(String value) {
         if (value == null) return "";
         boolean mustQuote =
                 value.contains(",") ||
@@ -677,7 +677,7 @@ public class CSVMerger {
                 "yyMMdd'H'HHmm"));
     }
 
-    private static String normalizeSignature(String raw) {
+    public static String normalizeSignature(String raw) {
         if (raw == null) return null;
 
         // Remove module/version prefixes (java.base@21.0.2/)

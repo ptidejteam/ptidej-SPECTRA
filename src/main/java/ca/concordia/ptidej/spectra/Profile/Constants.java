@@ -14,5 +14,8 @@ public final class Constants {
                 PROJECT_ROOT + "/Output/JProfiler/allobjects.csv", "CallTree", "-format=xml",
                 "-aggregation=method", PROJECT_ROOT + "/Output/JProfiler/calltree.csv.xml",
                 "Hotspots", "-format=csv", PROJECT_ROOT + "/Output/JProfiler/hotspots.csv");
+        public static final String JPROFILER_AVG_CSV = PROJECT_ROOT + "/Output/JProfiler/calltree-averaged.csv";
+        public static final String JOULARJX_AVG_CSV = PROJECT_ROOT + "/Output/Joularjx/data/joularJX-averaged-all-methods-energy.csv";
 
-    }
+
+}

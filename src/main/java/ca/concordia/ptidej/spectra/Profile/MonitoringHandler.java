@@ -64,7 +64,7 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
                              MonitoringStatus status, OperatingSystemMXBean osBean, ThreadMXBean threadBean, ResultTreeManager resultTreeManager) {
         super(appPid, properties, resultWriter, cpu, status, osBean,
                 threadBean, resultTreeManager);
-        this.appPid = 123;
+        this.appPid = appPid;
         this.properties = properties;
         this.resultWriter = resultWriter;
         this.cpu = cpu;
