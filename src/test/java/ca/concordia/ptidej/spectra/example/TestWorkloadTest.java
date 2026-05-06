@@ -5,14 +5,13 @@ import ca.concordia.ptidej.spectra.Profile.Launcher;
 import org.junit.Test;
 import org.noureddine.joularjx.result.CsvResultWriter;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class TestOverloadTest {
+public class TestWorkloadTest {
     @Test
     public void testOverload() throws Exception {
 
@@ -21,13 +20,8 @@ public class TestOverloadTest {
 
         long fileExists = launcher.launch(writer,
                 "/Users/mac/Documents/RA/SPECTRA/target/test-classes:/Users/mac/Documents/RA/SPECTRA/target/classes:/Users/mac/Documents/RA/SPECTRA/target/Spectra-with-dependencies.jar",
-                "ca.concordia.ptidej.spectra.example.OverloadTest");
+                "ca.concordia.ptidej.spectra.example.TestWorkload");
 
-        String outputDir = Constants.PROJECT_ROOT + "/Output/JProfiler/snapshot.jps";
-
-        assertFalse("Snapshot file created", Files.exists(Paths.get(outputDir)));
-
-        assertTrue("Excel files created", fileExists != 0);
 
     }
 

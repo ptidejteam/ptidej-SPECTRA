@@ -39,7 +39,7 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
 
     private final long appPid;
     private final AgentProperties properties;
-    private final ResultWriter resultWriter;
+    private final List<ResultWriter> resultWriters;
     private final Cpu cpu;
     private final MonitoringStatus status;
     private final OperatingSystemMXBean osBean;
@@ -60,13 +60,13 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
      * @param threadBean the ThreadMXBean, used to collect thread CPU time
      * @param resultTreeManager the ResultTreeManager, used to provide filepaths for runtime generated files
      */
-    public MonitoringHandler(long appPid, AgentProperties properties, ResultWriter resultWriter, Cpu cpu,
+    public MonitoringHandler(long appPid, AgentProperties properties, List<ResultWriter> resultWriters, Cpu cpu,
                              MonitoringStatus status, OperatingSystemMXBean osBean, ThreadMXBean threadBean, ResultTreeManager resultTreeManager) {
-        super(appPid, properties, resultWriter, cpu, status, osBean,
-                threadBean, resultTreeManager);
+        super(appPid, properties, resultWriters, cpu, status, osBean,
+                threadBean);
         this.appPid = appPid;
         this.properties = properties;
-        this.resultWriter = resultWriter;
+        this.resultWriters = resultWriters;
         this.cpu = cpu;
         this.status = status;
         this.osBean = osBean;
@@ -231,9 +231,8 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
                         String methodName = stackTraceElement.getMethodName();
                         int lineNumber = stackTraceElement.getLineNumber();
 
-                        // Use the resolve method to get the full method name
-                        String fullMethodName = resolve(Class.forName(className), methodName,
-                                lineNumber);
+                        // Use JoularJX 3.1.0's resolver
+                        String fullMethodName = org.noureddine.joularjx.utils.BytecodeMethodResolver.resolve(stackTraceElement);
                         if (fullMethodName != null && covers.test(fullMethodName)) {
                             target.merge(fullMethodName, 1, Integer::sum);
                             break;
@@ -392,15 +391,18 @@ public class MonitoringHandler extends org.noureddine.joularjx.monitor.Monitorin
      * @throws IOException if an I/O error occurs while writing the file
      */
     public <K> void saveResults(Map<Thread, Map<K, Integer>> stats, Map<Long, Double> threadCpuTimePercentages, String filePath) throws IOException {
-        resultWriter.setTarget(filePath, true);
-
-        for (var statEntry : stats.entrySet()) {
-            for (var entry : statEntry.getValue().entrySet()) {
-                double power = threadCpuTimePercentages.get(statEntry.getKey().getId()) * (entry.getValue() / 100.0);
-                resultWriter.write(entry.getKey().toString(), power);
+        try (java.io.BufferedWriter writer = java.nio.file.Files.newBufferedWriter(
+                java.nio.file.Paths.get(filePath + ".csv"), 
+                java.nio.file.StandardOpenOption.CREATE, 
+                java.nio.file.StandardOpenOption.WRITE, 
+                java.nio.file.StandardOpenOption.TRUNCATE_EXISTING)) {
+            for (var statEntry : stats.entrySet()) {
+                for (var entry : statEntry.getValue().entrySet()) {
+                    double power = threadCpuTimePercentages.get(statEntry.getKey().getId()) * (entry.getValue() / 100.0);
+                    writer.write(String.format(java.util.Locale.US, "\"%s\",%.10f%n", entry.getKey().toString(), power));
+                }
             }
         }
-        resultWriter.closeTarget();
     }
 
     /**

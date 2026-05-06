@@ -137,11 +137,7 @@ public class CSVMerger {
                 // Convert JVM signature to human-readable
                 String methodSignature = className + "." + methodName
                         + convertJVMDescriptor(jvmSignature);
-
-                if (methodSignature.contains("$$Lambda")) {
-                    methodSignature.replace("\\$\\$Lambda.*", ".lambda");
-                }
-
+ 
                 methodSignature = normalizeSignature(methodSignature);
 
 
@@ -324,23 +320,23 @@ public class CSVMerger {
 
     public static Map<String, MethodData> mergeUnionEnergyData(
             Map<String, MethodData> profilerData, String energyCsvPath) throws IOException {
-
+ 
         Map<String, MethodData> merged = new HashMap<>();
         Map<String, Double> energyMap = new HashMap<>();
-
+ 
         // Step 1: Parse JoularJX CSV into energyMap
         try (BufferedReader br = new BufferedReader(new FileReader(energyCsvPath))) {
             String line;
             while ((line = br.readLine()) != null) {
                 line = line.trim();
                 if (line.isEmpty()) continue;
-
+ 
                 int lastComma = line.lastIndexOf(',');
                 if (lastComma < 0) continue;
-
+ 
                 String method = normalizeSignature(line.substring(0, lastComma).trim());
                 String energyStr = line.substring(lastComma + 1).trim();
-
+ 
                 try {
                     double energy = Double.parseDouble(energyStr);
                     energyMap.put(method, energy);
@@ -348,36 +344,29 @@ public class CSVMerger {
                 }
             }
         }
-
-        // Step 2: Create union of keys (from profiler + JoularJX)
-        for (String method : profilerData.keySet()) {
-            merged.put(method, new MethodData(method));
-        }
-        for (String method : energyMap.keySet()) {
-            merged.putIfAbsent(method, new MethodData(method));
-        }
-
-        // Step 3: Fill in data
-        for (String method : merged.keySet()) {
-            MethodData unionEntry = merged.get(method);
-
+ 
+        // Step 2: Iterate over energyMap (JoularJX is the primary source)
+        for (Map.Entry<String, Double> entry : energyMap.entrySet()) {
+            String method = entry.getKey();
+            Double energyValue = entry.getValue();
+            
+            MethodData unionEntry = new MethodData(method);
+            unionEntry.combineEnergyData(energyValue);
+ 
+            // Step 3: Match with profiler data (if exists)
             MethodData profilerEntry = profilerData.get(method);
             if (profilerEntry != null) {
                 unionEntry.combineXMLData(profilerEntry.invocations, profilerEntry.executionTime, profilerEntry.selfTime);
             } else {
+                // No match in profiler, set placeholders
                 unionEntry.invocations = -1;
                 unionEntry.executionTime = -1;
                 unionEntry.selfTime = -1;
             }
-
-            Double energy = energyMap.get(method);
-            if (energy != null) {
-                unionEntry.combineEnergyData(energy);
-            } else {
-                unionEntry.energyConsumption = -1;
-            }
+            
+            merged.put(method, unionEntry);
         }
-
+ 
         return merged;
     }
 
@@ -564,16 +553,15 @@ public class CSVMerger {
                             methodData.sizeBytes);
                 }
             } else {
-                out.println("Method Signature,Invocations,Total Times (ms),Self Time (ms),Energy (J)");
+                out.println("Method Signature,Invocations,Total Times (us),Energy (J)");
                 for (MethodData methodData : methodDataMap.values()) {
                     String inv  = methodData.invocations   == -1 ? "-" : String.valueOf(methodData.invocations);
                     String time = methodData.executionTime == -1 ? "-" : String.valueOf(methodData.executionTime);
-                    String self = methodData.selfTime      == -1 ? "-" : String.valueOf(methodData.selfTime);
                     String en   = methodData.energyConsumption == -1 ? "-" : String.valueOf(methodData.energyConsumption);
-
-                    out.printf("%s,%s,%s,%s,%s%n",
+ 
+                    out.printf("%s,%s,%s,%s%n",
                             csvEscape(methodData.methodSignature),
-                            inv, time, self, en);
+                            inv, time, en);
                 }
             }
         }
@@ -603,7 +591,7 @@ public class CSVMerger {
                     ? new String[]{"Class Name", "Energy (J)",
                     "Instance Count", "Size " + "(bytes)"}
                     : new String[]{"Method Signature", "Invocations",
-                    "Execution Time", "Self Time", "Energy (J)"};
+                    "Execution Time (us)", "Energy (J)"};
 
             createHeaderRow(headerRow, headers, workbook);
             int rowNum = 1;
@@ -620,9 +608,7 @@ public class CSVMerger {
                     row.createCell(0).setCellValue(methodData.methodSignature);
                     row.createCell(1).setCellValue(methodData.invocations == -1 ? "-" : String.valueOf(methodData.invocations));
                     row.createCell(2).setCellValue(methodData.executionTime == -1 ? "-" : String.valueOf(methodData.executionTime));
-                    row.createCell(3).setCellValue(methodData.selfTime == -1 ? "-" : String.valueOf(methodData.selfTime));
-                    row.createCell(4).setCellValue(methodData.energyConsumption == -1 ? "-" : String.valueOf(methodData.energyConsumption));
-
+                    row.createCell(3).setCellValue(methodData.energyConsumption == -1 ? "-" : String.valueOf(methodData.energyConsumption));
                 }
 
             }
@@ -653,45 +639,51 @@ public class CSVMerger {
 
     public final class Constants {
         public static final String XML_FILE_PATH = PROJECT_ROOT + "/Output/JProfiler/calltree.csv.xml";
-        public static final String ALL_OBJECTS_CSV_PATH = PROJECT_ROOT + "/Output/Jprofiler/allobjects.csv";
-        public static final String HOTSPOTS_CSV_PATH = PROJECT_ROOT + "/Output/Jprofiler/hotspots.csv";
-        public static final String ENERGY_CSV_PATH = PROJECT_ROOT + "/Output/Joularjx/data/joularJX-123-all-methods-energy.csv";
-
+        public static final String ALL_OBJECTS_CSV_PATH = PROJECT_ROOT + "/Output/JProfiler/allobjects.csv";
+        public static final String HOTSPOTS_CSV_PATH = PROJECT_ROOT + "/Output/JProfiler/hotspots.csv";
+        public static final String ENERGY_CSV_PATH = PROJECT_ROOT + "/Output/Joularjx/joularJX-123-all-methods-energy.csv";
+ 
         private Constants() {
         }
-
-        public static String getXmlEnergyOutputPath(String fileName, String type) {
-            return String.format(PROJECT_ROOT + "/Results/%s.%s.%s.spectra.csv", fileName, type, timestamp);
-
+ 
+        public static String getXmlEnergyOutputPath(String fqn, String type) {
+            String simpleName = fqn;
+            if (fqn.contains(".")) {
+                simpleName = fqn.substring(fqn.lastIndexOf('.') + 1);
+            }
+            return String.format(PROJECT_ROOT + "/Results/%s.%s.%s.spectra.csv", simpleName, type, timestamp);
         }
-
-        public static String getAllObjectsEnergyOutputPath(String fileName, String type) {
-            return String.format(PROJECT_ROOT + "/Results/%s.%s.%s.spectra.csv", fileName, type, timestamp);
-        }
-
-        public static String getHotSpotEnergyOutputPath(String fileName, String type) {
-            return String.format(PROJECT_ROOT + "/Results/%s.%s.%s.spectra.csv", fileName, type, timestamp);
-        }
-
+ 
         static String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(
                 "yyMMdd'H'HHmm"));
     }
 
     public static String normalizeSignature(String raw) {
         if (raw == null) return null;
-
-        // Remove module/version prefixes (java.base@21.0.2/)
-        raw = raw.replaceAll("[a-zA-Z0-9_.-]+@[0-9.]+/", "");
-
-        // Normalize $$Lambda classes
+ 
+        // 1. Remove module/version prefixes (java.base@21.0.2/)
+        raw = raw.replaceAll("[a-zA-Z0-9_.-]+@[0-9.]+/","");
+ 
+        // 2. Remove return type if present (e.g., "void com.foo.Bar.main(String[])" -> "com.foo.Bar.main(String[])")
+        // If there is a space before the first parenthesis, the part before the last space is the return type
+        int firstParen = raw.indexOf('(');
+        if (firstParen > 0) {
+            String beforeParen = raw.substring(0, firstParen);
+            int lastSpace = beforeParen.lastIndexOf(' ');
+            if (lastSpace >= 0) {
+                raw = raw.substring(lastSpace + 1);
+            }
+        }
+ 
+        // 3. Normalize $$Lambda classes
         raw = raw.replaceAll("\\$\\$Lambda.*", ".lambda");
-//
-//        // Normalize arrays
-//        raw = raw.replaceAll("\\[\\s*\\]", "[]");
-//
-//        // Remove extra spaces
-//        raw = raw.replaceAll(",\\s+", ",");
-
+ 
+        // 4. Remove all whitespace (handles spaces after commas in parameters)
+        raw = raw.replaceAll("\\s+", "");
+ 
+        // 5. Remove all quotes
+        raw = raw.replace("\"", "");
+ 
         return raw.trim();
     }
 }
