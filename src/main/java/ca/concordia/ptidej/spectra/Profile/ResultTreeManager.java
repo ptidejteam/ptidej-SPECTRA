@@ -39,7 +39,7 @@ public class ResultTreeManager  extends  org.noureddine.joularjx.result.ResultTr
         super(properties, pid, startTimestamp);
         this.properties = properties;
         Object[] var10002 = new Object[]{pid, startTimestamp};
-        this.runDirectoryPath = PROJECT_ROOT + "/Output/Joularjx/data/";
+        this.runDirectoryPath = PROJECT_ROOT + "/Output/Joularjx/";
         String allDirectoryPath = this.runDirectoryPath + "/all";
         String filteredDirectoryPath = this.runDirectoryPath + "/app";
         this.allTotalMethodsPath = allDirectoryPath + "/total/methods";

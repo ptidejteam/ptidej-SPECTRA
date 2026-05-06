@@ -6,6 +6,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.io.File;
 
 import org.noureddine.joularjx.result.CsvResultWriter;
 import org.noureddine.joularjx.cpu.Cpu;
@@ -41,7 +42,9 @@ public class Agent {
         ThreadMXBean threadBean = createThreadBean();
 
         // Get Process ID of current application
-        long appPid = ProcessHandle.current().pid()-1;
+        long appPid = 123;
+
+        // File renaming logic moved to Launcher.java
 
         // Creating the required folders to store the result files generated later on
         ResultTreeManager resultTreeManager = new ResultTreeManager(properties, appPid,
@@ -56,10 +59,10 @@ public class Agent {
         OperatingSystemMXBean osBean = createOperatingSystemBean(cpu);
         MonitoringStatus status = new MonitoringStatus();
 
-        ResultWriter writer = new CsvResultWriter();
-        MonitoringHandler monitoringHandler = new MonitoringHandler(appPid, properties, writer, cpu, status, osBean,
+        java.util.List<ResultWriter> writers = org.noureddine.joularjx.Agent.getWriters(properties, appPid, 123456789);
+        MonitoringHandler monitoringHandler = new MonitoringHandler(appPid, properties, writers, cpu, status, osBean,
                 threadBean, resultTreeManager);
-        ShutdownHandler shutdownHandler = new ShutdownHandler(appPid, writer, cpu, status, properties,
+        ShutdownHandler shutdownHandler = new ShutdownHandler(appPid, writers, cpu, status, properties,
                 resultTreeManager);
 
         logger.log(Level.INFO, "Initialization finished");

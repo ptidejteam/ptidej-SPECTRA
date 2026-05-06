@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import org.noureddine.joularjx.cpu.Cpu;
 import org.noureddine.joularjx.monitor.MonitoringStatus;
 import org.noureddine.joularjx.result.ResultWriter;
+import java.util.List;
 import org.noureddine.joularjx.utils.AgentProperties;
 import org.noureddine.joularjx.utils.JoularJXLogging;
 
@@ -23,7 +24,7 @@ public class ShutdownHandler extends org.noureddine.joularjx.monitor.ShutdownHan
     private static final Logger logger = JoularJXLogging.getLogger();
 
     private final long appPid;
-    private final ResultWriter resultWriter;
+    private final List<ResultWriter> resultWriters;
     private final Cpu cpu;
     private final MonitoringStatus status;
     private final AgentProperties properties;
@@ -38,10 +39,10 @@ public class ShutdownHandler extends org.noureddine.joularjx.monitor.ShutdownHan
      * @param properties the agent's configuration properties
      * @param resultTreeManager the ResultTreeManager used to provide correct filepaths for the generated files
      */
-    public ShutdownHandler(long appPid, ResultWriter resultWriter, Cpu cpu, MonitoringStatus status, AgentProperties properties, ResultTreeManager resultTreeManager) {
-        super(appPid, resultWriter, cpu, status, properties, resultTreeManager);
+    public ShutdownHandler(long appPid, List<ResultWriter> resultWriters, Cpu cpu, MonitoringStatus status, AgentProperties properties, ResultTreeManager resultTreeManager) {
+        super(appPid, resultWriters, cpu, status, properties);
         this.appPid = appPid;
-        this.resultWriter = resultWriter;
+        this.resultWriters = resultWriters;
         this.cpu = cpu;
         this.status = status;
         this.properties = properties;
@@ -62,8 +63,8 @@ public class ShutdownHandler extends org.noureddine.joularjx.monitor.ShutdownHan
 
         try {
             //Writing methods and filtered methods energy consumption
-            this.saveResults(status.getMethodsConsumedEnergy(), PROJECT_ROOT + "/Output/Joularjx/data"+String.format("/joularJX-%d-all-methods-energy", appPid));
-            this.saveResults(status.getFilteredMethodsConsumedEnergy(), PROJECT_ROOT + "/Output/Joularjx/data"+String.format("/joularJX-%d-filtered-methods-energy", appPid));
+            this.saveResults(status.getMethodsConsumedEnergy(), PROJECT_ROOT + "/Output/Joularjx"+String.format("/joularJX-%d-all-methods-energy", appPid));
+            // this.saveResults(status.getFilteredMethodsConsumedEnergy(), PROJECT_ROOT + "/Output"+String.format("/joularJX-%d-filtered-methods-energy", appPid));
 
             //Writing consumption evolution files only if the option is enabled
             if (this.properties.trackConsumptionEvolution()) {
@@ -98,17 +99,17 @@ public class ShutdownHandler extends org.noureddine.joularjx.monitor.ShutdownHan
      * @throws IOException if an I/O error occurs while writing the data.
      */
     public <K> void saveResults(Map<K, Double> consumedEnergyMap, String filePath) throws IOException {
-        //String fileName = String.format("joularJX-%d-%s-%s", appPid, nodeType, dataType);
-        resultWriter.setTarget(filePath, true);
-
-        for (var entry : consumedEnergyMap.entrySet()) {
-            resultWriter.write(entry.getKey().toString(), entry.getValue());
-            if (filePath.contains("-all-methods-energy") && !entry.getValue().toString().contains("$$Lambda/0x0"))
-            System.out.println(entry.getKey().toString()+" : "+ entry.getValue());
-
-
+        try (java.io.BufferedWriter writer = java.nio.file.Files.newBufferedWriter(
+                java.nio.file.Paths.get(filePath + ".csv"), 
+                java.nio.file.StandardOpenOption.CREATE, 
+                java.nio.file.StandardOpenOption.WRITE, 
+                java.nio.file.StandardOpenOption.TRUNCATE_EXISTING)) {
+            for (var entry : consumedEnergyMap.entrySet()) {
+                writer.write(String.format(java.util.Locale.US, "\"%s\",%.10f%n", entry.getKey().toString(), entry.getValue()));
+                if (filePath.contains("-all-methods-energy") && !entry.getValue().toString().contains("$$Lambda/0x0")) {
+                    System.out.println(entry.getKey().toString()+" : "+ entry.getValue());
+                }
+            }
         }
-
-        resultWriter.closeTarget();
     }
 }

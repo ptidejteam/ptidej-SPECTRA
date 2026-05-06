@@ -42,8 +42,8 @@ public class Launcher {
 	private static final int PORT_CHECK_INTERVAL_MS = 500; // Check every 500ms
 	private static final String JPROFILER_OUTPUT_DIR = "Output/JProfiler/";
 	private static final String SNAPSHOT_FILE = "snapshot.jps";
-    private static final int NUM_JOULARJX_RUNS = 5;
-    private static final int NUM_JPROFILER_RUNS = 5;
+    private static final int NUM_JOULARJX_RUNS = 3;
+    private static final int NUM_JPROFILER_RUNS = 1;
 
     private final AtomicBoolean cleanupRun = new AtomicBoolean(false);
 
@@ -87,7 +87,7 @@ public class Launcher {
             throw new RuntimeException(e);
         }
 
-//        // 2. Launch JoularJX multiple times and collect PIDs
+        // 2. Launch JoularJX multiple times and collect PIDs
         System.out.println("\n=== Running JoularJX " + NUM_JOULARJX_RUNS + " times ===");
         List<Long> joularProcessIds = new ArrayList<>();
 
@@ -99,7 +99,15 @@ public class Launcher {
                 joularProcessIds.add(joularProcessId);
                 System.out.println("Finished JoularJX Run " + run + " with PID: " + joularProcessId);
 
-              //  preserveJoularJXOutput(joularProcessId, run);
+                File joularFile = new File("Output/Joularjx" + File.separator + "joularJX-123-all-methods-energy.csv");
+                if (joularFile.exists()) {
+                    File dest = new File("Output/Joularjx" + File.separator + run + "-joularJX-123-all-methods-energy.csv");
+                    if (joularFile.renameTo(dest)) {
+                        System.out.println("[Launcher] Successfully moved results to: " + dest.getAbsolutePath());
+                    } else {
+                        System.err.println("[Launcher] Failed to rename JoularJX output.");
+                    }
+                }
             } else {
                 System.err.println("Warning: JoularJX Run " + run + " failed");
             }
@@ -188,7 +196,7 @@ public class Launcher {
 		// VMDeath.
 		System.out.println("Waiting for profiled JVM to terminate naturally...");
 		try {
-			Thread.sleep(10000);
+			Thread.sleep(3000); // Reduced from 10000
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
@@ -347,8 +355,8 @@ public class Launcher {
 		try {
 			System.out.println("Starting profiling recordings via jpcontroller CLI...");
 			executeJpcontrollerCommand("startCPURecording", "true", jvmPid);
-			executeJpcontrollerCommand("startAllocRecording", "true", jvmPid);
-			executeJpcontrollerCommand("startMonitorRecording", "", jvmPid);
+			// executeJpcontrollerCommand("startAllocRecording", "true", jvmPid);
+			// executeJpcontrollerCommand("startMonitorRecording", "", jvmPid);
 			executeJpcontrollerCommand("startThreadProfiling", "", jvmPid); // Optional,
 			System.out.println("Profiling recordings started (CLI)");
 		} catch (Exception e) {
@@ -426,8 +434,8 @@ public class Launcher {
 
 			System.out.println("Stop recordings...");
 			executeJpcontrollerCommand("stopCPURecording", "", jvmPid);
-			executeJpcontrollerCommand("stopAllocRecording", "", jvmPid);
-			executeJpcontrollerCommand("stopMonitorRecording", "", jvmPid);
+			// executeJpcontrollerCommand("stopAllocRecording", "", jvmPid);
+			// executeJpcontrollerCommand("stopMonitorRecording", "", jvmPid);
 
 			System.out.println("Saving snapshot to: " + snapshotPath);
 			executeJpcontrollerCommand("saveSnapshot", snapshotPath, jvmPid);
@@ -502,8 +510,8 @@ public class Launcher {
 
 		try {
 			executeJpcontrollerCommand("stopCPURecording", "", jvmPid);
-			executeJpcontrollerCommand("stopAllocRecording", "", jvmPid);
-			executeJpcontrollerCommand("stopMonitorRecording", "", jvmPid);
+			// executeJpcontrollerCommand("stopAllocRecording", "", jvmPid);
+			// executeJpcontrollerCommand("stopMonitorRecording", "", jvmPid);
 		} catch (Exception e) {
 			System.err.println("Error stopping profiling: " + e.getMessage());
 			throw e;
@@ -514,7 +522,7 @@ public class Launcher {
 
 		Path cmdFile = Files.createTempFile(outputDirPath, "jpcommands", ".txt");
 
-		String commands = "stopCPURecording\n" + "stopAllocRecording\n" + "stopMonitorRecording\n" + "saveSnapshot "
+		String commands = "stopCPURecording\n" + "saveSnapshot "
 				+ snapshotPath + "\n";
 
 		Files.write(cmdFile, commands.getBytes());
@@ -697,7 +705,7 @@ public class Launcher {
      */
     private void averageJoularJXResults(List<Long> processIds) throws IOException {
 
-        Path dataDir = Paths.get("Output", "Joularjx", "data"); // keep capitalization consistent
+        Path dataDir = Paths.get("Output", "Joularjx"); // Removed "data" subfolder
         Files.createDirectories(dataDir);
         if (!Files.isWritable(dataDir)) {
             System.err.println("Permission denied: cannot write to directory: " + dataDir);
@@ -709,11 +717,12 @@ public class Launcher {
         Map<String, EnergyData> energyMap = new HashMap<>();
 
         // Read all energy CSV files
-        for (int run = 0; run <= processIds.size()-1; run++) {
-            Long pid = processIds.get(run);
-            String energyFilePath = "Output/joularjx/data/joularJX-" + pid + "-all-methods-energy.csv";
+        for (int run = 1; run <= processIds.size(); run++) {
+            String energyFilePath = "Output/Joularjx" + File.separator + run + "-joularJX-123-all-methods-energy.csv";
             File energyFile = new File(energyFilePath);
 
+            // If there was only 1 run, maybe it wasn't renamed to 1- if the script exited early, or maybe we just want to average it. 
+            // Wait, the rename block above ALWAYS renames to `run`-joularJX... so the file is ALWAYS `run-joularJX...`
             if (!energyFile.exists()) {
                 System.err.println("Warning: Energy file not found: " + energyFilePath);
                 continue;
@@ -766,8 +775,8 @@ public class Launcher {
      */
     private void updateEnergyCSVPath() throws IOException {
         String averagedFile = Constants.JOULARJX_AVG_CSV;
-        String targetFile = Constants.PROJECT_ROOT + "/Output/Joularjx/data/joularJX-123-all-methods-energy.csv";
-
+        String targetFile = Constants.PROJECT_ROOT + "/Output/Joularjx/joularJX-123-all-methods-energy.csv";
+ 
         Files.copy(Paths.get(averagedFile), Paths.get(targetFile),
                 java.nio.file.StandardCopyOption.REPLACE_EXISTING);
         System.out.println("Copied averaged file to: " + targetFile);
@@ -1087,11 +1096,11 @@ public class Launcher {
 			startCPU();
 			System.out.println("   CPU recording started");
 
-			startAlloc();
-			System.out.println("   Memory allocation recording started");
+			// startAlloc();
+			// System.out.println("   Memory allocation recording started");
 
-			startMonitor();
-			System.out.println("   Monitor recording started");
+			// startMonitor();
+			// System.out.println("   Monitor recording started");
 
 			System.out.println(" All recordings started successfully");
 		}
@@ -1106,11 +1115,11 @@ public class Launcher {
 			stopCPU();
 			System.out.println(" CPU recording stopped");
 
-			stopAlloc();
-			System.out.println("   Memory allocation recording stopped");
+			// stopAlloc();
+			// System.out.println("   Memory allocation recording stopped");
 
-			stopMonitor();
-			System.out.println("   Monitor recording stopped");
+			// stopMonitor();
+			// System.out.println("   Monitor recording stopped");
 
 			System.out.println(" All recordings stopped successfully");
 		}
@@ -1177,9 +1186,9 @@ public class Launcher {
 			command.add(snapshotPath);
 
 			// Export AllObjects view
-			command.add("AllObjects");
-			command.add("-format=csv");
-			command.add(outputDir + "/allobjects.csv");
+			// command.add("AllObjects");
+			// command.add("-format=csv");
+			// command.add(outputDir + "/allobjects.csv");
 
 			// Export Hotspots view
 			command.add("Hotspots");
