@@ -24,7 +24,7 @@
         <dependency>
             <groupId>org.noureddine</groupId>
             <artifactId>joularjx</artifactId>
-            <version>3.0.1</version>
+            <version>3.1.0</version>
         </dependency>
 
         <dependency>
@@ -205,10 +205,10 @@
                             <goal>install-file</goal>
                         </goals>
                         <configuration>
-                            <file>src/main/resources/joularjx-3.0.1.jar</file>
+                            <file>src/main/resources/joularjx-3.1.0.jar</file>
                             <groupId>org.noureddine</groupId>
                             <artifactId>joularjx</artifactId>
-                            <version>3.0.1</version>
+                            <version>3.1.0</version>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>
