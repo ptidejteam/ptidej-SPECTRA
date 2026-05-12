@@ -28,59 +28,98 @@ import static ca.concordia.ptidej.spectra.Profile.Constants.PROJECT_ROOT;
 
 public class CSVMerger {
     public static boolean runCSVMerger(String fileName) {
-        final String xmlFilePath = Constants.XML_FILE_PATH;
-        final String allObjectsCsvPath = Constants.ALL_OBJECTS_CSV_PATH;
-        final String hotspotsCsvPath = Constants.HOTSPOTS_CSV_PATH;
-        final String energyCsvPath = Constants.ENERGY_CSV_PATH;
-        final String xmlEnergyIntersectionOutputPath = Constants
-                .getXmlEnergyOutputPath(fileName, "intersection");
-        final String xmlEnergyUnionOutputPath = Constants
-                .getXmlEnergyOutputPath(fileName, "union");
-//        final String allObjectsEnergyOutputPath = Constants
-//                .getAllObjectsEnergyOutputPath(fileName);
-//        final String hotSpotEnergyOutputPath = Constants
-//                .getHotSpotEnergyOutputPath(fileName);
+        final String phase1XmlPath = ca.concordia.ptidej.spectra.Profile.Constants.PHASE1_CALLTREE_XML;
+        final String samplingCsvPath = ca.concordia.ptidej.spectra.Profile.Constants.JPROFILER_AVG_CSV;
+        final String energyCsvPath = ca.concordia.ptidej.spectra.Profile.Constants.JOULARJX_AVG_CSV;
+        final String mergedOutputPath = Constants.getXmlEnergyOutputPath(fileName, "merged-results");
 
         try {
-            // Parse XML and extract method data
-            final Map<String, MethodData> methodDataMap = parseXMLData(xmlFilePath);
+            // 1. Phase 1: Parse Instrumentation XML for canonical set and invocations
+            System.out.println("Merging: Reading Phase 1 Canonical Data from " + phase1XmlPath);
+            final Map<String, MethodData> methodDataMap = parseXMLData(phase1XmlPath);
+            
+            // By default, set execution times to -1 to identify un-sampled methods later
+            for (MethodData md : methodDataMap.values()) {
+                md.executionTime = -1;
+                md.selfTime = -1;
+            }
 
-            // Merge with Energy data and output XML-Energy "intersection"
-            final Map<String, MethodData> xmlEnergyIntersectionData = mergeAndFilterEnergyData(
-                    methodDataMap, energyCsvPath, true);
-            //writeToExcel(xmlEnergyIntersectionData, xmlEnergyIntersectionOutputPath);
-            writeToCsv(xmlEnergyIntersectionData, xmlEnergyIntersectionOutputPath);
+            // 2. Phase 2: Parse Sampling CSV for execution time and self time
+            System.out.println("Merging: Reading Phase 2 Sampling Data from " + samplingCsvPath);
+            mergeSamplingData(methodDataMap, samplingCsvPath);
 
+            // 3. Phase 3: Parse JoularJX CSV for energy
+            System.out.println("Merging: Reading Phase 3 Energy Data from " + energyCsvPath);
+            mergeEnergyData(methodDataMap, energyCsvPath);
 
-            // Merge with Energy data and output XML-Energy "union"
-            final Map<String, MethodData> xmlEnergyUnionData = mergeUnionEnergyData(
-                    methodDataMap, energyCsvPath);
-           // writeToExcel(xmlEnergyUnionData, xmlEnergyUnionOutputPath);
-            writeToCsv(xmlEnergyUnionData, xmlEnergyUnionOutputPath);
+            // 4. Output final unified CSV
+            writeToCsv(methodDataMap, mergedOutputPath);
+            System.out.println("Data successfully merged and written to: " + mergedOutputPath);
 
-
-
-            // Merge with AllObjects data and output AllObjects-Energy
-//            final Map<String, MethodData> allObjectsEnergyData =
-//                    mergeAndFilterAllObjectsEnergyData(
-//                            allObjectsCsvPath, energyCsvPath);
-//            writeToExcel(allObjectsEnergyData, allObjectsEnergyOutputPath);
-//
-//            // Merge hotspots.csv with energyCsvPath and output to Excel ======
-//            final Map<String, MethodData> hotspotsData = parseHotspotsCsv(
-//                    hotspotsCsvPath);
-//            final Map<String, MethodData> mergedHotspotsEnergy = mergeHotspotsWithEnergy(
-//                    hotspotsData, energyCsvPath);
-//            writeToExcel(mergedHotspotsEnergy, hotSpotEnergyOutputPath);
         } catch (Exception e) {
-            System.err.println(
-                    "Error during CSVMerger execution: " + e.getMessage());
+            System.err.println("Error during CSVMerger execution: " + e.getMessage());
             e.printStackTrace();
         }
 
-        System.out.println(
-                "Data successfully merged and written to Excel files.");
         return true;
+    }
+
+
+    public static void mergeSamplingData(Map<String, MethodData> methodDataMap, String samplingCsvPath) throws IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader(samplingCsvPath))) {
+            String line = br.readLine(); // skip header
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                
+                String[] parts = line.split("\\|");
+                if (parts.length >= 4) {
+                    // Extract parts from: method_key,avg_invocations,avg_executionTime,avg_selfTime
+                    String method = normalizeSignature(parts[0]);
+                    long avgExecutionTime = (long) Double.parseDouble(parts[2]);
+                    long avgSelfTime = (long) Double.parseDouble(parts[3]);
+                    
+                    MethodData data = methodDataMap.get(method);
+                    if (data != null) {
+                        data.executionTime = avgExecutionTime;
+                        data.selfTime = avgSelfTime;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @param methodDataMap
+     * @param energyCsvPath
+     * @throws IOException
+     */
+    public static void mergeEnergyData(Map<String, MethodData> methodDataMap, String energyCsvPath) throws IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader(energyCsvPath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+
+                int lastCommaIndex = line.lastIndexOf(',');
+                if (lastCommaIndex < 0) continue;
+
+                String fullMethodName = normalizeSignature(line.substring(0, lastCommaIndex).trim());
+                String energyStr = line.substring(lastCommaIndex + 1).trim();
+
+                try {
+                    double energyConsumption = Double.parseDouble(energyStr);
+                    MethodData data = methodDataMap.get(fullMethodName);
+                    if (data != null) {
+                        data.combineEnergyData(energyConsumption);
+                    }
+                } catch (NumberFormatException e) {
+                    continue;
+                }
+            }
+        }
     }
 
     public static class MethodData {
@@ -138,8 +177,10 @@ public class CSVMerger {
                 String methodSignature = className + "." + methodName
                         + convertJVMDescriptor(jvmSignature);
  
-                methodSignature = normalizeSignature(methodSignature);
-
+                // Apply package filter to ensure 1:1 overlap with instrumented scope
+                // if (!methodSignature.startsWith(ca.concordia.ptidej.spectra.Profile.Constants.PACKAGE_FILTER)) {
+                //    continue;
+                // }
 
                 long time = Long.parseLong(element.getAttribute("time"));
                 long selfTime = Long.parseLong(element.getAttribute("selfTime"));
@@ -540,29 +581,24 @@ public class CSVMerger {
 
     private static void writeToCsv(Map<String, MethodData> methodDataMap,
                                    String filePath) throws IOException {
-        boolean isAllObjects = filePath.contains("allObjects");
-
         try (PrintWriter out = new PrintWriter(new FileOutputStream(filePath))) {
-            if (isAllObjects) {
-                out.println("Class Name,Energy (J),Instance Count,Size (bytes)");
-                for (MethodData methodData : methodDataMap.values()) {
-                    out.printf("%s,%.4f,%d,%d%n",
-                            csvEscape(methodData.methodSignature),
-                            methodData.energyConsumption,
-                            methodData.instanceCount,
-                            methodData.sizeBytes);
+            out.println("Method Signature,Invocations (Instrumentation),Execution Time (us) (Sampled),Self Time (us) (Sampled),Energy (J) (JoularJX)");
+            for (MethodData methodData : methodDataMap.values()) {
+                String sig = methodData.methodSignature;
+                // Only include app methods OR math intrinsics for clarity
+                if (!sig.startsWith(ca.concordia.ptidej.spectra.Profile.Constants.PACKAGE_FILTER) && 
+                    !sig.startsWith("java.lang.Math")) {
+                    continue;
                 }
-            } else {
-                out.println("Method Signature,Invocations,Total Times (us),Energy (J)");
-                for (MethodData methodData : methodDataMap.values()) {
-                    String inv  = methodData.invocations   == -1 ? "-" : String.valueOf(methodData.invocations);
-                    String time = methodData.executionTime == -1 ? "-" : String.valueOf(methodData.executionTime);
-                    String en   = methodData.energyConsumption == -1 ? "-" : String.valueOf(methodData.energyConsumption);
- 
-                    out.printf("%s,%s,%s,%s%n",
-                            csvEscape(methodData.methodSignature),
-                            inv, time, en);
-                }
+
+                String inv  = methodData.invocations   == -1 ? "-" : String.valueOf(methodData.invocations);
+                String time = methodData.executionTime == -1 ? "-" : String.valueOf(methodData.executionTime);
+                String self = methodData.selfTime      == -1 ? "-" : String.valueOf(methodData.selfTime);
+                String en   = methodData.energyConsumption == -1 ? "-" : String.valueOf(methodData.energyConsumption);
+
+                out.printf("%s,%s,%s,%s,%s%n",
+                        csvEscape(methodData.methodSignature),
+                        inv, time, self, en);
             }
         }
     }

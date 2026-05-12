@@ -14,6 +14,11 @@ public final class Constants {
                 "Hotspots", "-format=csv", PROJECT_ROOT + "/Output/JProfiler/hotspots.csv");
         
         public static final String JPROFILER_AVG_CSV = PROJECT_ROOT + "/Output/JProfiler/calltree-averaged.csv";
-        public static final String JOULARJX_AVG_CSV = PROJECT_ROOT + "/Output/Joularjx/joularJX-averaged-all-methods-energy.csv";
-        public static final String JOULARJX_DIR = PROJECT_ROOT + "/Output/Joularjx";
+        public static final String JOULARJX_AVG_CSV = PROJECT_ROOT + "/Output/JoularJX/joularJX-averaged-all-methods-energy.csv";
+        public static final String JOULARJX_DIR = PROJECT_ROOT + "/Output/JoularJX";
+        
+        public static final String JPROFILER_INSTRUMENTATION_CONFIG = PROJECT_ROOT + "/src/main/resources/jprofiler_config_instrumentation.xml";
+        public static final String JPROFILER_SAMPLING_CONFIG = PROJECT_ROOT + "/src/main/resources/jprofiler_config_sampling.xml";
+        public static final String PACKAGE_FILTER = "ca.concordia.ptidej.spectra";
+        public static final String PHASE1_CALLTREE_XML = PROJECT_ROOT + "/Output/JProfiler/phase1_calltree.xml";
 }

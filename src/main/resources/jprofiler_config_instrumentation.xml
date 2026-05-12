@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config version="14.0.6">
+  <sessions>
+    <session id="110" name="spectra filter instrumentation" type="launch" jvmConfigurationId="100" methodCallRecordingType="instrumentation" lineNumbers="true" samplingFrequency="1" recordArrayAlloc="true"
+             autoTuneInstrumentation="false" allocationFrequency="0" splittingCap="2048" exceptionalCap="45" autoUpdatePeriodLong="4" utilConcurrentHandling="false" autoTuneMaxAverage="10"
+             vmExitHandling="keepAlive" recordingProfileId="10" recordAllMethods="true" recordJDK="true">
+        <filters>
+        <group type="inclusive" name="Default excludes" template="none">
+            <filter type="inclusive" name="ca." />
+            <filter type="inclusive" name="java." />
+        </group>
+        </filters>
+        <allocation recordArrayAlloc="true" recordNewArrays="true" />
+        <monitor recordContention="true" />
+        <threadProfiling recordDeadlocks="true" />
+
+        <offline startCPUImmediately="true" startAllocImmediately="true" startMonitorImmediately="true" />
+
+        <cpu methodCallRecordingType="instrumentation" samplingFrequency="1" lineNumbers="true" recordArrayAlloc="true" cpuTelemetry="true">
+            <callTreeProfile id="1" maxDepth="230" recordAllMethods="false" recordJDK="true" />
+        </cpu>
+    </session>
+  </sessions>
+</config>

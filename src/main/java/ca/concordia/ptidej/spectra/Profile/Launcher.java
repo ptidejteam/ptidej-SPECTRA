@@ -46,27 +46,50 @@ public class Launcher {
     private static final int NUM_JPROFILER_RUNS = 1;
 
     private final AtomicBoolean cleanupRun = new AtomicBoolean(false);
+    
+    private static void cleanupPorts() {
+        int[] ports = {JPROFILER_PORT, JDWP_PORT};
+        System.out.println("[Launcher] Cleaning up ports: " + Arrays.toString(ports));
+        for (int port : ports) {
+            try {
+                // Try normal kill first
+                String[] cmd = {"bash", "-c", "lsof -ti:" + port + " | xargs kill -9 2>/dev/null || true"};
+                new ProcessBuilder(cmd).start().waitFor(2, TimeUnit.SECONDS);
+                
+                // If still alive, try sudo
+                String[] sudoCmd = {"bash", "-c", "echo \"1234\" | sudo -S lsof -ti:" + port + " | xargs echo \"1234\" | sudo -S kill -9 2>/dev/null || true"};
+                new ProcessBuilder(sudoCmd).start().waitFor(2, TimeUnit.SECONDS);
+            } catch (Exception ignored) {}
+        }
+    }
 
 	public long launch(final ResultWriter aWriter, final String aClasspath, final String aFQN,
-			final String... programArgs) throws IOException {
+			final String... programArgs) throws Exception {
 
-		// 1. Launch JProfiler
         prepareJProfilerDataDirectory();
-        Path dataDir = Paths.get("Output", "JProfiler");
-        Files.createDirectories(dataDir);
         List<Path> jprofilerXmls = new ArrayList<>();
+//         1. Phase 1: JProfiler Instrumentation & Calibration
+        System.out.println("\n=== PHASE 1: JProfiler Instrumentation ===");
+        long pid1 = launchJProfilerPhase(Constants.JPROFILER_INSTRUMENTATION_CONFIG, aClasspath, aFQN, programArgs);
+        if (pid1 <= 0) {
+            System.err.println("Warning: Phase 1 Instrumentation returned non-positive PID");
+        }
+        Path phase1Xml = copyExportedCalltreeXML(0); // Run 0 for phase 1
+        Path phase1Target = Paths.get(Constants.PHASE1_CALLTREE_XML);
+        Files.move(phase1Xml, phase1Target, StandardCopyOption.REPLACE_EXISTING);
 
-        for (int run = 1; run <= NUM_JPROFILER_RUNS; run++) {
-            System.out.println("\n--- JProfiler run " + run + " / " + NUM_JPROFILER_RUNS + " ---");
+        // Phase 1 provides the calibration data
+        int nRuns = calibrateSamplingRuns(phase1Target);
+        System.out.println("Will perform " + nRuns + " sampling runs for statistical significance...");
 
-            // Launch one profiling session; expects export into Output/JProfiler after cleanup
-            long pid = launchJProfilerPhase(aClasspath, aFQN, programArgs);
+        // 2. Phase 2: JProfiler Sampling
+        System.out.println("\n=== PHASE 2: JProfiler Sampling (" + nRuns + " runs) ===");
+        for (int run = 1; run <= nRuns; run++) {
+            System.out.println("\n--- JProfiler Sampling run " + run + " / " + nRuns + " ---");
+            long pid = launchJProfilerPhase(Constants.JPROFILER_SAMPLING_CONFIG, aClasspath, aFQN, programArgs);
             if (pid <= 0) {
                 System.err.println("Warning: JProfiler run " + run + " returned non-positive PID");
-            }
-
-
-            else {
+            } else {
                 try {
                     Path xmlPath = copyExportedCalltreeXML(run);
                     jprofilerXmls.add(xmlPath);
@@ -76,38 +99,62 @@ public class Launcher {
             }
         }
 
-        // Average per-run CSVs into single averaged CSV
-        try {
-            averageCalltreeXMLs(jprofilerXmls );
-            System.out.println("JProfiler calltree averaging completed.");
-        } catch (IOException e) {
-            System.err.println("Error averaging calltree CSVs: " + e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        System.out.println("=== Phase 2: Completed " + jprofilerXmls.size() + " sampling runs ===");
+        if (!jprofilerXmls.isEmpty()) {
+            try {
+                averageCalltreeXMLs(jprofilerXmls);
+                System.out.println("JProfiler sampling data averaged successfully.");
+            } catch (Exception e) {
+                System.err.println("Error averaging JProfiler XMLs: " + e.getMessage());
+            }
         }
-
-        // 2. Launch JoularJX multiple times and collect PIDs
-        System.out.println("\n=== Running JoularJX " + NUM_JOULARJX_RUNS + " times ===");
+            // Phase 3: JoularJX sampling
+        System.out.println("\n=== PHASE 3: Running JoularJX " + nRuns + " times ===");
         List<Long> joularProcessIds = new ArrayList<>();
-
-        for (int run = 1; run <= NUM_JOULARJX_RUNS; run++) {
-            System.out.println("\n--- JoularJX Run " + run + "/" + NUM_JOULARJX_RUNS + " ---");
+        prepareJoularJXDataDirectory();
+        for (int run = 1; run <= nRuns; run++) {
+            System.out.println("\n--- JoularJX Run " + run + "/" + nRuns + " ---");
             long joularProcessId = launchJoularjxPhase(aClasspath, aFQN, programArgs);
 
             if (joularProcessId > 0) {
                 joularProcessIds.add(joularProcessId);
                 System.out.println("Finished JoularJX Run " + run + " with PID: " + joularProcessId);
 
-                File joularFile = new File("Output/Joularjx" + File.separator + "joularJX-123-all-methods-energy.csv");
-                if (joularFile.exists()) {
-                    File dest = new File("Output/Joularjx" + File.separator + run + "-joularJX-123-all-methods-energy.csv");
-                    if (joularFile.renameTo(dest)) {
-                        System.out.println("[Launcher] Successfully moved results to: " + dest.getAbsolutePath());
-                    } else {
-                        System.err.println("[Launcher] Failed to rename JoularJX output.");
-                    }
-                }
+
+                  // Robust JoularJX result management using absolute paths
+                  String destPath = new File(Constants.JOULARJX_DIR + File.separator + run + "-joularJX-123-all-methods-energy.csv").getAbsolutePath();
+
+                  String[] moveCmd = {
+                      "bash", "-c",
+                      "echo \"1234\" | sudo -S find " + Constants.PROJECT_ROOT + " -maxdepth 3 -name \"joularJX-123-*-methods-energy.csv\" -size +0c -exec mv {} " + destPath + " \\; 2>/dev/null; " +
+                      "echo \"1234\" | sudo -S chown mac " + destPath + " 2>/dev/null; " +
+                      "echo \"1234\" | sudo -S rm -rf " + Constants.PROJECT_ROOT + "/joularjx-result " + Constants.PROJECT_ROOT + "/joularJX-result; " +
+                      "echo 'MOVE_FINISHED'"
+                  };
+
+                  try {
+                      Process p = new ProcessBuilder(moveCmd).start();
+                      consumeProcessOutput(p);
+                      p.waitFor();
+                      if (new File(destPath).exists()) {
+                          System.out.println("[Launcher] Successfully moved results for run " + run);
+                      } else {
+                          // Fallback check: if no non-empty file found, check for ANY file
+                          System.err.println("[Launcher] Warning: No non-empty JoularJX result found after run " + run + ". Checking for empty files...");
+                          String[] fallbackMove = {
+                              "bash", "-c",
+                              "echo \"1234\" | sudo -S find " + Constants.PROJECT_ROOT + " -maxdepth 3 -name \"joularJX-123-all-methods-energy.csv\" -exec mv {} " + destPath + " \\; 2>/dev/null"
+                          };
+                          new ProcessBuilder(fallbackMove).start().waitFor();
+                          if (new File(destPath).exists()) {
+                              System.out.println("[Launcher] Moved empty JoularJX result for run " + run);
+                          } else {
+                             System.err.println("[Launcher] JoularJX result file not found after run " + run);
+                          }
+                      }
+                  } catch (Exception e) {
+                      System.err.println("[Launcher] Error during result move: " + e.getMessage());
+                  }
             } else {
                 System.err.println("Warning: JoularJX Run " + run + " failed");
             }
@@ -118,23 +165,18 @@ public class Launcher {
         }
 
         System.out.println("\n=== All JoularJX runs completed successfully ===");
-        System.out.println("Process IDs: " + joularProcessIds);
 
-        // 3. Average JoularJX results from all runs
-        System.out.println("\n=== Averaging JoularJX Energy Data ===");
+        // Average JoularJX results from all runs
         try {
             averageJoularJXResults(joularProcessIds);
+            updateEnergyCSVPath();
             System.out.println("Energy data averaged successfully");
         } catch (Exception e) {
             System.err.println("Error averaging JoularJX results: " + e.getMessage());
-            e.printStackTrace();
             throw new IOException("Failed to average JoularJX results", e);
         }
-        // 4. Update energy CSV path to use averaged file
-        updateEnergyCSVPath();
 
-
-		// 5. Merge CSV results
+		// 4. Phase 4: Merge CSV results
 		if (programArgs.length > 0 || !joularProcessIds.isEmpty()) {
 			String mergeArg = (programArgs != null && programArgs.length > 0) ? Arrays.toString(programArgs) : aFQN;
 			CSVMerger.runCSVMerger(mergeArg);
@@ -143,16 +185,56 @@ public class Launcher {
 
 	}
 
-	private long launchJProfilerPhase(final String aClasspath, final String aFQN, final String... programArgs)
+    private int calibrateSamplingRuns(Path phase1Xml) throws Exception {
+        Map<String, MethodData> data = CSVMerger.parseXMLData(phase1Xml.toString());
+        double minDuration = Double.MAX_VALUE;
+        
+        for (MethodData md : data.values()) {
+            if (md.invocations > 0) {
+                double duration = md.executionTime / (double) md.invocations;
+                if (duration > 0 && duration < minDuration) {
+                    minDuration = duration;
+                }
+            }
+        }
+
+        // Ignore extremely fast methods (noise) during calibration
+        if (minDuration < 1.0) {
+            System.out.println("Warning: Shortest method duration " + minDuration + " us is very low. Using 1.0 us for calibration.");
+            minDuration = 1.0;
+        }
+        
+        if (minDuration == Double.MAX_VALUE) {
+            System.out.println("Could not find a valid method duration for calibration. Defaulting to 5 runs.");
+            return 5;
+        }
+        // Formula: runs = max(sample_period / shortest_lifetime, 1) * safety_multiplier
+        // sample_period = 1ms = 1000us
+        // safety_multiplier = 5
+        double samplePeriodUs = 1000.0;
+        int safetyMultiplier = 5;
+
+        int calculatedRuns = (int) (Math.max(samplePeriodUs / minDuration, 1.0) * safetyMultiplier);
+        
+        // Cap runs to a reasonable maximum (e.g., 50) to prevent excessive execution time
+        int nRuns = Math.min(calculatedRuns, 50);
+        
+        System.out.printf("Shortest method duration: %.2f us, calculated runs: %d, capped runs: %d (sample_period: %.0f us, safety_multiplier: %d)%n", 
+                minDuration, calculatedRuns, nRuns, samplePeriodUs, safetyMultiplier);
+        return nRuns;
+    }
+
+	private long launchJProfilerPhase(final String configPath, final String aClasspath, final String aFQN, final String... programArgs)
 			throws IOException {
-		System.out.println("=== PHASE 1: JProfiler Profiling ===");
+		System.out.println("=== JProfiler Profiling Session ===");
+		cleanupPorts();
 
 		// Step 1: Launch JVM in suspended mode
 		final String javaPath = System.getProperty("java.home");
 		final String jprofilerAgent = Constants.JPROFILER_AGENT;
 
 		System.out.println("Step 1: Launching JVM in suspended mode with JProfiler...");
-		final Process jvmProcess = launchJVMSuspended(javaPath, jprofilerAgent, aClasspath, aFQN, programArgs);
+		final Process jvmProcess = launchJVMSuspended(javaPath, jprofilerAgent, configPath, aClasspath, aFQN, programArgs);
 
 		final long jvmPid = jvmProcess.pid();
 		System.out.println("JVM Process ID: " + jvmPid);
@@ -203,27 +285,39 @@ public class Launcher {
 
 		int exitCode = 0;
 		try {
-			exitCode = jvmProcess.waitFor();
+			boolean finished = jvmProcess.waitFor(300, TimeUnit.SECONDS);
+            if (!finished) {
+                System.err.println("[Launcher] Profiled JVM HUNG. Killing process " + jvmProcess.pid());
+                jvmProcess.destroyForcibly();
+                exitCode = -1;
+            } else {
+                exitCode = jvmProcess.exitValue();
+                System.out.println("Profiled JVM exited with code: " + exitCode);
+            }
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
-		System.out.println("Profiled JVM exited with code: " + exitCode);
 
 		return jvmProcess.pid();
 	}
 
 	// Step 1.1: Launch JVM in suspended mode with JProfiler agent
-	private Process launchJVMSuspended(final String javaPath, final String jprofilerAgent, final String classpath,
+	private Process launchJVMSuspended(final String javaPath, final String jprofilerAgent, final String configPath, final String classpath,
 			final String mainClass, final String... programArgs) throws IOException {
 		final List<String> command = new ArrayList<>();
 		command.add(javaPath + "/bin" + "/java");
 
 		// JProfiler agent with suspended mode and specific port
-		command.add("-agentpath:" + jprofilerAgent + "=port=" + JPROFILER_PORT + ",nowait" + ",config="
-				+ Constants.PROJECT_ROOT + "/src/main/resources/jprofiler_config.xml");
+		command.add("-agentpath:" + jprofilerAgent + "=port=" + JPROFILER_PORT + ",nowait,config=" + configPath);
+        // De-optimization flags for 1:1 overlap
+        command.add("-XX:+UnlockDiagnosticVMOptions");
+        command.add("-XX:-UseLibmIntrinsic");
+        command.add("-XX:-UseMathExactIntrinsics");
+        command.add("-XX:-Inline");
 
 		command.add("-cp");
-		command.add(classpath);
+		String jprofilerApiJar = "/Applications/JProfiler.app/Contents/Resources/app/api/jprofiler-controller.jar";
+		command.add(classpath + java.io.File.pathSeparator + jprofilerApiJar);
 		command.add("-Dspectra.realMain=" + mainClass);
 		command.add("-Djdk.attach.allowAttachSelf=true");
 		command.add("-agentlib:jdwp=transport=dt_socket,server=y,address=5005,suspend=y");
@@ -239,18 +333,10 @@ public class Launcher {
 		final ProcessBuilder processBuilder = new ProcessBuilder(command);
 		processBuilder.redirectErrorStream(true);
 
-		// // Change Current Working Directory
-		File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/POM/");
-        //File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/CPL/");
-
-        processBuilder.directory(newCurrentWorkingDirectory);
 		// Start the process
 		final Process process = processBuilder.start();
 
-		// Provide the sudo password
-		enterPassword(process);
-		System.out.println("Launched JVM in suspended mode with PID: " + process.pid() + " at directory:"
-				+ newCurrentWorkingDirectory.getPath());
+		System.out.println("Launched JVM in suspended mode with PID: " + process.pid());
 
 		// Consume output in background thread
 		consumeProcessOutput(process);
@@ -281,36 +367,6 @@ public class Launcher {
 		return false;
 	}
 
-	private void registerShutdownHook(final Process jvmProcess) {
-		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-			System.out.println("=== SHUTDOWN HOOK: Profiling Cleanup ===");
-
-			try {
-				// Step 6: Stop all recordings
-				System.out.println("Step 6: Stopping profiling recordings...");
-				stopProfiling(jvmProcess.pid());
-
-				// Step 7: Save snapshot
-				System.out.println("Step 7: Saving profiling snapshot...");
-				saveProfilerSnapshot();
-
-				// Step 8: Export snapshot to CSVs
-				System.out.println("Step 8: Exporting snapshot to CSVs...");
-				exportProfilerSnapshot();
-
-				System.out.println("=== Profiling cleanup completed ===");
-			} catch (Exception e) {
-				System.err.println("Error during profiling cleanup: " + e.getMessage());
-				e.printStackTrace();
-			}
-
-			// Final cleanup
-			if (jvmProcess.isAlive()) {
-				System.out.println("Terminating JVM process...");
-				jvmProcess.destroyForcibly();
-			}
-		}));
-	}
 
 	// Programmatically attach debugger (JDWP) and resume the suspended JVM using
 	// JDI
@@ -503,77 +559,9 @@ public class Launcher {
 
 	// * Step 6: Stop all profiling recordings via JPController
 
-	private void stopProfiling(long jvmPid) throws Exception {
-		System.out.println("Stopping all profiling recordings...");
-		String outputDir = Constants.PROJECT_ROOT + "/" + JPROFILER_OUTPUT_DIR;
-		String snapshotPath = outputDir + SNAPSHOT_FILE;
-
-		try {
-			executeJpcontrollerCommand("stopCPURecording", "", jvmPid);
-			// executeJpcontrollerCommand("stopAllocRecording", "", jvmPid);
-			// executeJpcontrollerCommand("stopMonitorRecording", "", jvmPid);
-		} catch (Exception e) {
-			System.err.println("Error stopping profiling: " + e.getMessage());
-			throw e;
-		}
-		// Ensure output directory exists before creating a temp file inside it
-		Path outputDirPath = Paths.get(outputDir);
-		Files.createDirectories(outputDirPath);
-
-		Path cmdFile = Files.createTempFile(outputDirPath, "jpcommands", ".txt");
-
-		String commands = "stopCPURecording\n" + "saveSnapshot "
-				+ snapshotPath + "\n";
-
-		Files.write(cmdFile, commands.getBytes());
-
-		ProcessBuilder pb = new ProcessBuilder(Constants.JPCONTROLLER_PATH, "-n", "-f",
-				Constants.PROJECT_ROOT + "/Output/JProfiler/command.txt");
-
-		Process p = pb.inheritIO().start();
-
-		try (BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
-			String line;
-			while ((line = r.readLine()) != null) {
-				System.out.println("[jpcontroller] " + line);
-			}
-		}
-
-		int rc = p.waitFor();
-		System.out.println("jpcontroller exit code: " + rc);
-		System.out.println("snapshot exists: " + Files.exists(Paths.get(snapshotPath)));
-
-	}
 
 	// Step 7: Save profiler snapshot
 
-	private void saveProfilerSnapshot() throws Exception {
-		String outputDir = Constants.PROJECT_ROOT + File.separator + JPROFILER_OUTPUT_DIR;
-		String snapshotPath = outputDir + SNAPSHOT_FILE;
-
-		// Create output directory if it doesn't exist
-		Files.createDirectories(Paths.get(outputDir));
-
-		try {
-			final List<String> cmdList = new ArrayList<>();
-			cmdList.add("sudo");
-			cmdList.add("-S");
-			cmdList.add(Constants.JPCONTROLLER_PATH);
-			cmdList.add("-n");
-			cmdList.add("saveSnapshot");
-			cmdList.add(snapshotPath);
-
-			System.out.println("Saving snapshot to: " + snapshotPath);
-			Process process = new ProcessBuilder(cmdList).inheritIO().start();
-			int exitCode = process.waitFor();
-			if (exitCode != 0) {
-				System.err.println("saveSnapshot returned exit code: " + exitCode);
-			}
-		} catch (Exception e) {
-			System.err.println("Error saving profiler snapshot: " + e.getMessage());
-			throw e;
-		}
-	}
 
 	// Step 8: Export profiler snapshot to CSVs
 
@@ -585,10 +573,17 @@ public class Launcher {
 			final List<String> command = new ArrayList<>(Constants.JPEXPORT_COMMAND);
 
 			System.out.println("Exporting snapshot to CSVs in: " + outputDir);
-			Process process = new ProcessBuilder(command).inheritIO().start();
-			int exitCode = process.waitFor();
+			Process process = new ProcessBuilder(command).start();
+			consumeProcessOutput(process);
+			boolean completed = process.waitFor(120, TimeUnit.SECONDS);
+			if (!completed) {
+				System.err.println("Timeout waiting for exportProfilerSnapshot. Destroying process.");
+				process.destroyForcibly();
+				return -1;
+			}
+			int exitCode = process.exitValue();
 			if (exitCode != 0) {
-				System.err.println("JPController command '" + command + "' returned exit code: " + exitCode);
+				System.err.println("JPExport command returned exit code: " + exitCode);
 			}
 			return exitCode;
 		} catch (Exception e) {
@@ -604,7 +599,7 @@ public class Launcher {
 		System.out.println("\n=== PHASE 2: Joularjx Profiling ===");
 
 		final String javaPath = System.getProperty("java.home");
-		final String spectraAgentPath = Constants.MY_AGENT_PATH;
+		final String spectraAgentPath = Constants.PROJECT_ROOT + "/src/main/resources/joularjx-3.1.0.jar";
 
 		final List<String> command = new ArrayList<>();
 		command.add("sudo");
@@ -612,6 +607,11 @@ public class Launcher {
 		command.add(javaPath + File.separator + "bin" + File.separator + "java");
 		command.add("-Djoularjx.config=" + Constants.PROJECT_ROOT + "/src/test/resources/config.properties");
 		command.add("-javaagent:" + spectraAgentPath);
+        // De-optimization flags for 1:1 overlap
+        command.add("-XX:+UnlockDiagnosticVMOptions");
+        command.add("-XX:-UseLibmIntrinsic");
+        command.add("-XX:-UseMathExactIntrinsics");
+        command.add("-XX:-Inline");
 		command.add("-cp");
 		// Include both main classes and test classes for JUnit execution
 		String testClasses = "/Users/mac/Documents/RA/SPECTRA/target/test-classes";
@@ -633,11 +633,7 @@ public class Launcher {
 		final ProcessBuilder processBuilder = new ProcessBuilder(command);
 		processBuilder.redirectErrorStream(true);
 
-		// Change Current Working Directory
-		File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/POM/");
-        //File newCurrentWorkingDirectory = new File("../Ptidej/ptidej-Ptidej/CPL/");
-
-        processBuilder.directory(newCurrentWorkingDirectory);
+		// Start the process
 		final Process process = processBuilder.start();
 
 		// Enter sudo password
@@ -647,8 +643,16 @@ public class Launcher {
 		consumeProcessOutput(process);
 
 		try {
-			int exitCode = process.waitFor();
-			System.out.println("Joularjx process exited with code: " + exitCode);
+			boolean finished = process.waitFor(300, TimeUnit.SECONDS);
+            if (!finished) {
+                System.err.println("[Launcher] JoularJX process HUNG. Killing process " + process.pid());
+                process.destroyForcibly();
+            } else {
+                System.out.println("Joularjx process exited with code: " + process.exitValue());
+            }
+            
+            // The move logic is handled in the main launch loop for multiple runs.
+            
 		} catch (InterruptedException e) {
 			System.err.println("Joularjx process wait was interrupted");
 			Thread.currentThread().interrupt();
@@ -658,16 +662,10 @@ public class Launcher {
 		return process.pid();
 	}
 
-	// Launch JPExport for converting profiler data
-	private Process launchJpexport() throws IOException {
-		final List<String> command = new ArrayList<>(Constants.JPEXPORT_COMMAND);
-		System.out.println("JPExport command: " + command);
-		return new ProcessBuilder(command).inheritIO().start();
-	}
 
 	// Consume process output streams asynchronously
 
-	private void consumeProcessOutput(final Process process) {
+	private static void consumeProcessOutput(final Process process) {
 		// Consume output stream
 		new Thread(() -> {
 			try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
@@ -694,7 +692,7 @@ public class Launcher {
 	}
 
 	// Enter sudo password for privileged operations
-	private void enterPassword(final Process process) throws IOException {
+	private static void enterPassword(final Process process) throws IOException {
 		try (OutputStream os = process.getOutputStream()) {
 			// Replace with your actual password handling mechanism
 			os.write("1234\n".getBytes());
@@ -705,7 +703,7 @@ public class Launcher {
      */
     private void averageJoularJXResults(List<Long> processIds) throws IOException {
 
-        Path dataDir = Paths.get("Output", "Joularjx"); // Removed "data" subfolder
+        Path dataDir = Paths.get("Output", "JoularJX"); 
         Files.createDirectories(dataDir);
         if (!Files.isWritable(dataDir)) {
             System.err.println("Permission denied: cannot write to directory: " + dataDir);
@@ -714,21 +712,18 @@ public class Launcher {
             } catch (Exception ignored) {}
             throw new IOException("Directory not writable: " + dataDir);
         }
-        Map<String, EnergyData> energyMap = new HashMap<>();
-
-        // Read all energy CSV files
+        Map<String, EnergyData> energyMap = new HashMap<>();        // Read all energy CSV files
         for (int run = 1; run <= processIds.size(); run++) {
-            String energyFilePath = "Output/Joularjx" + File.separator + run + "-joularJX-123-all-methods-energy.csv";
+            String energyFilePath = "Output/JoularJX" + File.separator + run + "-joularJX-123-all-methods-energy.csv";
             File energyFile = new File(energyFilePath);
 
-            // If there was only 1 run, maybe it wasn't renamed to 1- if the script exited early, or maybe we just want to average it. 
-            // Wait, the rename block above ALWAYS renames to `run`-joularJX... so the file is ALWAYS `run-joularJX...`
             if (!energyFile.exists()) {
                 System.err.println("Warning: Energy file not found: " + energyFilePath);
                 continue;
             }
 
             System.out.println("Reading energy data from: " + energyFilePath);
+            Map<String, Double> runEnergy = new HashMap<>();
             try (BufferedReader br = new BufferedReader(new FileReader(energyFile))) {
                 String line;
                 while ((line = br.readLine()) != null) {
@@ -743,15 +738,23 @@ public class Launcher {
 
                     try {
                         double energy = Double.parseDouble(energyStr);
-                        energyMap.computeIfAbsent(methodSignature, k -> new EnergyData())
-                                .addValue(energy);
+                        // Sum duplicates within the SAME run file
+                        runEnergy.merge(methodSignature, energy, Double::sum);
                     } catch (NumberFormatException e) {
                         // Skip invalid lines
                     }
                 }
             }
+            
+            // Add summed run values to global average map
+            for (Map.Entry<String, Double> entry : runEnergy.entrySet()) {
+                energyMap.computeIfAbsent(entry.getKey(), k -> new EnergyData())
+                        .addValue(entry.getValue());
+            }
         }
 
+        System.out.println("Averaged " + energyMap.size() + " method signatures across "
+                + processIds.size() + " runs");
         // Write averaged results
         Path outputFile = dataDir.resolve("joularJX-averaged-all-methods-energy.csv");
 
@@ -775,7 +778,7 @@ public class Launcher {
      */
     private void updateEnergyCSVPath() throws IOException {
         String averagedFile = Constants.JOULARJX_AVG_CSV;
-        String targetFile = Constants.PROJECT_ROOT + "/Output/Joularjx/joularJX-123-all-methods-energy.csv";
+        String targetFile = Constants.PROJECT_ROOT + "/Output/JoularJX/joularJX-123-all-methods-energy.csv";
  
         Files.copy(Paths.get(averagedFile), Paths.get(targetFile),
                 java.nio.file.StandardCopyOption.REPLACE_EXISTING);
@@ -824,10 +827,10 @@ public class Launcher {
         // Write averaged CSV for CSVMerger
         Path avgCsv = Paths.get(Constants.PROJECT_ROOT, "Output", "JProfiler", "calltree-averaged.csv");
         try (PrintWriter out = new PrintWriter(avgCsv.toFile())) {
-            out.println("method_key,avg_invocations,avg_executionTime,avg_selfTime");
+            out.println("method_key|avg_invocations|avg_executionTime|avg_selfTime");
             for (Map.Entry<String, double[]> e : stats.entrySet()) {
                 double[] v = e.getValue();
-                out.printf("%s,%.1f,%.0f,%.1f%n", e.getKey(),
+                out.printf("%s|%.1f|%.0f|%.1f%n", e.getKey(),
                         v[0]/v[3], v[1]/v[3], v[2]/v[3]);
             }
         }
@@ -853,6 +856,22 @@ public class Launcher {
         Files.deleteIfExists(dataDir.resolve("calltree-averaged.csv"));
     }
 
+    private void prepareJoularJXDataDirectory() throws IOException {
+        Path dataDir = Paths.get("Output", "JoularJX");
+        Files.createDirectories(dataDir);
+
+        // Delete previous per-run files so a new batch overwrites old data
+        try (DirectoryStream<Path> ds = Files.newDirectoryStream(dataDir, "*-joularJX-123-all-methods-energy.csv")) {
+            for (Path p : ds) {
+                Files.deleteIfExists(p);
+            }
+        } catch (IOException ignored) {
+            // nothing to delete
+        }
+
+        // Remove previous averaged file
+        Files.deleteIfExists(dataDir.resolve("joularJX-averaged-all-methods-energy.csv"));
+    }
     private Path copyExportedCalltreeXML(final int run) throws IOException {
         Path jprofOut = Paths.get(Constants.PROJECT_ROOT, "Output", "JProfiler");
         Path dataDir = Paths.get(Constants.PROJECT_ROOT, "Output", "JProfiler");
@@ -869,379 +888,15 @@ public class Launcher {
         return target;
     }
 
-	/**
-	 *
-	 * The following code was added to support JMX-based control of JProfiler for
-	 * starting/stopping recordings. So far, it is not needed now; but just kept
-	 * just in case if we ever require to move to JMX control in the future.
-	 */
 
-	public long launchWithJMXProfiling(final ResultWriter aWriter, final String aClasspath, final String aFQN,
-			final String... programArgs) throws Exception {
 
-		System.out.println("=== JProfiler Profiling with JMX Control ===\n");
-
-		// Step 1: Launch JVM with JProfiler agent (with auto-start recording)
-		final String javaPath = System.getProperty("java.home");
-		final String jprofilerAgent = Constants.JPROFILER_AGENT;
-
-		System.out.println("Step 1: Launching JVM with JProfiler agent (auto-start profiling)...");
-		final Process jvmProcess = launchJVMSuspended(javaPath, jprofilerAgent, aClasspath, aFQN, programArgs);
-
-		// Step 2: Check port availability
-		System.out.println("Step 2: Checking JProfiler port availability...");
-		boolean portAvailable = waitForPortAvailable(JPROFILER_PORT, PORT_CHECK_TIMEOUT_MS);
-		if (!portAvailable) {
-			jvmProcess.destroyForcibly();
-			throw new RuntimeException("JProfiler port " + JPROFILER_PORT + " not available");
-		}
-
-		// Step 2b: Check JMX port availability (crucial for JProfiler 14+)
-		System.out.println("Step 2b: Checking JMX port availability...");
-		boolean jmxPortAvailable = waitForPortAvailable(JMX_PORT, PORT_CHECK_TIMEOUT_MS);
-		if (!jmxPortAvailable) {
-			jvmProcess.destroyForcibly();
-			throw new RuntimeException("JMX port " + JMX_PORT + " not available");
-		}
-
-		// Step 3: Connect to JProfiler via JMX
-		// IMPORTANT: Use JProfiler's JMX port (8850), not the agent port (8849)
-		System.out.println("Step 3: Connecting to JProfiler via JMX on port " + JMX_PORT + "...");
-		JProfilerRemoteControllerClient controller = new JProfilerRemoteControllerClient("localhost", JMX_PORT);
-
-		try {
-			controller.connect();
-			System.out.println("  Connected! Profiling is already running (auto-started with agent)");
-
-			// Explicitly start recordings to ensure we capture data
-			controller.startAllRecordings();
-
-			VirtualMachine vm = null;
-			// Wait for JDWP port to be ready before attaching debugger
-			vm = attachDebugger("localhost", JDWP_PORT);
-			System.out.println("Attached and listening for VMDeath events");
-
-			attachShutdownListener(vm, aFQN, controller);
-			vm.resume();
-
-			// Step 5: Stop profiling recordings BEFORE saving snapshot
-			System.out.println("\nStep 5: Stopping profiling recordings...");
-//            controller.stopAllRecordings();
-			int exitCode = 0;
-			final long WAIT_TIMEOUT_MS = 60_000; // tune as needed
-			if (jvmProcess.waitFor(WAIT_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
-				exitCode = jvmProcess.exitValue();
-				System.out.println("Profiled JVM exited within timeout with code: " + exitCode);
-			} else {
-				System.err.println("Timed out waiting for profiled JVM to exit after " + WAIT_TIMEOUT_MS
-						+ "ms. Forcing termination...");
-				// Optional: capture/process diagnostics here (thread dump, logs)
-				if (jvmProcess.isAlive()) {
-					jvmProcess.destroyForcibly();
-				}
-				// wait for forced termination to complete
-				exitCode = jvmProcess.waitFor();
-				System.out.println("Profiled JVM forcibly terminated, exitCode: " + exitCode);
-			}
-
-//            // Step 6: Save snapshot WHILE JVM IS STILL ALIVE
-			System.out.println("\nStep 6: Saving snapshot...");
-			String outputDir = Constants.PROJECT_ROOT + File.separator + JPROFILER_OUTPUT_DIR;
-			String snapshotPath = outputDir + SNAPSHOT_FILE;
-//            controller.saveSnapshot(snapshotPath);
-
-			// Verify snapshot was created
-			File snapshotFile = new File(snapshotPath);
-			if (!snapshotFile.exists()) {
-				throw new RuntimeException("Snapshot file was not created: " + snapshotPath);
-			}
-			System.out.println("  Snapshot file created: " + snapshotPath + " (" + snapshotFile.length() + " bytes)");
-
-			// Step 7: Export to CSV
-			System.out.println("\nStep 7: Exporting profiling data to CSV...");
-			// controller.exportToCSV(snapshotPath, outputDir);
-
-			System.out.println("\n===   SUCCESS ===");
-			System.out.println("Profiling data saved to: " + outputDir);
-			System.out.println("  - Snapshot: " + SNAPSHOT_FILE);
-			System.out.println("  - CSVs: allobjects.csv, hotspots.csv, calltree.xml");
-
-		} catch (Exception e) {
-			System.err.println("\nError during JMX profiling: " + e.getMessage());
-			e.printStackTrace();
-			throw e;
-		} finally {
-			try {
-				controller.close();
-			} catch (Exception ex) {
-				System.err.println("Warning: Error closing controller: " + ex.getMessage());
-			}
-			if (jvmProcess.isAlive()) {
-				System.out.println("\nTerminating JVM process...");
-				jvmProcess.destroyForcibly();
-			}
-		}
-		return jvmProcess.pid();
-	}
-
-	private void attachShutdownListener(final VirtualMachine vm, final String mainClass,
-			JProfilerRemoteControllerClient controller) {
-		Thread eventThread = new Thread(() -> {
-			try {
-				EventRequestManager erm = vm.eventRequestManager();
-
-				// Fire on main() exit
-				MethodExitRequest mer = erm.createMethodExitRequest();
-				mer.addClassFilter(mainClass);
-				mer.setSuspendPolicy(EventRequest.SUSPEND_EVENT_THREAD); // suspend only main thread
-				mer.enable();
-
-				// Fallback: VMDeath
-				VMDeathRequest vdr = erm.createVMDeathRequest();
-				vdr.setSuspendPolicy(EventRequest.SUSPEND_NONE);
-				vdr.enable();
-
-				EventQueue queue = vm.eventQueue();
-
-				boolean done = false;
-				while (!done) {
-					EventSet eventSet = queue.remove(); // blocking
-					for (Event event : eventSet) {
-
-						if (event instanceof MethodExitEvent mee) {
-							if ("main".equals(mee.method().name())
-									&& mainClass.equals(mee.method().declaringType().name())) {
-
-								System.out.println("main() exited — PAUSING JVM for snapshot...");
-
-								// JVM main thread is suspended here!
-								Thread.sleep(5000); // <-- THIS IS THE MAGIC "pause before exit"
-
-								controller.stopAllRecordings();
-
-								// Step 6: Save snapshot WHILE JVM IS STILL ALIVE
-								System.out.println("\nStep 6: Saving snapshot...");
-								String outputDir = Constants.PROJECT_ROOT + File.separator + JPROFILER_OUTPUT_DIR;
-								String snapshotPath = outputDir + SNAPSHOT_FILE;
-								controller.saveSnapshot(snapshotPath);
-								controller.exportToCSV(snapshotPath, outputDir);
-								done = true;
-							}
-						}
-
-						if (event instanceof VMDeathEvent || event instanceof VMDisconnectEvent) {
-							System.out.println("VMDeath fallback");
-							// Still attempt cleanup, but might be too late.
-							// runProfilerCleanupAPI();
-							controller.stopAllRecordings();
-
-							// Step 6: Save snapshot WHILE JVM IS STILL ALIVE
-							System.out.println("\nStep 6: Saving snapshot...");
-							String outputDir = Constants.PROJECT_ROOT + File.separator + JPROFILER_OUTPUT_DIR;
-							String snapshotPath = outputDir + SNAPSHOT_FILE;
-							controller.saveSnapshot(snapshotPath);
-							controller.exportToCSV(snapshotPath, outputDir);
-
-							done = true;
-						}
-					}
-
-					// Resume suspended threads (if main was suspended)
-					eventSet.resume();
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					vm.dispose();
-				} catch (Throwable ignored) {
-				}
-			}
-		});
-	}
-
-	static class JProfilerRemoteControllerClient {
-		private final String host;
-		private final int jmxPort;
-		private MBeanServerConnection connection;
-		private JMXConnector connector;
-		private boolean connected = false;
-		private static final String CONTROLLER_MBEAN = "com.jprofiler.api.agent.mbean:type=RemoteController";
-
-		public JProfilerRemoteControllerClient(String host, int jmxPort) {
-			this.host = host;
-			this.jmxPort = jmxPort;
-		}
-
-		public void connect() throws Exception {
-			String url = "service:jmx:rmi:///jndi/rmi://" + host + ":" + jmxPort + "/jmxrmi";
-			System.out.println("Connecting to JProfiler at: " + url);
-
-			JMXServiceURL jmxUrl = new JMXServiceURL(url);
-			connector = JMXConnectorFactory.connect(jmxUrl);
-			connection = connector.getMBeanServerConnection();
-			connected = true;
-
-			System.out.println(" Connected to JProfiler RemoteController MBean");
-		}
-
-		/**
-		 * Start all profiling recordings (CPU, Allocation, Monitor)
-		 */
-		public void startAllRecordings() throws Exception {
-			ensureConnected();
-			System.out.println("Starting all profiling recordings...");
-
-			startCPU();
-			System.out.println("   CPU recording started");
-
-			// startAlloc();
-			// System.out.println("   Memory allocation recording started");
-
-			// startMonitor();
-			// System.out.println("   Monitor recording started");
-
-			System.out.println(" All recordings started successfully");
-		}
-
-		/**
-		 * Stop all profiling recordings
-		 */
-		public void stopAllRecordings() throws Exception {
-			ensureConnected();
-			System.out.println("Stopping all profiling recordings...");
-
-			stopCPU();
-			System.out.println(" CPU recording stopped");
-
-			// stopAlloc();
-			// System.out.println("   Memory allocation recording stopped");
-
-			// stopMonitor();
-			// System.out.println("   Monitor recording stopped");
-
-			System.out.println(" All recordings stopped successfully");
-		}
-
-		public void startCPU() throws Exception {
-			ensureConnected();
-			connection.invoke(new ObjectName(CONTROLLER_MBEAN), "startCPURecording", new Object[] { Boolean.TRUE },
-					new String[] { "boolean" });
-		}
-
-		public void stopCPU() throws Exception {
-			ensureConnected();
-			connection.invoke(new ObjectName(CONTROLLER_MBEAN), "stopCPURecording", null, null);
-		}
-
-		public void startAlloc() throws Exception {
-			ensureConnected();
-			connection.invoke(new ObjectName(CONTROLLER_MBEAN), "startAllocRecording", new Object[] { Boolean.TRUE },
-					new String[] { "boolean" });
-		}
-
-		public void stopAlloc() throws Exception {
-			ensureConnected();
-			connection.invoke(new ObjectName(CONTROLLER_MBEAN), "stopAllocRecording", null, null);
-		}
-
-		public void startMonitor() throws Exception {
-			ensureConnected();
-			connection.invoke(new ObjectName(CONTROLLER_MBEAN), "startMonitorRecording", null, null);
-		}
-
-		public void stopMonitor() throws Exception {
-			ensureConnected();
-			connection.invoke(new ObjectName(CONTROLLER_MBEAN), "stopMonitorRecording", null, null);
-		}
-
-		public void stopThreadProfiling() throws Exception {
-			ensureConnected();
-			connection.invoke(new ObjectName(CONTROLLER_MBEAN), "stopThreadProfiling", null, null);
-		}
-
-		public void saveSnapshot(String path) throws Exception {
-			ensureConnected();
-
-			// Create parent directory if needed
-			File snapshotFile = new File(path);
-			Files.createDirectories(snapshotFile.getParentFile().toPath());
-
-			System.out.println("Saving snapshot to: " + path);
-			connection.invoke(new ObjectName(CONTROLLER_MBEAN), "saveSnapshot", new Object[] { path },
-					new String[] { "java.lang.String" });
-			System.out.println(" Snapshot saved successfully");
-		}
-
-		public void exportToCSV(String snapshotPath, String outputDir) throws Exception {
-			System.out.println("Exporting snapshot to CSV...");
-
-			// Create output directory
-			Files.createDirectories(Paths.get(outputDir));
-
-			// Build jpexport command
-			List<String> command = new ArrayList<>();
-			command.add(Constants.JPCONTROLLER_PATH.replace("jpcontroller", "jpexport"));
-			command.add(snapshotPath);
-
-			// Export AllObjects view
-			// command.add("AllObjects");
-			// command.add("-format=csv");
-			// command.add(outputDir + "/allobjects.csv");
-
-			// Export Hotspots view
-			command.add("Hotspots");
-			command.add("-format=csv");
-			command.add(outputDir + "/hotspots.csv");
-
-			// Export CallTree
-			command.add("CallTree");
-			command.add("-format=xml");
-			command.add("-aggregation=method");
-			command.add(outputDir + "/calltree.xml");
-
-			System.out.println("Executing: " + command);
-
-			Process process = new ProcessBuilder(command).redirectErrorStream(true).start();
-
-			// Capture output
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-				String line;
-				while ((line = reader.readLine()) != null) {
-					System.out.println("  [jpexport] " + line);
-				}
-			}
-
-			int exitCode = process.waitFor();
-			if (exitCode == 0) {
-				System.out.println(" CSV export completed successfully");
-				System.out.println("  Output directory: " + outputDir);
-			} else {
-				System.err.println("Warning: jpexport returned exit code: " + exitCode);
-			}
-		}
-
-		public boolean isConnected() {
-			return connected;
-		}
-
-		private void ensureConnected() {
-			if (!connected) {
-				throw new IllegalStateException("Not connected to JProfiler. Call connect() first.");
-			}
-		}
-
-		public void close() {
-			if (connector != null) {
-				try {
-					connector.close();
-					connected = false;
-					System.out.println(" Disconnected from JProfiler");
-				} catch (Exception e) {
-					System.err.println("Warning: Error closing JMX connector: " + e.getMessage());
-				}
-			}
-		}
-	}
+    private void deleteDirectory(File directory) {
+        File[] allContents = directory.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectory(file);
+            }
+        }
+        directory.delete();
+    }
 }
