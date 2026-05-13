@@ -2,7 +2,7 @@
 /target/
 env.json
 Output/Joularjx/*
-Output/JProfiler/jprofiler_command.txt
+Output/JProfiler/*
 Output/snapshot.jps
 !Output/Joularjx/
 ./src/test/data/db/*
